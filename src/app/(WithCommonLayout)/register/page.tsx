@@ -1,12 +1,12 @@
-import FeaturedSection from '@/client-components/home/featured-section/featured-section';
+import RegisterSection from '@/client-components/register/register-page';
 import React from 'react';
 
-const HomePage = () => {
+const RegisterPage = () => {
 	return (
 		<div>
-			<FeaturedSection />
+			<RegisterSection />
 		</div>
 	);
 };
 
-export default HomePage;
+export default RegisterPage;

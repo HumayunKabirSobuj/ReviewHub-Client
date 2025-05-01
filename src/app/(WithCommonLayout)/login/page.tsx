@@ -1,12 +1,12 @@
-import FeaturedSection from '@/client-components/home/featured-section/featured-section';
+import LoginSection from '@/client-components/login/login-page';
 import React from 'react';
 
-const HomePage = () => {
+const LoginPage = () => {
 	return (
 		<div>
-			<FeaturedSection />
+			<LoginSection />
 		</div>
 	);
 };
 
-export default HomePage;
+export default LoginPage;
