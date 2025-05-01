@@ -1,44 +1,11 @@
-/* top nav styles */
-.topNav {
-  background-color: var(--nav-info-background);
-  padding: 18px 0;
-}
-.topNavP {
-  color: #fff;
-  display: flex;
-  justify-content: flex-start;
-  gap: 75px;
-}
-
-.phoneDtl {
-  display: flex;
-  gap: 8px;
-}
-.topNavLogo {
-  width: 25px;
-  height: 18px;
-}
-
-@media (max-width: 576px) {
-  .topNavP {
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
-  }
-  .topNavLogo {
-    width: 15px;
-  }
-}
 /* Main Navigation bar styles */
 .navContainer {
-  display: flex;
-  background-color: var(--primary-nav-btn-color);
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 .navStyle {
-  flex: 1;
-  min-width: 0;
-  justify-content: end;
-  width: 100%;
-  background-color: var(--primary-nav-btn-color);
+	flex: 1;
+	min-width: 0;
+	justify-content: end;
+	width: 100%;
 }

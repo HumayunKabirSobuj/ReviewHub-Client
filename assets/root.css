@@ -1,36 +1,35 @@
 :root {
-  --primary-btn-color: #780000;
-  --primary-nav-btn-color: #002855;
-  --nav-info-background: #0466c8;
-  --description-font-size: 16px;
-  --heading-font-size: 32px;
-  --heading-line-height: 40px;
-  --description-line-height: 24px;
-  --input-btn-height: 36px;
-  --default-border-color: #d3d3d3;
+	--description-font-size: 16px;
+	--description-line-height: 18px;
+	--heading-font-size: 32px;
+	--heading-line-height: 36px;
+	--sub-heading-font-size: 22px;
+	--tag-font-size: 12px;
+	--default-border-radius: 15px;
+	--padding: 15px;
 }
 .default-padding-body {
-  padding: 0px 128px;
+	padding: 0px 128px;
 }
 
 @media (max-width: 992px) {
-  .default-padding-body {
-    padding: 0px 64px;
-  }
+	.default-padding-body {
+		padding: 0px 64px;
+	}
 }
 
 @media (max-width: 576px) {
-  .default-padding-body {
-    padding: 0px 15px;
-  }
+	.default-padding-body {
+		padding: 0px 15px;
+	}
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-poppins), sans-serif;
-  font-size: var(--description-font-size);
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-poppins), sans-serif;
+	font-size: var(--description-font-size);
 }
-nextjs-portal {
-  display: none;
-}
+/* nextjs-portal {
+	display: none;
+} */

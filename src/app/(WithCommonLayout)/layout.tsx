@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import NavBar from '@/components/shared/Navbar';
 import { Layout, MenuProps } from 'antd';
 
@@ -19,6 +20,19 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
         </>
 
     );
+=======
+import NavBar from '@/client-components/global/navigationbar';
+
+const CommonLayout = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<div className="default-padding-body">
+			<NavBar />
+
+			{children}
+			<footer>Footer</footer>
+		</div>
+	);
+>>>>>>> 33fb3f0548125e1a136ee6db9e5ca1cb41dca82d
 };
 
 export default CommonLayout;
