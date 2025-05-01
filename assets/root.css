@@ -7,6 +7,7 @@
 	--tag-font-size: 12px;
 	--default-border-radius: 15px;
 	--padding: 15px;
+	--larger-gap: 32px;
 }
 .default-padding-body {
 	padding: 0px 128px;
