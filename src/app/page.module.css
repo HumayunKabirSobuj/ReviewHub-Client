@@ -1,0 +1,11 @@
+/* Main Navigation bar styles */
+.navContainer {
+	display: flex;
+	align-items: center;
+}
+.navStyle {
+	flex: 1;
+	min-width: 0;
+	justify-content: end;
+	width: 100%;
+}
