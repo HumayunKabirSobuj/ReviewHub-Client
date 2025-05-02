@@ -32,7 +32,7 @@ export default function NavBar() {
     document.title = e.key;
 
     const selectedItem = navRoutes.find((item) => item?.key === e.key);
-    console.log({ selectedItem });
+    // console.log({ selectedItem });
 
     if (selectedItem?.key === "logout") {
       setIsLoading(true); // প্রথমে loading শুরু করি
