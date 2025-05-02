@@ -100,6 +100,9 @@ export default function Home() {
         </a>
       </footer>
       <Button>Welcome All</Button>
+
+
+      <h1>Hello hello</h1>
     </div>
   );
 }
