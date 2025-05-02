@@ -37,6 +37,7 @@ export const AuthenticatedNavRoutes: MenuItem[] = [
 		label: 'Logout',
 		key: 'logout',
 		route: '/',
+		
 	},
 ];
 
