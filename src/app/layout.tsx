@@ -1,25 +1,15 @@
 import type { Metadata } from "next";
-import { Roboto, Poppins, New_Rocker } from "next/font/google";
-import { Toaster } from "sonner";
-// import Providers from '@/providers/Providers';
-import "@ant-design/v5-patch-for-react-19";
-import Providers from "@/components/providers/Providers";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 
-const roboto = Roboto({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "700"], // Add required font weights
-  variable: "--font-roboto", // Define a CSS variable for usage
 });
 
-const poppins = Poppins({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-poppins",
-});
-const newRocker = New_Rocker({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-new-rocker",
 });
 
 export const metadata: Metadata = {
@@ -33,17 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-	<Providers>
     <html lang="en">
       <body
-        className={`${poppins.variable} ${roboto.variable} ${newRocker.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {" "}
-		<Toaster richColors position="top-center" />
         {children}
       </body>
     </html>
-	</Providers>
-
   );
 }
