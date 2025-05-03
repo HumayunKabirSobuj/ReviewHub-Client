@@ -33,7 +33,13 @@ export function LoginForm() {
     try {
       //   console.log(values);
       const result = await loginUser(loginData);
-      console.log(result);
+      // console.log(result);
+      // Save or remove email from localStorage based on rememberMe
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email)
+      } else {
+        localStorage.removeItem("rememberedEmail")
+      }
       if (result?.success) {
         console.log(result);
         toast.success(result?.message);
