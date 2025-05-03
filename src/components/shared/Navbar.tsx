@@ -331,19 +331,19 @@ export function Navbar() {
                   {user.role === "ADMIN" ? (
                     <DropdownMenuItem>
                       <User className="mr-2 h-4 w-4" />
-                      <Link href={"/admin/dashboard"}><span> Dashboard</span></Link>
+                      <Link href={"/admin/dashboard"}>
+                        <span> Dashboard</span>
+                      </Link>
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem>
                       <User className="mr-2 h-4 w-4" />
-                      <Link href={"/user/dashboard"}><span> Dashboard</span></Link>
+                      <Link href={"/user/dashboard"}>
+                        <span> Dashboard</span>
+                      </Link>
                     </DropdownMenuItem>
                   )}
 
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600"
