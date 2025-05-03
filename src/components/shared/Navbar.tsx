@@ -239,7 +239,7 @@ export function Navbar() {
   // console.log(user);
 
   const handleLogout = async () => {
-    console.log("logout...");
+    // console.log("logout...");
     setIsLoading(true); // প্রথমে loading শুরু করি
     await logout(); // async call শেষ না হওয়া পর্যন্ত wait করি
     setIsLoading(false); // তারপর loading false করি
@@ -308,7 +308,7 @@ export function Navbar() {
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarImage src="/avatars/user.png" alt="User" />
-                      <AvatarFallback>{user?.name}</AvatarFallback>
+                      <AvatarFallback  >USER</AvatarFallback>
                     </Avatar>
                     <span className="hidden text-sm font-medium text-gray-700 md:inline-block">
                       {user?.name}

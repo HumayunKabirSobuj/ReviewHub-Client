@@ -1,64 +1,66 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
-import { InboxIcon as EnvelopeIcon, LockOpenIcon as LockClosedIcon } from "lucide-react"
-import Link from "next/link"
-import { loginUser } from "@/services/AuthServices"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
-import { useUser } from "@/components/context/UserContext"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  InboxIcon as EnvelopeIcon,
+  LockOpenIcon as LockClosedIcon,
+} from "lucide-react";
+import Link from "next/link";
+import { loginUser } from "@/services/AuthServices";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/components/context/UserContext";
 
 export function LoginForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [rememberMe, setRememberMe] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
   const { setIsLoading } = useUser();
 
-  const handleSubmit = async(e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     // Handle login logic here
     // console.log({ email, password })
 
-    const loginData ={
-      email, password 
-    }
+    const loginData = {
+      email,
+      password,
+    };
     console.log(loginData);
 
     try {
       //   console.log(values);
       const result = await loginUser(loginData);
       // console.log(result);
-      // Save or remove email from localStorage based on rememberMe
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", email)
-      } else {
-        localStorage.removeItem("rememberedEmail")
-      }
+
       if (result?.success) {
         console.log(result);
         toast.success(result?.message);
         setIsLoading(true);
         router.push("/");
       } else {
-        toast.success(result?.message,{duration:2000  });
+        toast.success(result?.message, { duration: 2000 });
       }
     } catch (err) {
-      toast.error("Something went wrong", {duration:2000  });
+      toast.error("Something went wrong", { duration: 2000 });
     }
   };
-  
 
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 text-center sm:space-y-2">
-        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">Sign In</h1>
-        <p className="text-xs text-gray-500 sm:text-sm">Welcome back! please enter your detail.</p>
+        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+          Sign In
+        </h1>
+        <p className="text-xs text-gray-500 sm:text-sm">
+          Welcome back! please enter your detail.
+        </p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
@@ -106,7 +108,10 @@ export function LoginForm() {
               Remember me
             </label>
           </div>
-          <Link href="/forgot-password" className="text-xs font-medium text-blue-600 hover:text-blue-500 sm:text-sm">
+          <Link
+            href="/forgot-password"
+            className="text-xs font-medium text-blue-600 hover:text-blue-500 sm:text-sm"
+          >
             Forgot Password?
           </Link>
         </div>
@@ -118,5 +123,5 @@ export function LoginForm() {
         </Button>
       </form>
     </div>
-  )
+  );
 }
