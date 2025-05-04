@@ -3,7 +3,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-export function UploadMultipleImages() {
+interface ImageListProps {
+	setImageLinks: React.Dispatch<React.SetStateAction<string[]>>;
+}
+export function UploadMultipleImages({ setImageLinks }: ImageListProps) {
 	const [imageList, setImageList] = useState<File[]>([]);
 	const [getView, setGetView] = useState<string[]>([]);
 
@@ -18,11 +21,43 @@ export function UploadMultipleImages() {
 		setGetView(previewUrls);
 	};
 
-	const handleUpload = () => {
+	const handleUpload = async () => {
 		const formData = new FormData();
-		imageList.forEach((image, index) => {
-			formData.append(`image[${index}]`, image);
-		});
+
+		formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!);
+		formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
+		// const result = await Promise.all(
+		// 	// only map section starts
+		// 	files.map(async (file: any, index: number) => {
+		// 		const imageName = `${user.userId}-${index}`;
+		// 		const path = file?.path;
+
+		// 		//send image to cloudinary
+		// 		const { secure_url } = await sendImageToCloudinary(imageName, path);
+		// 		return await CarouselModel.create({ image: secure_url });
+		// 	}),
+		// );
+		let images: string[] = [];
+		try {
+			await Promise.all(
+				imageList.map(async (image) => {
+					formData.append(`file`, image);
+					const res = await fetch(
+						`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+						{
+							method: 'POST',
+							body: formData,
+						},
+					);
+					const resp = await res.json();
+					images.push(resp.secure_url);
+				}),
+			);
+			console.log('images', images);
+			setImageLinks(images);
+		} catch (err) {
+			console.log(err);
+		}
 
 		console.log('total', imageList.length, 'images');
 	};
