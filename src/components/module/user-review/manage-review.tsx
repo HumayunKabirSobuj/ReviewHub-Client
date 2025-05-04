@@ -15,14 +15,15 @@ import {
 	DrawerTrigger,
 } from '@/components/ui/drawer';
 import { getCurrentUser } from '@/services/AuthServices';
-import { getAllReviewsApi } from '@/services/UserDashboard/ReviewServices';
+import { deleteUserReviewApi, getAllReviewsApi } from '@/services/UserDashboard/ReviewServices';
 import { CircleX, Edit, Eye, Loader, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CreateReviewComponent from './create-review';
 import ViewReviewComponent from './sub-component/view-review';
+import { toast } from 'sonner';
 
-export default function UserReviewManagement() {
-	const [allReviews, setAllReviews] = useState<reviewDtlType[]>([]);
+export default function UserReviewManagement({ reviews }: { reviews: reviewDtlType[] }) {
+	// const [allReviews, setAllReviews] = useState<reviewDtlType[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
 	const [mode, setMode] = useState<string>('view');
 	const [reviewDtl, setReviewDtl] = useState<reviewDtlType>({
@@ -50,15 +51,12 @@ export default function UserReviewManagement() {
 		},
 	});
 
-	useEffect(() => {
-		getAllReviews();
-	}, []);
-	const getAllReviews = async () => {
-		const user = await getCurrentUser();
+	const deleteUserReview = async (review: reviewDtlType) => {
 		try {
-			const res = await getAllReviewsApi(user.id);
+			let toastId = toast.loading('...Deleting', { id: 1 });
+			const res = await deleteUserReviewApi(review.id);
 			if (res?.success) {
-				setAllReviews(res.data);
+				toast.success(res.message, { id: toastId });
 			}
 		} catch (err) {
 			console.log(err);
@@ -73,12 +71,12 @@ export default function UserReviewManagement() {
 
 	return (
 		<Card className="w-full ">
-			{!allReviews.length && (
+			{!reviews.length && (
 				<div className="w-full h-[100vh] flex items-center justify-center">
 					<Loader className="w-[80px] h-12 animate-spin" />
 				</div>
 			)}
-			{allReviews.length > 0 && (
+			{reviews.length > 0 && (
 				<>
 					{' '}
 					<Drawer direction={'right'} open={open} onOpenChange={setOpen}>
@@ -98,11 +96,6 @@ export default function UserReviewManagement() {
 										{mode === 'edit' && <CreateReviewComponent review={reviewDtl} mode="edit" />}
 									</div>
 								</div>
-								{mode === 'edit' && (
-									<DrawerFooter>
-										<Button>Submit</Button>
-									</DrawerFooter>
-								)}
 							</div>
 						</DrawerContent>
 					</Drawer>
@@ -141,8 +134,13 @@ export default function UserReviewManagement() {
 									</tr>
 								</thead>
 								<tbody className="bg-white divide-y divide-gray-200">
-									{allReviews.map((review, index) => (
-										<tr key={index} className="hover:bg-gray-50">
+									{reviews.map((review, index) => (
+										<tr
+											key={index}
+											className={`hover:bg-gray-50 ${
+												reviewDtl.id === review.id ? 'bg-gray-200' : ''
+											}`}
+										>
 											<td className="px-4 py-3 text-sm font-medium">
 												<div className="flex flex-col">
 													<span className="truncate max-w-[200px]">
@@ -196,6 +194,7 @@ export default function UserReviewManagement() {
 														size="icon"
 														className="h-8 w-8 text-red-500"
 														title="Delete"
+														onClick={() => deleteUserReview(review)}
 													>
 														<Trash2 className="h-4 w-4" />
 													</Button>

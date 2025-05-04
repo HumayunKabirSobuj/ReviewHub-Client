@@ -6,13 +6,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 // import RatingComponent from '@/components/usefulComponents/ratingComponent';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { categoryList, reviewDtlOne, reviewDtlType } from '@/components/types/add-review';
-import { createUserReview, getAllCategories } from '@/services/UserDashboard/ReviewServices';
+import { createUserReview, getAllCategories, updateUserReview } from '@/services/UserDashboard/ReviewServices';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader, Loader2 } from 'lucide-react';
@@ -52,10 +52,21 @@ export default function CreateReviewComponent({
 	const [getView, setGetView] = useState<string[]>([]);
 	const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
 	const [allCategories, setAllCategories] = useState<categoryList[]>([]);
+	const imgFileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		getAllCategoriesApiCall();
+		if (mode === 'edit') {
+			updateStateToUpdateReview();
+		}
 	}, []);
+
+	const updateStateToUpdateReview = () => {
+		setPremiumChecked(true);
+		if (review !== null) {
+			setGetView(review.imageUrls);
+		}
+	};
 
 	const getAllCategoriesApiCall = async () => {
 		try {
@@ -136,8 +147,6 @@ export default function CreateReviewComponent({
 			  });
 
 	const onSubmitOne = async (data: any) => {
-		formOne.reset();
-		setGetView([]);
 		let toastId: string | number = 'updateProfile';
 		toastId = toast.loading('...Loading', { id: toastId });
 		try {
@@ -147,9 +156,27 @@ export default function CreateReviewComponent({
 				price: Number(data.price),
 				rating: 0,
 			};
-
-			const res = await createUserReview(jsonData);
+			console.log('json', jsonData);
+			let res;
+			if (mode === 'edit') {
+				const reviewId = (review !== null ? review.id : null) as string;
+				res = await updateUserReview(jsonData, reviewId);
+			} else {
+				res = await createUserReview(jsonData);
+			}
 			if (res?.success) {
+				formOne.reset({
+					title: '',
+					description: '',
+					excerp: '',
+					categoryId: '',
+					purchaseSource: '',
+					isPremium: false,
+					price: '',
+					isPublished: false,
+				});
+				setGetView([]);
+				imgFileInputRef.current?.value && (imgFileInputRef.current.value = '');
 				toast.success(res?.message, { id: toastId });
 			} else {
 				toast.error(res?.message, { id: toastId });
@@ -329,7 +356,13 @@ export default function CreateReviewComponent({
 								</div>
 								<div className="flex flex-col gap-4">
 									<Label htmlFor="multi-image">Upload Images</Label>
-									<Input id="multi-image" type="file" accept="image/*" onChange={ImgChangeHandler} />
+									<Input
+										id="multi-image"
+										type="file"
+										ref={imgFileInputRef}
+										accept="image/*"
+										onChange={ImgChangeHandler}
+									/>
 									{disableSubmit && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 
 									{getView.length > 0 && !disableSubmit && (
