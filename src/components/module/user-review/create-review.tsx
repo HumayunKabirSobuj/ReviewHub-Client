@@ -62,7 +62,11 @@ export default function CreateReviewComponent({
 	}, []);
 
 	const updateStateToUpdateReview = () => {
-		setPremiumChecked(true);
+		if (Number(review?.price) > 0) {
+			setPremiumChecked(true);
+		} else {
+			setPremiumChecked(false);
+		}
 		if (review !== null) {
 			setGetView(review.imageUrls);
 		}
