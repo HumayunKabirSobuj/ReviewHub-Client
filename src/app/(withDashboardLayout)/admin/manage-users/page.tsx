@@ -1,8 +1,9 @@
+import ManageUsersForAdmin from "@/components/module/admin/manageUsers/manageUsers";
 
 const ManageUsers = () => {
     return (
         <div>
-            Manage Users
+          <ManageUsersForAdmin></ManageUsersForAdmin>
         </div>
     );
 };
