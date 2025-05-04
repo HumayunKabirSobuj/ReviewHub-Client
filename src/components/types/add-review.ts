@@ -3,9 +3,9 @@ export interface reviewDtlOne {
 	description: string;
 	rating?: number;
 	purchaseSource?: string;
-	category: string;
+	categoryId: string;
 	excerp: string;
-	isPublish: boolean;
+	isPublished: boolean;
 	price?: number;
 	isPremium: boolean;
 	imageUrls?: string[];

@@ -13,6 +13,7 @@ export const createUserReview = async (data: reviewDtlOne) => {
 				'Content-Type': 'application/json',
 				Authorization: `${accessToken}`,
 			},
+			body: JSON.stringify(data),
 		});
 		const result = await res.json();
 
