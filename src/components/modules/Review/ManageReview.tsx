@@ -27,6 +27,10 @@ import {
   Calendar,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   DollarSign,
   Edit,
   Eye,
@@ -72,6 +76,13 @@ interface Review {
   votes: any[]
 }
 
+interface PaginationInfo {
+  currentPage: number
+  totalPages: number
+  totalItems: number
+  itemsPerPage: number
+}
+
 interface ManageReviewsProps {
   initialData: Review[]
   category: Category[]
@@ -83,6 +94,17 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false)
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(() => {
+    const page = searchParams.get("page")
+    return page ? Number.parseInt(page) : 1
+  })
+
+  const [itemsPerPage, setItemsPerPage] = useState(() => {
+    const limit = searchParams.get("limit")
+    return limit ? Number.parseInt(limit) : 2
+  })
 
   // State for filters
   const [searchQuery, setSearchQuery] = useState(searchParams.get("searchTerm") || "")
@@ -135,12 +157,15 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
       setIsPublished(undefined)
     }
 
+    // Reset to page 1 when changing tabs
+    setCurrentPage(1)
+
     // Apply filters with the new isPublished value
-    handleFilter(value)
+    handleFilter(value, 1)
   }
 
   // Filter handler function
-  const handleFilter = async (tabValue?: string) => {
+  const handleFilter = async (tabValue?: string, page?: number) => {
     setIsLoading(true)
 
     try {
@@ -168,6 +193,11 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
         queryParams.push(`isPaid=${selectedPremium}`)
       }
 
+      // Add pagination parameters
+      const pageToUse = page !== undefined ? page : currentPage
+      queryParams.push(`page=${pageToUse}`)
+      queryParams.push(`limit=${itemsPerPage}`)
+
       if (queryParams.length > 0) {
         url += `?${queryParams.join("&")}`
       }
@@ -181,6 +211,12 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
     }
   }
 
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    handleFilter(undefined, page)
+  }
+
   // Reset all filters
   const handleResetFilters = () => {
     setSearchQuery("")
@@ -188,7 +224,8 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
     setSelectedPremium(undefined)
     setIsPublished(undefined)
     setActiveTab("all")
-    router.push("/admin/manage-reviews")
+    setCurrentPage(1)
+    router.push(`/admin/manage-reviews?page=1&limit=${itemsPerPage}`)
   }
 
   // Filter reviews based on all filters for local display
@@ -218,6 +255,25 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
     })
   }, [initialData, isPublished, selectedPremium, selectedCategory, searchQuery])
 
+  // Calculate pagination info
+  const paginationInfo = useMemo((): PaginationInfo => {
+    const totalItems = filteredReviews.length
+    const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
+
+    return {
+      currentPage,
+      totalPages,
+      totalItems,
+      itemsPerPage,
+    }
+  }, [filteredReviews, currentPage, itemsPerPage])
+
+  // Get paginated reviews
+  const paginatedReviews = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return filteredReviews.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredReviews, currentPage, itemsPerPage])
+
   // Summary counts
   const summaries = useMemo(() => {
     return {
@@ -235,7 +291,17 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
     if (tab !== activeTab) {
       setActiveTab(tab)
     }
-  }, [])
+
+    const page = searchParams.get("page")
+    if (page && Number.parseInt(page) !== currentPage) {
+      setCurrentPage(Number.parseInt(page))
+    }
+
+    const limit = searchParams.get("limit")
+    if (limit && Number.parseInt(limit) !== itemsPerPage) {
+      setItemsPerPage(Number.parseInt(limit))
+    }
+  }, [searchParams])
 
   return (
     <div className="container mx-auto p-4">
@@ -273,6 +339,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
           isActive={selectedPremium === true}
           onClick={() => {
             setSelectedPremium((prev) => (prev === true ? undefined : true))
+            setCurrentPage(1)
             handleFilter()
           }}
         />
@@ -381,32 +448,35 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
             <>
               <TabsContent value="all">
                 <ReviewsTable
-                  reviews={filteredReviews}
+                  reviews={paginatedReviews}
                   onDelete={(review) => {
                     setSelectedReview(review)
                     setDeleteDialogOpen(true)
                   }}
                 />
+                <Pagination paginationInfo={paginationInfo} onPageChange={handlePageChange} />
               </TabsContent>
 
               <TabsContent value="published">
                 <ReviewsTable
-                  reviews={filteredReviews}
+                  reviews={paginatedReviews}
                   onDelete={(review) => {
                     setSelectedReview(review)
                     setDeleteDialogOpen(true)
                   }}
                 />
+                <Pagination paginationInfo={paginationInfo} onPageChange={handlePageChange} />
               </TabsContent>
 
               <TabsContent value="unpublished">
                 <ReviewsTable
-                  reviews={filteredReviews}
+                  reviews={paginatedReviews}
                   onDelete={(review) => {
                     setSelectedReview(review)
                     setDeleteDialogOpen(true)
                   }}
                 />
+                <Pagination paginationInfo={paginationInfo} onPageChange={handlePageChange} />
               </TabsContent>
             </>
           )}
@@ -451,6 +521,154 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+// Pagination Component
+function Pagination({
+  paginationInfo,
+  onPageChange,
+}: {
+  paginationInfo: PaginationInfo
+  onPageChange: (page: number) => void
+}) {
+  const { currentPage, totalPages, totalItems, itemsPerPage } = paginationInfo
+
+  // Calculate start and end item numbers
+  const startItem = Math.min(totalItems, (currentPage - 1) * itemsPerPage + 1)
+  const endItem = Math.min(totalItems, currentPage * itemsPerPage)
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = []
+    const maxPagesToShow = 5
+
+    if (totalPages <= maxPagesToShow) {
+      // Show all pages if there are few
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Always show first page
+      pages.push(1)
+
+      // Calculate start and end of page range
+      let start = Math.max(2, currentPage - 1)
+      let end = Math.min(totalPages - 1, currentPage + 1)
+
+      // Adjust if at the beginning
+      if (currentPage <= 2) {
+        end = Math.min(totalPages - 1, 4)
+      }
+
+      // Adjust if at the end
+      if (currentPage >= totalPages - 1) {
+        start = Math.max(2, totalPages - 3)
+      }
+
+      // Add ellipsis if needed
+      if (start > 2) {
+        pages.push(-1) // -1 represents ellipsis
+      }
+
+      // Add middle pages
+      for (let i = start; i <= end; i++) {
+        pages.push(i)
+      }
+
+      // Add ellipsis if needed
+      if (end < totalPages - 1) {
+        pages.push(-2) // -2 represents ellipsis
+      }
+
+      // Always show last page
+      pages.push(totalPages)
+    }
+
+    return pages
+  }
+
+  const pageNumbers = getPageNumbers()
+
+  if (totalPages <= 1) {
+    return null
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4">
+      <div className="text-sm text-gray-500">
+        Showing {startItem} to {endItem} of {totalItems} reviews
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(1)}
+          disabled={currentPage === 1}
+          className="cursor-pointer"
+          aria-label="First page"
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </Button>
+
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="cursor-pointer"
+          aria-label="Previous page"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+
+        {pageNumbers.map((page, index) => {
+          if (page < 0) {
+            // Render ellipsis
+            return (
+              <span key={`ellipsis-${index}`} className="px-2">
+                &hellip;
+              </span>
+            )
+          }
+
+          return (
+            <Button
+              key={page}
+              variant={currentPage === page ? "default" : "outline"}
+              size="sm"
+              onClick={() => onPageChange(page)}
+              className="cursor-pointer"
+            >
+              {page}
+            </Button>
+          )
+        })}
+
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="cursor-pointer"
+          aria-label="Next page"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(totalPages)}
+          disabled={currentPage === totalPages}
+          className="cursor-pointer"
+          aria-label="Last page"
+        >
+          <ChevronsRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   )
 }
