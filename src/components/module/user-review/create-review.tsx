@@ -11,7 +11,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { categoryList, reviewDtlOne } from '@/components/types/add-review';
+import { categoryList, reviewDtlOne, reviewDtlType } from '@/components/types/add-review';
 import { createUserReview, getAllCategories } from '@/services/UserDashboard/ReviewServices';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
@@ -37,7 +37,13 @@ const formSchemaPartOne = z.object({
 	rating: z.number().default(0).optional(),
 });
 
-export default function CreateReviewComponent() {
+export default function CreateReviewComponent({
+	review,
+	mode,
+}: {
+	review: reviewDtlType | null;
+	mode: 'create' | 'edit';
+}) {
 	const { control, register, handleSubmit, watch, reset } = useForm();
 	// const [ratingNumber, setRatingNumber] = useState(0);
 	const [imageLinks, setImageLinks] = useState<string[]>([]);
@@ -100,19 +106,35 @@ export default function CreateReviewComponent() {
 		setGetView(previewUrls);
 	};
 
-	const formOne = useForm<z.infer<typeof formSchemaPartOne>>({
-		resolver: zodResolver(formSchemaPartOne),
-		defaultValues: {
-			title: '',
-			description: '',
-			excerp: '',
-			categoryId: '',
-			purchaseSource: '',
-			isPremium: false,
-			price: '',
-			isPublished: false,
-		},
-	});
+	const formOne =
+		mode === 'create'
+			? useForm<z.infer<typeof formSchemaPartOne>>({
+					resolver: zodResolver(formSchemaPartOne),
+					defaultValues: {
+						title: '',
+						description: '',
+						excerp: '',
+						categoryId: '',
+						purchaseSource: '',
+						isPremium: false,
+						price: '',
+						isPublished: false,
+					},
+			  })
+			: useForm<z.infer<typeof formSchemaPartOne>>({
+					resolver: zodResolver(formSchemaPartOne),
+					defaultValues: {
+						title: review?.title,
+						description: review?.description,
+						excerp: review?.excerp,
+						categoryId: review?.categoryId,
+						purchaseSource: review?.purchaseSource,
+						isPremium: review?.isPremium,
+						price: String(review?.price),
+						isPublished: review?.isPublished,
+					},
+			  });
+
 	const onSubmitOne = async (data: any) => {
 		formOne.reset();
 		setGetView([]);
@@ -149,7 +171,7 @@ export default function CreateReviewComponent() {
 					<Card className="w-full ">
 						<CardHeader className="space-y-2">
 							<div className="w-full">
-								<CardTitle>Write a review</CardTitle>
+								<CardTitle> {review === null ? 'Write' : 'Edit'} a review</CardTitle>
 								<CardDescription>
 									Share your experience and help others to make informed decisions
 								</CardDescription>

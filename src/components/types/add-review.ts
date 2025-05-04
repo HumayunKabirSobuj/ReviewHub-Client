@@ -15,3 +15,28 @@ export interface categoryList {
 	id: string;
 	name: string;
 }
+
+export interface reviewDtlType {
+	id: string;
+	title: string;
+	description: string;
+	rating: number;
+	purchaseSource: string;
+	imageUrls: string[];
+	excerp: string;
+	isPremium: boolean;
+	price: number;
+	isPublished: boolean;
+	userId: string;
+	categoryId: string;
+	author: {
+		id: string;
+		name: string;
+		email: string;
+		profileUrl: string | null;
+	};
+	category: {
+		id: string;
+		name: string;
+	};
+}
