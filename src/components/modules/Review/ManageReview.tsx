@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { format } from "date-fns"
 
@@ -22,7 +22,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Calendar, Check, ChevronDown, DollarSign, Edit, Eye, Search, Star, Trash2, X } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Calendar,
+  Check,
+  ChevronDown,
+  DollarSign,
+  Edit,
+  Eye,
+  Filter,
+  Loader2,
+  Search,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react"
 
 // Types
 interface Author {
@@ -67,6 +81,9 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false)
+
   // State for filters
   const [searchQuery, setSearchQuery] = useState(searchParams.get("searchTerm") || "")
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get("categoryId") || "")
@@ -100,6 +117,11 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [moderationReason, setModerationReason] = useState("")
 
+  // Check if any filter is active
+  const hasActiveFilters = useMemo(() => {
+    return searchQuery !== "" || selectedCategory !== "" || selectedPremium !== undefined || isPublished !== undefined
+  }, [searchQuery, selectedCategory, selectedPremium, isPublished])
+
   // Update isPublished when tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value)
@@ -118,40 +140,59 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
   }
 
   // Filter handler function
-  const handleFilter = (tabValue?: string) => {
-    let url = "/admin/manage-reviews"
-    const queryParams: string[] = []
+  const handleFilter = async (tabValue?: string) => {
+    setIsLoading(true)
 
-    if (searchQuery) queryParams.push(`searchTerm=${encodeURIComponent(searchQuery)}`)
-    if (selectedCategory) queryParams.push(`categoryId=${encodeURIComponent(selectedCategory)}`)
+    try {
+      let url = "/admin/manage-reviews"
+      const queryParams: string[] = []
 
-    // Handle publication status based on tab or current state
-    const pubStatus = tabValue
-      ? tabValue === "published"
-        ? true
-        : tabValue === "unpublished"
-          ? false
-          : undefined
-      : isPublished
+      if (searchQuery) queryParams.push(`searchTerm=${encodeURIComponent(searchQuery)}`)
+      if (selectedCategory) queryParams.push(`categoryId=${encodeURIComponent(selectedCategory)}`)
 
-    if (pubStatus !== undefined) {
-      queryParams.push(`isPublished=${pubStatus}`)
+      // Handle publication status based on tab or current state
+      const pubStatus = tabValue
+        ? tabValue === "published"
+          ? true
+          : tabValue === "unpublished"
+            ? false
+            : undefined
+        : isPublished
+
+      if (pubStatus !== undefined) {
+        queryParams.push(`isPublished=${pubStatus}`)
+      }
+
+      // Handle premium status
+      if (selectedPremium !== undefined) {
+        queryParams.push(`isPaid=${selectedPremium}`)
+      }
+
+      if (queryParams.length > 0) {
+        url += `?${queryParams.join("&")}`
+      }
+
+      router.push(url)
+
+      // Add a small delay to show loading state
+      await new Promise((resolve) => setTimeout(resolve, 300))
+    } finally {
+      setIsLoading(false)
     }
+  }
 
-    // Handle premium status
-    if (selectedPremium !== undefined) {
-      queryParams.push(`isPaid=${selectedPremium}`)
-    }
-
-    if (queryParams.length > 0) {
-      url += `?${queryParams.join("&")}`
-    }
-
-    router.push(url)
+  // Reset all filters
+  const handleResetFilters = () => {
+    setSearchQuery("")
+    setSelectedCategory("")
+    setSelectedPremium(undefined)
+    setIsPublished(undefined)
+    setActiveTab("all")
+    router.push("/admin/manage-reviews")
   }
 
   // Filter reviews based on all filters for local display
-  const getFilteredReviews = () => {
+  const filteredReviews = useMemo(() => {
     return initialData.filter((review) => {
       // Filter by publication status if set
       if (isPublished !== undefined && review.isPublished !== isPublished) {
@@ -175,9 +216,17 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 
       return true
     })
-  }
+  }, [initialData, isPublished, selectedPremium, selectedCategory, searchQuery])
 
-  const filteredReviews = getFilteredReviews()
+  // Summary counts
+  const summaries = useMemo(() => {
+    return {
+      all: initialData.length,
+      published: initialData.filter((r) => r.isPublished).length,
+      unpublished: initialData.filter((r) => !r.isPublished).length,
+      premium: initialData.filter((r) => r.isPremium).length,
+    }
+  }, [initialData])
 
   // Sync URL params with component state on mount
   useEffect(() => {
@@ -194,27 +243,38 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <SummaryCard
           title="All Reviews"
-          count={initialData.length}
+          count={summaries.all}
           icon={<Calendar className="h-5 w-5" />}
           color="bg-blue-100 text-blue-700"
+          isActive={activeTab === "all"}
+          onClick={() => handleTabChange("all")}
         />
         <SummaryCard
           title="Published"
-          count={initialData.filter((r) => r.isPublished).length}
+          count={summaries.published}
           icon={<Check className="h-5 w-5" />}
           color="bg-green-100 text-green-700"
+          isActive={activeTab === "published"}
+          onClick={() => handleTabChange("published")}
         />
         <SummaryCard
           title="Unpublished"
-          count={initialData.filter((r) => !r.isPublished).length}
+          count={summaries.unpublished}
           icon={<X className="h-5 w-5" />}
           color="bg-red-100 text-red-700"
+          isActive={activeTab === "unpublished"}
+          onClick={() => handleTabChange("unpublished")}
         />
         <SummaryCard
           title="Premium"
-          count={initialData.filter((r) => r.isPremium).length}
+          count={summaries.premium}
           icon={<DollarSign className="h-5 w-5" />}
           color="bg-purple-100 text-purple-700"
+          isActive={selectedPremium === true}
+          onClick={() => {
+            setSelectedPremium((prev) => (prev === true ? undefined : true))
+            handleFilter()
+          }}
         />
       </div>
 
@@ -236,7 +296,10 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
             {/* Category Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline">
+                <Button
+                  variant={selectedCategory ? "default" : "outline"}
+                  className={`cursor-pointer ${selectedCategory ? "bg-primary text-primary-foreground" : ""}`}
+                >
                   {selectedCategory ? category.find((c) => c.id === selectedCategory)?.name || "Category" : "Category"}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -244,7 +307,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => setSelectedCategory("")}>All Categories</DropdownMenuItem>
                 {category.map((cat) => (
-                  <DropdownMenuItem key={cat.id} onClick={() => setSelectedCategory(cat.id)}>
+                  <DropdownMenuItem key={cat.id} onClick={() => setSelectedCategory(cat.id)} className="cursor-pointer">
                     {cat.name}
                   </DropdownMenuItem>
                 ))}
@@ -254,59 +317,99 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
             {/* Premium Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline">
+                <Button
+                  variant={selectedPremium !== undefined ? "default" : "outline"}
+                  className={`cursor-pointer ${selectedPremium !== undefined ? "bg-primary text-primary-foreground" : ""}`}
+                >
                   {selectedPremium === undefined ? "Premium Status" : selectedPremium ? "Premium" : "Free"}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setSelectedPremium(undefined)}>All Reviews</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedPremium(true)}>Premium Only</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedPremium(false)}>Free Only</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedPremium(undefined)} className="cursor-pointer">
+                  All Reviews
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedPremium(true)} className="cursor-pointer">
+                  Premium Only
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedPremium(false)} className="cursor-pointer">
+                  Free Only
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button onClick={() => handleFilter()}>Apply Filters</Button>
+            <Button onClick={() => handleFilter()} disabled={isLoading} className="cursor-pointer">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Filtering...
+                </>
+              ) : (
+                <>
+                  <Filter className="mr-2 h-4 w-4" />
+                  Apply Filters
+                </>
+              )}
+            </Button>
+
+            {hasActiveFilters && (
+              <Button variant="ghost" onClick={handleResetFilters} className="cursor-pointer">
+                <X className="mr-2 h-4 w-4" />
+                Reset
+              </Button>
+            )}
           </div>
         </div>
 
         {/* Tabs */}
         <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="mb-4">
-            <TabsTrigger value="all">All Reviews</TabsTrigger>
-            <TabsTrigger value="published">Published</TabsTrigger>
-            <TabsTrigger value="unpublished">Unpublished</TabsTrigger>
+            <TabsTrigger value="all" className="cursor-pointer">
+              All Reviews
+            </TabsTrigger>
+            <TabsTrigger value="published" className="cursor-pointer">
+              Published
+            </TabsTrigger>
+            <TabsTrigger value="unpublished" className="cursor-pointer">
+              Unpublished
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all">
-            <ReviewsTable
-              reviews={filteredReviews}
-              onDelete={(review) => {
-                setSelectedReview(review)
-                setDeleteDialogOpen(true)
-              }}
-            />
-          </TabsContent>
+          {isLoading ? (
+            <TableSkeleton />
+          ) : (
+            <>
+              <TabsContent value="all">
+                <ReviewsTable
+                  reviews={filteredReviews}
+                  onDelete={(review) => {
+                    setSelectedReview(review)
+                    setDeleteDialogOpen(true)
+                  }}
+                />
+              </TabsContent>
 
-          <TabsContent value="published">
-            <ReviewsTable
-              reviews={filteredReviews}
-              onDelete={(review) => {
-                setSelectedReview(review)
-                setDeleteDialogOpen(true)
-              }}
-            />
-          </TabsContent>
+              <TabsContent value="published">
+                <ReviewsTable
+                  reviews={filteredReviews}
+                  onDelete={(review) => {
+                    setSelectedReview(review)
+                    setDeleteDialogOpen(true)
+                  }}
+                />
+              </TabsContent>
 
-          <TabsContent value="unpublished">
-            <ReviewsTable
-              reviews={filteredReviews}
-              onDelete={(review) => {
-                setSelectedReview(review)
-                setDeleteDialogOpen(true)
-              }}
-            />
-          </TabsContent>
+              <TabsContent value="unpublished">
+                <ReviewsTable
+                  reviews={filteredReviews}
+                  onDelete={(review) => {
+                    setSelectedReview(review)
+                    setDeleteDialogOpen(true)
+                  }}
+                />
+              </TabsContent>
+            </>
+          )}
         </Tabs>
       </div>
 
@@ -330,7 +433,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} className="cursor-pointer">
               Cancel
             </Button>
             <Button
@@ -341,6 +444,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
                 setSelectedReview(null)
                 setModerationReason("")
               }}
+              className="cursor-pointer"
             >
               Delete
             </Button>
@@ -357,14 +461,21 @@ function SummaryCard({
   count,
   icon,
   color,
+  isActive = false,
+  onClick,
 }: {
   title: string
   count: number
   icon: React.ReactNode
   color: string
+  isActive?: boolean
+  onClick?: () => void
 }) {
   return (
-    <Card>
+    <Card
+      className={`transition-all duration-200 ${isActive ? "ring-2 ring-primary" : "hover:shadow-md"} cursor-pointer`}
+      onClick={onClick}
+    >
       <CardContent className="p-4 flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-500">{title}</p>
@@ -435,15 +546,75 @@ function ReviewsTable({
               <TableCell>{format(new Date(review.createdAt), "MMM d, yyyy")}</TableCell>
               <TableCell>
                 <div className="flex space-x-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-500">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-500 cursor-pointer">
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-green-500">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-green-500 cursor-pointer">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500" onClick={() => onDelete(review)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-red-500 cursor-pointer"
+                    onClick={() => onDelete(review)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
+
+function TableSkeleton() {
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Title</TableHead>
+            <TableHead>Author</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Rating</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <Skeleton className="h-5 w-[180px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[80px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[40px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[80px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[60px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableCell>
+              <TableCell>
+                <div className="flex space-x-1">
+                  <Skeleton className="h-8 w-8 rounded" />
+                  <Skeleton className="h-8 w-8 rounded" />
+                  <Skeleton className="h-8 w-8 rounded" />
                 </div>
               </TableCell>
             </TableRow>
