@@ -33,44 +33,112 @@ import {
   Search,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
-const ReviesPageCard = (reviewData: any) => {
+
+
+interface Author {
+  id: string
+  name: string
+  email: string
+  profileUrl: string | null
+}
+
+
+interface Category {
+  id: string
+  name: string
+}
+
+interface Review {
+  id: string
+  title: string
+  description: string
+  rating: number
+  purchaseSource: string
+  imageUrls: string[]
+  excerp: string
+  isPremium: boolean
+  price: number
+  isPublished: boolean
+  userId: string
+  categoryId: string
+  createdAt: string
+  updatedAt: string
+  author: Author
+  category: Category
+  comments: any[]
+  votes: any[]
+}
+interface ManageReviewsProps {
+  initialData: Review[]
+  category: Category[]
+}
+
+const ReviewsPageCard = ({ initialData = [], category = [] }: ManageReviewsProps) => {
+
+  console.log("initialData", initialData);
   const [filterOpen, setFilterOpen] = useState(false);
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const categories = [
-    "All Categories",
-    "Gadgets",
-    "Clothing",
-    "Books",
-    "Home",
-    "Beauty",
-    "Food",
-    "Sports",
-    "Other",
-  ];
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(() => {
+    const page = searchParams.get("page")
+    return page ? Number.parseInt(page) : 1
+  })
+
+  const [itemsPerPage, setItemsPerPage] = useState(() => {
+    const limit = searchParams.get("limit")
+    return limit ? Number.parseInt(limit) : 2
+  })
+
+  // State for filters
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("searchTerm") || "")
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("categoryId") || "")
+  const [selectedPremium, setSelectedPremium] = useState<boolean | undefined>(() => {
+    const isPaid = searchParams.get("isPaid")
+    if (isPaid === "true") return true
+    if (isPaid === "false") return false
+    return undefined
+  })
+
+  // Publication status state
+  const [isPublished, setIsPublished] = useState<boolean | undefined>(() => {
+    const published = searchParams.get("isPublished")
+    if (published === "true") return true
+    if (published === "false") return false
+    return undefined
+  })
+
+  // Set active tab based on isPublished value from URL
+  const getInitialTab = () => {
+    const published = searchParams.get("isPublished")
+    if (published === "true") return "published"
+    if (published === "false") return "unpublished"
+    return "all"
+  }
+
+  const [activeTab, setActiveTab] = useState(getInitialTab())
+
+  // Dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
+  const [moderationReason, setModerationReason] = useState("")
+
+  // Check if any filter is active
+  const hasActiveFilters = useMemo(() => {
+    return searchQuery !== "" || selectedCategory !== "" || selectedPremium !== undefined || isPublished !== undefined
+  }, [searchQuery, selectedCategory, selectedPremium, isPublished])
+
+
 
   // console.log(reviewData.reviewData);
-  // if (Array.isArray(reviewData.reviewData)) {
-  //     // এটা একটা array
-  //     console.log("Yes, it's an array!");
-  //   } else {
-  //     // এটা array না (object, string, undefined ইত্যাদি হতে পারে)
-  //     console.log("No, it's not an array.");
-  //   }
-  // const review = {
-  //     id: "1",
-  //     title: "The Ultimate Coffee Maker: A Game Changer for Home Brewing",
-  //     author: "Jane Smith",
-  //     rating: 4.5,
-  //     category: "Kitchen Appliances",
-  //     description:
-  //       "This coffee maker has completely transformed my morning routine. The precision temperature control ensures perfect extraction every time, while the built-in grinder saves counter space and delivers consistently fresh grounds. I've noticed a significant improvement in flavor compared to my previous setup.",
-  //     isPremium: true,
-  //     votes: 42,
-  //     commentCount: 7,
-  //     date: "2023-11-15",
-  //   }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5">
@@ -82,8 +150,8 @@ const ReviesPageCard = (reviewData: any) => {
               type="search"
               placeholder="Search reviews..."
               className="w-full pl-8"
-              //   value={searchQuery}
-              //   onChange={(e) => setSearchQuery(e.target.value)}
+            //   value={searchQuery}
+            //   onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           {/* <Sheet open={filterOpen} onOpenChange={setFilterOpen}> */}
@@ -127,8 +195,8 @@ const ReviesPageCard = (reviewData: any) => {
                       defaultValue={[0]}
                       max={5}
                       step={1}
-                      //   value={ratingFilter}
-                      //   onValueChange={setRatingFilter}
+                    //   value={ratingFilter}
+                    //   onValueChange={setRatingFilter}
                     />
                     <div className="flex justify-between mt-2">
                       {[0, 1, 2, 3, 4, 5].map((num) => (
@@ -183,14 +251,14 @@ const ReviesPageCard = (reviewData: any) => {
               <div>
                 <h4 className="text-sm font-medium mb-2">Category</h4>
                 <div className="space-y-2">
-                  {categories.map((category) => (
-                    <div key={category} className="flex items-center">
+                  {category.map((cat) => (
+                    <div key={cat.id} className="flex items-center">
                       <button
                         // className={`text-sm ${selectedCategory === category ? "font-medium text-primary" : "text-muted-foreground"}`}
                         className={`text-sm font-medium text-primary text-muted-foreground"}`}
-                        // onClick={() => setSelectedCategory(category)}
+                      // onClick={() => setSelectedCategory(category)}
                       >
-                        {category}
+                        {cat.name}
                       </button>
                     </div>
                   ))}
@@ -230,11 +298,11 @@ const ReviesPageCard = (reviewData: any) => {
               <Button
                 variant="outline"
                 className="w-full"
-                // onClick={() => {
-                //   setSelectedCategory("All Categories")
-                //   setRatingFilter([0])
-                //   setSortBy("newest")
-                // }}
+              // onClick={() => {
+              //   setSelectedCategory("All Categories")
+              //   setRatingFilter([0])
+              //   setSortBy("newest")
+              // }}
               >
                 Reset Filters
               </Button>
@@ -244,7 +312,7 @@ const ReviesPageCard = (reviewData: any) => {
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {reviewData.reviewData?.map((review: any) => (
+          {initialData?.map((review: any) => (
             <Card className="h-full flex flex-col max-w-md">
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-start">
@@ -282,11 +350,10 @@ const ReviesPageCard = (reviewData: any) => {
                   {review.category.name}
                 </Badge>
                 <p
-                  className={`text-sm mt-2 ${
-                    review.isPremium
-                      ? "line-clamp-2 blur-[2px]"
-                      : "line-clamp-3"
-                  }`}
+                  className={`text-sm mt-2 ${review.isPremium
+                    ? "line-clamp-2 blur-[2px]"
+                    : "line-clamp-3"
+                    }`}
                 >
                   {review.description}
                 </p>
@@ -328,4 +395,4 @@ const ReviesPageCard = (reviewData: any) => {
   );
 };
 
-export default ReviesPageCard;
+export default ReviewsPageCard;

@@ -1,13 +1,23 @@
-import ReviesPageCard from '@/components/modules/Review/ReviesPageCard';
+import ReviewsPageCard from '@/components/modules/Review/ReviewsPageCard';
+import { createSafeQueryString } from '@/helpers';
+import { getAllCategories } from '@/services/Categories';
 import { getAllReviews } from '@/services/Reviews';
-import React from 'react';
 
-const Reviews = async() => {
-  const reviews = await getAllReviews();
+const Reviews = async ({ searchParams }: { searchParams: { [key: string]: string | string[] } }) => {
+  // Use the safe query string creator
+  const queryString = createSafeQueryString(searchParams)
+
+  // Fetch data based on the query parameters
+  const { data, error } = await getAllReviews(queryString)
+  const { data: category } = await getAllCategories()
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error loading reviews: {error}</div>
+  }
   // console.log(revews);
   return (
     <div>
-      <ReviesPageCard reviewData={reviews.data}/>
+      <ReviewsPageCard initialData={data} category={category} />
     </div>
   );
 };

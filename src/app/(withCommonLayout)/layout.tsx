@@ -8,7 +8,7 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="container mx-auto">
         <main className="min-h-screen">{children}</main>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
