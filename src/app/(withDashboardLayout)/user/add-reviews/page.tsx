@@ -1,4 +1,4 @@
-import CreateReviewComponent from '@/components/module/review/create-review';
+import CreateReviewComponent from '@/components/module/user-review/create-review';
 
 export default function AddReviews() {
 	return <CreateReviewComponent />;
