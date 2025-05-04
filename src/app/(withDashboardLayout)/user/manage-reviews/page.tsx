@@ -6,5 +6,5 @@ const ManageReviewsForUser = () => {
         </div>
     );
 };
-
+ 
 export default ManageReviewsForUser;
