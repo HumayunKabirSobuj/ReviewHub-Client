@@ -5,7 +5,7 @@ export const getAllReviews = async (searchQuery?: string) => {
   try {
     const res = await fetch(
       //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
-      `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}`
+      `${process.env.NEXT_PUBLIC_BASE_API}/review`
       //   `${process.env.NEXT_PUBLIC_BASE_API}/review`,
       //   {
       //     method: "GET",
