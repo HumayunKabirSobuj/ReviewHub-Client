@@ -50,7 +50,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   // Fetch review data
   const { data: review, error } = await getReviewById(params.id)
 
-  // console.log("review", review);
+  console.log("review", review);
 
   // Handle error state
   if (error) {

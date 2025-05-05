@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import PaywallModal from "./PayWallModal";
 import { useUser } from "@/components/context/UserContext";
+import Link from "next/link";
 
 interface Review {
   id: string;
@@ -31,6 +32,7 @@ interface Review {
     name: string;
   };
   isPremium: boolean;
+  userId: string;
   price?: number;
   votes?: string[];
   comments?: string[];
@@ -151,44 +153,13 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
             {review.category.name}
           </Badge>
 
-          {/* Show excerpt for premium content, full description for free content */}
-          {review.isPremium ? (
-            <>
-              <p className="text-sm mt-3 line-clamp-2">{excerpt}</p>
-              <div className="relative mt-2">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
-                <p className="text-sm blur-[2px] line-clamp-2 text-muted-foreground">
-                  {review.description.substring(100)}
-                </p>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm mt-3 line-clamp-3">{review.description}</p>
-          )}
+       
 
-          {user?.role === "ADMIN" ? (
-            <div className="mt-4" onClick={handleInnerClick}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs hover:bg-blue-50 transition-colors"
-              >
-                Show Details
-              </Button>
-            </div>
-          ) : user?.role === "USER" ? (
-            <div className="mt-4" onClick={handleInnerClick}>
-              {review?.Payment?.some(
-                (payment) => payment.userId === user?.id
-              ) ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-xs hover:bg-amber-50 transition-colors"
-                >
-                  Already Paid Show Details
-                </Button>
-              ) : (
+          {review?.isPremium &&
+            user?.role === "USER" &&
+            !review?.Payment?.some((payment) => payment.userId === user?.id) &&
+            review?.userId !== user?.id && (
+              <div className="mt-4">
                 <Button
                   variant="outline"
                   size="sm"
@@ -197,9 +168,58 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
                 >
                   Unlock for BDT{review.price?.toFixed(2) || "0000"}
                 </Button>
-              )}
+              </div>
+            )}
+
+          {!review?.isPremium && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-xs hover:bg-blue-50 transition-colors mt-4"
+            >
+              <Link href={`/reviews/${review.id}`}>Show Details</Link>
+            </Button>
+          )}
+
+          {review?.isPremium && user?.role === "ADMIN" && (
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs hover:bg-blue-50 transition-colors"
+              >
+                <Link href={`/reviews/${review.id}`}>Show Details</Link>
+              </Button>
             </div>
-          ) : null}
+          )}
+
+          {review?.isPremium &&
+            user?.role === "USER" &&
+            review?.Payment?.some((payment) => payment.userId === user?.id) && (
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs hover:bg-green-50 transition-colors"
+                >
+                  <Link href={`/reviews/${review.id}`}>Show Details</Link>
+                </Button>
+              </div>
+            )}
+
+          {review?.isPremium &&
+            user?.role === "USER" &&
+            review?.userId === user?.id && (
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs hover:bg-green-50 transition-colors"
+                >
+                  <Link href={`/reviews/${review.id}`}>Show Details</Link>
+                </Button>
+              </div>
+            )}
         </CardContent>
         <CardFooter className="pt-3 flex justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-4" onClick={handleInnerClick}>
