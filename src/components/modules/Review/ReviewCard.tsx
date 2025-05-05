@@ -179,6 +179,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               <Link href={`/reviews/${review.id}`}>Show Details</Link>
             </Button>
           )}
+          
           {!user && !review?.isPremium && (
             <Button
               variant="outline"
