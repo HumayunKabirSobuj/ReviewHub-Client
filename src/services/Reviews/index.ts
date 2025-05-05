@@ -1,4 +1,5 @@
 "use server";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 export const getAllReviews = async (queryString: string) => {
@@ -9,9 +10,7 @@ export const getAllReviews = async (queryString: string) => {
       `${process.env.NEXT_PUBLIC_BASE_API}/review?${queryString}`
     );
 
-    const result = await res.json();
-
-    return result;
+    return await res.json();
   } catch (error: any) {
     return Error(error);
   }
@@ -25,6 +24,9 @@ export async function getReviewById(id: string) {
         method: "GET",
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+        },
+        next: {
+          tags: ["reviews"],
         },
       }
     );
@@ -73,15 +75,16 @@ export async function createVote(reviewId: string, voteType: "up" | "down") {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
+
         body: JSON.stringify({
           reviewId,
           voteType: voteType === "up" ? "upVote" : "downVote",
         }),
       }
     );
-
+    revalidateTag("reviews");
     const data = await response.json();
 
     if (!response.ok) {
@@ -98,6 +101,7 @@ export async function createVote(reviewId: string, voteType: "up" | "down") {
     };
   }
 }
+
 export async function createComment(reviewId: string, content: string) {
   try {
     const response = await fetch(
@@ -105,15 +109,16 @@ export async function createComment(reviewId: string, content: string) {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
+
         body: JSON.stringify({
           reviewId,
           content,
         }),
       }
     );
-
+    revalidateTag("reviews");
     const data = await response.json();
 
     if (!response.ok) {
