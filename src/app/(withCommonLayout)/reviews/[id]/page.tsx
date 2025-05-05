@@ -370,9 +370,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                     decisions.
                   </p>
                 </div>
-                <Button variant="outline" className="w-full" asChild>
+                {/* <Button variant="outline" className="w-full" asChild>
                   <Link href={`/profile/${review.author?.id}`}>View Profile</Link>
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
 
