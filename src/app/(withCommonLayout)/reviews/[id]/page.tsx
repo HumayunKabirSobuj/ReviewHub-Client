@@ -50,7 +50,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   // Fetch review data
   const { data: review, error } = await getReviewById(params.id)
 
-  console.log("review", review);
+  // console.log("review", review);
 
   // Handle error state
   if (error) {
@@ -129,7 +129,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
 
   // Format comments from API response
   const formattedComments =
-    review.comments?.map((comment) => ({
+    review.comments?.map((comment:any) => ({
       id: comment.id,
       author: {
         id: comment.author.id,

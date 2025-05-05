@@ -29,7 +29,7 @@ export function LoginForm() {
 			email,
 			password,
 		};
-		console.log(loginData);
+		// console.log(loginData);
 
 		try {
 			//   console.log(values);
