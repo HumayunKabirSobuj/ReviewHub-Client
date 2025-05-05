@@ -8,12 +8,12 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import { Filter, Search } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import type React from "react"
 import { memo, useCallback, useEffect, useMemo, useState, useTransition } from "react"
-import ReviewCardSkeleton from "./REviewCardSkeleton"
 import ReviewCard from "./ReviewCard"
-
+import { Badge } from "@/components/ui/badge"
+import ReviewCardSkeleton from "./REviewCardSkeleton"
 
 interface Review {
   id: string
@@ -48,20 +48,37 @@ interface ReviewsPageCardProps {
 
 // Main component
 const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category }) => {
-  
-  const [isFilterOpen, setFilterOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [loadingInitial, setLoadingInitial] = useState(true)
+  const searchParams = useSearchParams()
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  const [ratingFilter, setRatingFilter] = useState(0)
-  const [sortBy, setSortBy] = useState("newest")
+  // Initialize state from URL params to maintain filter state
+  const [isFilterOpen, setFilterOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("searchTerm") || "")
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("categoryId") || "")
+  const [ratingFilter, setRatingFilter] = useState(Number(searchParams.get("minRating") || 0))
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "newest")
+  const [premiumFilter, setPremiumFilter] = useState<string | null>(
+    searchParams.has("isPremium") ? (searchParams.get("isPremium") === "true" ? "premium" : "free") : null,
+  )
+
+  // UI state
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingInitial, setLoadingInitial] = useState(true)
   const [filteredReviews, setFilteredReviews] = useState<Review[]>([])
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
+  const [shouldApplyFilters, setShouldApplyFilters] = useState(false)
+
+  // Initialize data
+  useEffect(() => {
+    if (initialData) {
+      // Apply initial filters based on URL params
+      const filtered = filterReviews(initialData, selectedCategory, ratingFilter, sortBy, searchQuery, premiumFilter)
+      setFilteredReviews(filtered)
+      setLoadingInitial(false)
+    }
+  }, [initialData]) // Only run on initial data load
 
   // Debounce search input
   useEffect(() => {
@@ -74,16 +91,18 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 
   // Apply search filter when debounced value changes
   useEffect(() => {
-    if (debouncedSearchQuery !== "") {
-      applyFilters(selectedCategory, ratingFilter, sortBy, debouncedSearchQuery)
+    if (debouncedSearchQuery !== searchQuery) {
+      setShouldApplyFilters(true)
     }
-  }, [debouncedSearchQuery])
+  }, [debouncedSearchQuery, searchQuery])
 
-  // Initialize data
+  // Apply filters when requested
   useEffect(() => {
-    setFilteredReviews(initialData)
-    setLoadingInitial(false)
-  }, [initialData])
+    if (shouldApplyFilters) {
+      applyFilters()
+      setShouldApplyFilters(false)
+    }
+  }, [shouldApplyFilters])
 
   // Count active filters
   useEffect(() => {
@@ -92,25 +111,15 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
     if (ratingFilter > 0) count++
     if (sortBy !== "newest") count++
     if (searchQuery) count++
+    if (premiumFilter !== null) count++
     setActiveFiltersCount(count)
-  }, [selectedCategory, ratingFilter, sortBy, searchQuery])
+  }, [selectedCategory, ratingFilter, sortBy, searchQuery, premiumFilter])
 
-  const handleCategoryChange = useCallback(
-    (categoryId: string) => {
-      setSelectedCategory(categoryId)
-      startTransition(() => {
-        applyFilters(categoryId, ratingFilter, sortBy, searchQuery)
-      })
-    },
-    [ratingFilter, sortBy, searchQuery],
-  )
-
-  const applyFilters = useCallback(
-    (categoryId = selectedCategory, rating = ratingFilter, sort = sortBy, search = searchQuery) => {
-      setIsLoading(true)
-
+  // Filter reviews without triggering API calls
+  const filterReviews = useCallback(
+    (reviews: Review[], categoryId: string, rating: number, sort: string, search: string, premium: string | null) => {
       // Filter by search query
-      let filtered = initialData.filter((review) => {
+      let filtered = reviews.filter((review) => {
         if (
           search &&
           !review.title.toLowerCase().includes(search.toLowerCase()) &&
@@ -129,27 +138,67 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
           return false
         }
 
+        // Filter by premium status
+        if (premium !== null) {
+          if (premium === "premium" && !review.isPremium) return false
+          if (premium === "free" && review.isPremium) return false
+        }
+
         return true
       })
 
       // Sort the filtered reviews
       filtered = sortReviews(filtered, sort)
 
-      // Use requestAnimationFrame for smoother UI updates
-      requestAnimationFrame(() => {
-        setFilteredReviews(filtered)
-
-        // Simulate network delay for smoother UX
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 300)
-      })
-
-      // Update URL with filters
-      updateUrl(categoryId, rating, sort, search)
+      return filtered
     },
-    [initialData, selectedCategory, ratingFilter, sortBy, searchQuery],
+    [],
   )
+
+  // Apply filters and update URL
+  const applyFilters = useCallback(() => {
+    setIsLoading(true)
+
+    // Filter reviews locally without API call
+    const filtered = filterReviews(
+      initialData,
+      selectedCategory,
+      ratingFilter,
+      sortBy,
+      debouncedSearchQuery,
+      premiumFilter,
+    )
+
+    // Update state with filtered reviews
+    setFilteredReviews(filtered)
+
+    // Update URL with filters (without triggering navigation)
+    updateUrl()
+
+    // Simulate network delay for smoother UX
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+  }, [initialData, selectedCategory, ratingFilter, sortBy, debouncedSearchQuery, premiumFilter, filterReviews])
+
+  // Update URL without triggering navigation
+  const updateUrl = useCallback(() => {
+    const params = new URLSearchParams()
+
+    if (selectedCategory) params.set("categoryId", selectedCategory)
+    if (ratingFilter > 0) params.set("minRating", ratingFilter.toString())
+    if (sortBy !== "newest") params.set("sort", sortBy)
+    if (debouncedSearchQuery) params.set("searchTerm", debouncedSearchQuery)
+    if (premiumFilter === "premium") params.set("isPremium", "true")
+    if (premiumFilter === "free") params.set("isPremium", "false")
+
+    const queryString = params.toString()
+
+    // Use startTransition for URL updates to avoid blocking the UI
+    startTransition(() => {
+      router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+    })
+  }, [router, selectedCategory, ratingFilter, sortBy, debouncedSearchQuery, premiumFilter])
 
   const sortReviews = useCallback((reviews: Review[], sortType: string) => {
     switch (sortType) {
@@ -168,34 +217,35 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
     }
   }, [])
 
-  const updateUrl = useCallback(
-    (categoryId: string, rating: number, sort: string, search: string) => {
-      const params = new URLSearchParams()
+  // Handle filter changes
+  const handleCategoryChange = useCallback((categoryId: string) => {
+    setSelectedCategory(categoryId)
+    setShouldApplyFilters(true)
+  }, [])
 
-      if (categoryId) params.set("categoryId", categoryId)
-      if (rating > 0) params.set("minRating", rating.toString())
-      if (sort !== "newest") params.set("sort", sort)
-      if (search) params.set("searchTerm", search)
+  const handleRatingChange = useCallback((value: number) => {
+    setRatingFilter(value)
+    setShouldApplyFilters(true)
+  }, [])
 
-      const queryString = params.toString()
+  const handleSortChange = useCallback((value: string) => {
+    setSortBy(value)
+    setShouldApplyFilters(true)
+  }, [])
 
-      // Use startTransition for URL updates to avoid blocking the UI
-      startTransition(() => {
-        router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
-      })
-    },
-    [router],
-  )
+  const handlePremiumFilterChange = useCallback((value: string | null) => {
+    setPremiumFilter(value)
+    setShouldApplyFilters(true)
+  }, [])
 
   const resetFilters = useCallback(() => {
     setSelectedCategory("")
     setRatingFilter(0)
     setSortBy("newest")
     setSearchQuery("")
-    startTransition(() => {
-      applyFilters("", 0, "newest", "")
-    })
-  }, [applyFilters])
+    setPremiumFilter(null)
+    setShouldApplyFilters(true)
+  }, [])
 
   // Memoize the category list to prevent unnecessary re-renders
   const categoryList = useMemo(
@@ -296,7 +346,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
               <div className="grid gap-6 py-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium leading-none">Category</label>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                     <SelectTrigger className="w-full focus:ring-primary">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
@@ -316,11 +366,11 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                     <span className="text-sm font-medium">{ratingFilter}</span>
                   </div>
                   <Slider
-                    defaultValue={[0]}
+                    defaultValue={[ratingFilter]}
                     max={5}
                     step={1}
                     value={[ratingFilter]}
-                    onValueChange={([value]) => setRatingFilter(value)}
+                    onValueChange={([value]) => handleRatingChange(value)}
                     className="py-2"
                   />
                   <div className="flex justify-between mt-1 text-xs text-muted-foreground">
@@ -330,8 +380,24 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                   </div>
                 </div>
                 <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">Premium Content</label>
+                  <Select
+                    value={premiumFilter || ""}
+                    onValueChange={(value) => handlePremiumFilterChange(value === "" ? null : value)}
+                  >
+                    <SelectTrigger className="w-full focus:ring-primary">
+                      <SelectValue placeholder="All Reviews" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Reviews</SelectItem>
+                      <SelectItem value="premium">Premium Only</SelectItem>
+                      <SelectItem value="free">Free Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
                   <label className="text-sm font-medium leading-none">Sort By</label>
-                  <Select value={sortBy} onValueChange={setSortBy}>
+                  <Select value={sortBy} onValueChange={handleSortChange}>
                     <SelectTrigger className="w-full focus:ring-primary">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
@@ -388,11 +454,11 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                     <span className="text-sm font-medium">{ratingFilter}</span>
                   </div>
                   <Slider
-                    defaultValue={[0]}
+                    defaultValue={[ratingFilter]}
                     max={5}
                     step={1}
                     value={[ratingFilter]}
-                    onValueChange={([value]) => setRatingFilter(value)}
+                    onValueChange={([value]) => handleRatingChange(value)}
                     className="py-2"
                   />
                   <div className="flex justify-between mt-1 text-xs text-muted-foreground">
@@ -402,9 +468,51 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                   </div>
                 </div>
                 <Separator className="my-4" />
+                <div className="space-y-3">
+                  <h4 className="text-md font-medium">Premium Content</h4>
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      className={cn(
+                        "text-sm px-2 py-1.5 rounded-md text-left transition-colors",
+                        premiumFilter === null
+                          ? "font-medium text-primary bg-primary/10"
+                          : "text-muted-foreground hover:bg-muted",
+                      )}
+                      onClick={() => handlePremiumFilterChange(null)}
+                    >
+                      All Reviews
+                    </button>
+                    <button
+                      className={cn(
+                        "text-sm px-2 py-1.5 rounded-md text-left transition-colors flex items-center",
+                        premiumFilter === "premium"
+                          ? "font-medium text-primary bg-primary/10"
+                          : "text-muted-foreground hover:bg-muted",
+                      )}
+                      onClick={() => handlePremiumFilterChange("premium")}
+                    >
+                      Premium Only
+                      <Badge variant="default" className="ml-2 bg-amber-500 hover:bg-amber-500">
+                        PRO
+                      </Badge>
+                    </button>
+                    <button
+                      className={cn(
+                        "text-sm px-2 py-1.5 rounded-md text-left transition-colors",
+                        premiumFilter === "free"
+                          ? "font-medium text-primary bg-primary/10"
+                          : "text-muted-foreground hover:bg-muted",
+                      )}
+                      onClick={() => handlePremiumFilterChange("free")}
+                    >
+                      Free Only
+                    </button>
+                  </div>
+                </div>
+                <Separator className="my-4" />
                 <div className="space-y-2">
                   <h4 className="text-md font-medium mb-2">Sort By</h4>
-                  <Select value={sortBy} onValueChange={setSortBy}>
+                  <Select value={sortBy} onValueChange={handleSortChange}>
                     <SelectTrigger className="w-full focus:ring-primary">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>

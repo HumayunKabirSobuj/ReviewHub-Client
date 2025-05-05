@@ -48,11 +48,13 @@ export default function ReviewComments({ reviewId, initialComments }: ReviewComm
     }
 
     const handleComment = async () => {
+
         if (commentText.trim() === "") return
 
         setIsSubmitting(true)
 
         try {
+
             const response = await createComment(reviewId, commentText)
 
             if (!response.success) {
