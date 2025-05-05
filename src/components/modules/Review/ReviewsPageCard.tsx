@@ -48,6 +48,7 @@ interface ReviewsPageCardProps {
 
 // Main component
 const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category }) => {
+  
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
