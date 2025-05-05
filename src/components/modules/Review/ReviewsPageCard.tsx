@@ -308,7 +308,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       )
     }
 
-    return filteredReviews.map((review) => <ReviewCard key={review.id} review={review} />)
+    return filteredReviews.map((review) => <ReviewCard  key={review.id} review={review} />)
   }, [filteredReviews, isLoading, loadingInitial, resetFilters])
 
   return (
