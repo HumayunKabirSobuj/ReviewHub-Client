@@ -4,10 +4,8 @@ import { voteType } from '@/components/types/add-review';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { updateMyVoteApi } from '@/services/UserDashboard/VoteServices';
 import { CircleX, Eye, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 	const [open, setOpen] = useState<boolean>(false);
@@ -26,27 +24,6 @@ export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 	const openDrawer = (vote: voteType) => {
 		setOpen(true);
 		setVoteDtl(vote);
-	};
-
-	const updateMyVote = async (vote: voteType, type: 'UP' | 'DOWN') => {
-		try {
-			const jsonData = {
-				type: type,
-				reviewId: vote.reviewId,
-			};
-			setVoteDtl({ ...vote, type: type });
-
-			const res = await updateMyVoteApi(jsonData);
-
-			if (res?.success) {
-				toast.success(res?.message, { id: 1 });
-			} else {
-				toast.error(res?.message, { id: 1 });
-				console.log(res);
-			}
-		} catch (error) {
-			console.error(error);
-		}
 	};
 
 	return (
@@ -85,40 +62,6 @@ export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 													{voteDtl.review.description}
 												</p>
 											</div>
-											<div className="space-y-1 mb-4 flex gap-4">
-												<Button
-													variant="outline"
-													size="sm"
-													onClick={() => updateMyVote(voteDtl, 'UP')}
-													className={voteDtl.type === 'UP' ? 'bg-blue-400' : 'bg-primary/10'}
-												>
-													<ThumbsUp
-														className={
-															voteDtl.type === 'UP'
-																? 'w-4 h-4 mr-1 text-white'
-																: 'w-4 h-4 mr-1  text-primary'
-														}
-													/>
-													{/* <span className="text-primary">111</span> */}
-												</Button>
-												<Button
-													variant="outline"
-													size="sm"
-													onClick={() => updateMyVote(voteDtl, 'DOWN')}
-													className={
-														voteDtl.type === 'DOWN' ? 'bg-blue-400' : 'bg-primary/10'
-													}
-												>
-													<ThumbsDown
-														className={
-															voteDtl.type === 'DOWN'
-																? 'w-4 h-4 mr-1 text-white'
-																: 'w-4 h-4 mr-1  text-primary'
-														}
-													/>
-													{/* <span className="text-primary">222</span> */}
-												</Button>
-											</div>
 										</CardContent>
 									</Card>
 								</div>
@@ -145,6 +88,9 @@ export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 										Short Description
 									</th>
+									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Vote Type
+									</th>
 
 									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
 										Actions
@@ -163,6 +109,25 @@ export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 
 										<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
 											{vote.review.excerp || 'Untitled'}
+										</td>
+										<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+											{vote.type === 'UP' ? (
+												<Button
+													variant="outline"
+													size="sm"
+													className="bg-blue-400 pointer-events-none"
+												>
+													<ThumbsUp className="w-4 h-4 mr-1 text-white" />
+												</Button>
+											) : (
+												<Button
+													variant="outline"
+													size="sm"
+													className="bg-red-400 pointer-events-none"
+												>
+													<ThumbsDown className="w-4 h-4 mr-1 text-white" />
+												</Button>
+											)}
 										</td>
 
 										<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
