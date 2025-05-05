@@ -2,11 +2,11 @@
 import { cookies } from "next/headers";
 
 export const makePayment = async (reviewId: string) => {
-  console.log({ reviewId });
+  // console.log({ reviewId });
   try {
     const accessToken = (await cookies()).get("accessToken")?.value;
 
-    console.log(accessToken);
+    // console.log(accessToken);
     if (!accessToken) {
       throw new Error("Login First...");
     }

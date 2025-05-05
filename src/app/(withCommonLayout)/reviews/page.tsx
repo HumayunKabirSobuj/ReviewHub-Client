@@ -60,7 +60,7 @@ export const metadata = {
 }
 
 const makePayment = async(reviewId:string)=>{
-  console.log('Root page....');
+  // console.log('Root page....');
 }
 
 // Main page component

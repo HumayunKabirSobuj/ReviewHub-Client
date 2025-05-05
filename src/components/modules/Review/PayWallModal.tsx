@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -9,38 +9,60 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Lock } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Lock } from "lucide-react";
+import { makePayment } from "@/services/Payments";
 
 interface PaywallModalProps {
-  isOpen: boolean
-  onClose: () => void
-  reviewId: string
-  title: string
-  excerpt: string
-  price: number
-  author: string
+  isOpen: boolean;
+  onClose: () => void;
+  reviewId: string;
+  title: string;
+  excerpt: string;
+  price: number;
+  author: string;
 }
 
-export default function PaywallModal({ isOpen, onClose, reviewId, title, excerpt, price, author }: PaywallModalProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+export default function PaywallModal({
+  isOpen,
+  onClose,
+  reviewId,
+  title,
+  excerpt,
+  price,
+  author,
+}: PaywallModalProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handlePayment = () => {
-    setIsLoading(true)
-    // Redirect to payment page 
+  const handlePayment = async (reviewIdHere: string) => {
+    // setIsLoading(true);
+    // Redirect to payment page
     //! Apnar j route a kora ache oi route a hit korben!
-    router.push(`/reviews/payment/${reviewId}`)
-  }
+    // router.push(`/reviews/payment/${reviewId}`)
+
+    // const result = await makePayment(reviewId);
+    // console.log(result);
+
+    // console.log("payment.....", reviewIdHere);
+    const result = await makePayment(reviewIdHere);
+    // console.log(result);
+    // setIsLoading(true);
+    window.location.replace(result.url);
+    setIsLoading(true);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <Badge variant="default" className="bg-amber-500 hover:bg-amber-600">
+            <Badge
+              variant="default"
+              className="bg-amber-500 hover:bg-amber-600"
+            >
               Premium Content
             </Badge>
             <Badge variant="outline" className="text-muted-foreground">
@@ -48,7 +70,9 @@ export default function PaywallModal({ isOpen, onClose, reviewId, title, excerpt
             </Badge>
           </div>
           <DialogTitle className="text-xl mt-2">{title}</DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground">By {author}</DialogDescription>
+          <DialogDescription className="text-sm text-muted-foreground">
+            By {author}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
@@ -80,7 +104,7 @@ export default function PaywallModal({ isOpen, onClose, reviewId, title, excerpt
             Maybe Later
           </Button>
           <Button
-            onClick={handlePayment}
+            onClick={() => handlePayment(reviewId)}
             className="sm:flex-1 bg-amber-500 hover:bg-amber-600 text-white"
             disabled={isLoading}
           >
@@ -89,5 +113,5 @@ export default function PaywallModal({ isOpen, onClose, reviewId, title, excerpt
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
