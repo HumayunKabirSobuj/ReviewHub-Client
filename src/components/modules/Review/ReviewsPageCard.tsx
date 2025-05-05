@@ -180,9 +180,13 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       const queryString = params.toString()
 
       // Use startTransition for URL updates to avoid blocking the UI
-      startTransition(() => {
-        router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
-      })
+      // startTransition(() => {
+      //   router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+      // })
+
+      // startTransition(() => {
+      //   router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+      // })
     },
     [router],
   )
@@ -258,7 +262,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       )
     }
 
-    return filteredReviews.map((review) => <ReviewCard key={review.id} review={review} />)
+    return filteredReviews.map((review) => <ReviewCard  key={review.id} review={review} />)
   }, [filteredReviews, isLoading, loadingInitial, resetFilters])
 
   return (
