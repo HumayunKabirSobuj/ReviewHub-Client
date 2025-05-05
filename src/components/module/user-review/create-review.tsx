@@ -160,7 +160,6 @@ export default function CreateReviewComponent({
 				price: Number(data.price),
 				rating: 0,
 			};
-			console.log('json', jsonData);
 			let res;
 			if (mode === 'edit') {
 				const reviewId = (review !== null ? review.id : null) as string;

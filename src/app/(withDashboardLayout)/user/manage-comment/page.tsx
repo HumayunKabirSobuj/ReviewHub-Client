@@ -1,5 +1,5 @@
 import ManageCommentClient from '@/components/module/user-review/manage-comment';
-import { getAllReviewsApi, getMyAllCommentsApi } from '@/services/UserDashboard/ReviewServices';
+import { getMyAllCommentsApi } from '@/services/UserDashboard/CommentServices';
 
 export default async function ManageCommentSection() {
 	const comments = (await getMyAllCommentsApi()).data;

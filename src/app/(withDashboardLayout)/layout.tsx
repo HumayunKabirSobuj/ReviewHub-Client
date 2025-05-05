@@ -211,7 +211,19 @@ import type React from 'react';
 import { useUser } from '@/components/context/UserContext';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { BarChart3, Home, LayoutDashboard, Map, Users, X } from 'lucide-react';
+import {
+	BarChart3,
+	CalendarRange,
+	Euro,
+	Home,
+	LayoutDashboard,
+	Map,
+	MessageCircle,
+	MessageSquareDiff,
+	Users,
+	Vote,
+	X,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -234,11 +246,11 @@ const sidebarItemsAdmin = [
 const sidebarItemsUser = [
 	{ icon: LayoutDashboard, label: 'Dashboard', href: '/user/dashboard' },
 	//   { icon: Globe, label: "Site", href: "/admin/site" },
-	{ icon: Users, label: 'Add Reviews', href: '/user/add-reviews' },
-	{ icon: Users, label: 'Manage Reviews', href: '/user/manage-reviews' },
-	{ icon: Users, label: 'Manage Comment', href: '/user/manage-comment' },
-	{ icon: Users, label: 'Manage Vote', href: '/user/manage-vote' },
-	{ icon: Users, label: 'My Payment', href: '/user/my-payments' },
+	{ icon: CalendarRange, label: 'Add Reviews', href: '/user/add-reviews' },
+	{ icon: MessageSquareDiff, label: 'Manage Reviews', href: '/user/manage-reviews' },
+	{ icon: MessageCircle, label: 'Manage Comment', href: '/user/manage-comment' },
+	{ icon: Vote, label: 'Manage Vote', href: '/user/manage-vote' },
+	{ icon: Euro, label: 'My Payment', href: '/user/my-payments' },
 	{ icon: Home, label: 'Go to Home', href: '/' },
 ];
 
