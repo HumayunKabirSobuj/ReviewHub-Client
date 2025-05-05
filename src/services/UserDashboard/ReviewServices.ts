@@ -99,3 +99,23 @@ export const getAllReviewsApi = async () => {
 		console.log(error);
 	}
 };
+
+export const getMyAllCommentsApi = async () => {
+	// /comment/my-comments
+	const accessToken = (await cookies()).get('accessToken')?.value;
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/comment/my-comments`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${accessToken}`,
+			},
+			next: { tags: ['COMMENTS'] },
+		});
+		const result = await res.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};

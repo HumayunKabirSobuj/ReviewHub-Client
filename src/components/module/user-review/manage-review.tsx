@@ -1,23 +1,13 @@
 'use client';
 
-import { reviewDtlOne, reviewDtlType } from '@/components/types/add-review';
+import { reviewDtlType } from '@/components/types/add-review';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from '@/components/ui/drawer';
-import { getCurrentUser } from '@/services/AuthServices';
-import { deleteUserReviewApi, getAllReviewsApi } from '@/services/UserDashboard/ReviewServices';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
 import { CircleX, Edit, Eye, Loader, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CreateReviewComponent from './create-review';
 import ViewReviewComponent from './sub-component/view-review';
 import { toast } from 'sonner';

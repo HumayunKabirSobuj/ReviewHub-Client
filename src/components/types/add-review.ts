@@ -40,3 +40,16 @@ export interface reviewDtlType {
 		name: string;
 	};
 }
+
+export interface commentType {
+	id: string;
+	content: string;
+	userId: string;
+	reviewId: string;
+	createdAt: string;
+	review: {
+		title: string;
+		excerp: string;
+		description: string;
+	};
+}
