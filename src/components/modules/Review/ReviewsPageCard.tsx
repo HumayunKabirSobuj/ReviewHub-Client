@@ -47,7 +47,7 @@ interface ReviewsPageCardProps {
 }
 
 // Main component
-const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category }) => {
+const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category ,makePayment}) => {
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
@@ -179,9 +179,13 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       const queryString = params.toString()
 
       // Use startTransition for URL updates to avoid blocking the UI
-      startTransition(() => {
-        router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
-      })
+      // startTransition(() => {
+      //   router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+      // })
+
+      // startTransition(() => {
+      //   router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+      // })
     },
     [router],
   )
@@ -257,7 +261,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       )
     }
 
-    return filteredReviews.map((review) => <ReviewCard key={review.id} review={review} />)
+    return filteredReviews.map((review) => <ReviewCard  key={review.id} review={review} />)
   }, [filteredReviews, isLoading, loadingInitial, resetFilters])
 
   return (

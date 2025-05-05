@@ -59,6 +59,10 @@ export const metadata = {
   description: "Browse and filter product reviews from our community",
 }
 
+const makePayment = async(reviewId:string)=>{
+  console.log('Root page....');
+}
+
 // Main page component
 export default async function Reviews({ searchParams }: ReviewsPageProps) {
   try {
