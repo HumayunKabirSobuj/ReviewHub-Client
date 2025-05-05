@@ -1,4 +1,4 @@
-import ManageReviews from "@/components/modules/Review/admin/ManageReview"
+import ManageReviews from "@/components/modules/admin/ManageReview"
 import { createSafeQueryString } from "@/helpers"
 import { getAllCategories } from "@/services/Categories"
 import { getAllReviews } from "@/services/Reviews"

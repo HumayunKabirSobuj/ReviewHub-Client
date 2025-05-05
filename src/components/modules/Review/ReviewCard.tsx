@@ -17,6 +17,7 @@ import { memo, useState } from "react";
 import { useUser } from "@/components/context/UserContext";
 import { makePayment } from "@/services/Payments";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface Review {
   id: string;
@@ -166,7 +167,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               size="sm"
               className="w-full text-xs hover:bg-amber-50 transition-colors"
             >
-              View Details
+              <Link href={`/reviews/${review?.id}`}>View Details</Link>
             </Button>
           </div>
         )}
