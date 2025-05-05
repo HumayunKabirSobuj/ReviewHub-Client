@@ -65,3 +65,17 @@ export interface voteType {
 		description: string;
 	};
 }
+
+export interface paymentType {
+	id: string;
+	userId: string;
+	reviewId: string;
+	amount: number;
+	status: string;
+	createdAt: string;
+	review: {
+		title: string;
+		excerp: string;
+		description: string;
+	};
+}
