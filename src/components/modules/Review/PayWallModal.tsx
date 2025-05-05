@@ -108,7 +108,7 @@ export default function PaywallModal({
             className="sm:flex-1 bg-amber-500 hover:bg-amber-600 text-white"
             disabled={isLoading}
           >
-            {isLoading ? "Processing..." : `Pay $${price.toFixed(2)} Now`}
+            {isLoading ? "Processing..." : `Pay ${price.toFixed(2)} BDT Now`}
           </Button>
         </DialogFooter>
       </DialogContent>
