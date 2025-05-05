@@ -53,3 +53,15 @@ export interface commentType {
 		description: string;
 	};
 }
+
+export interface voteType {
+	id: string;
+	type: string;
+	userId: string;
+	reviewId: string;
+	review: {
+		title: string;
+		excerp: string;
+		description: string;
+	};
+}

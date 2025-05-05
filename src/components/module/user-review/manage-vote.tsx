@@ -1,22 +1,21 @@
 'use client';
 
-import { commentType } from '@/components/types/add-review';
+import { voteType } from '@/components/types/add-review';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { deleteCommentApi } from '@/services/UserDashboard/CommentServices';
-import { CircleX, Eye, Trash2 } from 'lucide-react';
+import { updateMyVoteApi } from '@/services/UserDashboard/VoteServices';
+import { CircleX, Eye, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export default function ManageCommentClient({ comments }: { comments: commentType[] }) {
+export default function ManageVoteClient({ votes }: { votes: voteType[] }) {
 	const [open, setOpen] = useState<boolean>(false);
-	const [commentDtl, setCommentDtl] = useState<commentType>({
+	const [voteDtl, setVoteDtl] = useState<voteType>({
 		id: '',
-		content: '',
+		type: '',
 		userId: '',
 		reviewId: '',
-		createdAt: '',
 		review: {
 			title: '',
 			excerp: '',
@@ -24,32 +23,41 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 		},
 	});
 
-	const deleteUserComment = async (comment: commentType) => {
-		try {
-			let toastId = toast.loading('...Deleting', { id: 1 });
-			const res = await deleteCommentApi(comment.id);
-			if (res?.success) {
-				toast.success(res.message, { id: toastId });
-			}
-		} catch (err) {
-			console.log(err);
-		}
+	const openDrawer = (vote: voteType) => {
+		setOpen(true);
+		setVoteDtl(vote);
 	};
 
-	const openDrawer = (comment: commentType) => {
-		setOpen(true);
-		setCommentDtl(comment);
+	const updateMyVote = async (vote: voteType, type: 'UP' | 'DOWN') => {
+		try {
+			const jsonData = {
+				type: type,
+				reviewId: vote.reviewId,
+			};
+			setVoteDtl({ ...vote, type: type });
+
+			const res = await updateMyVoteApi(jsonData);
+
+			if (res?.success) {
+				toast.success(res?.message, { id: 1 });
+			} else {
+				toast.error(res?.message, { id: 1 });
+				console.log(res);
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
 		<>
 			<Card>
 				<Drawer direction={'right'} open={open} onOpenChange={setOpen}>
-					<DrawerContent className="min-w-xl overflow-y-auto overflow-x-hidden p-[15px]">
+					<DrawerContent className="min-w-lg overflow-y-auto overflow-x-hidden p-[15px]">
 						<div className="mx-auto w-full max-w-2xl">
 							<DrawerHeader>
 								<div className="flex justify-between">
-									<DrawerTitle>View Comment Detail</DrawerTitle>
+									<DrawerTitle>View Vote Detail</DrawerTitle>
 									<DrawerClose>
 										<CircleX />
 									</DrawerClose>
@@ -65,7 +73,7 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 													Review Title
 												</label>
 												<p className="text-gray-500 w-[calc(100%-130px)]">
-													{commentDtl.review.title}
+													{voteDtl.review.title}
 												</p>
 											</div>
 
@@ -74,16 +82,42 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 													Description
 												</label>
 												<p className="text-gray-500 w-[calc(100%-130px)]">
-													{commentDtl.review.description}
+													{voteDtl.review.description}
 												</p>
 											</div>
-											<div className="space-y-1 mb-4 flex ">
-												<label htmlFor="" className="w-[130px]">
-													Comment
-												</label>
-												<p className="text-gray-500 w-[calc(100%-130px)]">
-													{commentDtl.content}
-												</p>
+											<div className="space-y-1 mb-4 flex gap-4">
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={() => updateMyVote(voteDtl, 'UP')}
+													className={voteDtl.type === 'UP' ? 'bg-blue-400' : 'bg-primary/10'}
+												>
+													<ThumbsUp
+														className={
+															voteDtl.type === 'UP'
+																? 'w-4 h-4 mr-1 text-white'
+																: 'w-4 h-4 mr-1  text-primary'
+														}
+													/>
+													{/* <span className="text-primary">111</span> */}
+												</Button>
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={() => updateMyVote(voteDtl, 'DOWN')}
+													className={
+														voteDtl.type === 'DOWN' ? 'bg-blue-400' : 'bg-primary/10'
+													}
+												>
+													<ThumbsDown
+														className={
+															voteDtl.type === 'DOWN'
+																? 'w-4 h-4 mr-1 text-white'
+																: 'w-4 h-4 mr-1  text-primary'
+														}
+													/>
+													{/* <span className="text-primary">222</span> */}
+												</Button>
 											</div>
 										</CardContent>
 									</Card>
@@ -94,7 +128,7 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 				</Drawer>
 				<CardHeader className="space-y-2">
 					<div className="w-full">
-						<CardTitle>Manage your comments</CardTitle>
+						<CardTitle>Manage your votes</CardTitle>
 						<CardDescription>
 							Share your experience and help others to make informed decisions
 						</CardDescription>
@@ -109,7 +143,7 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 										Review Title
 									</th>
 									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										Comment
+										Short Description
 									</th>
 
 									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
@@ -119,16 +153,16 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 							</thead>
 							{/* bg-gray-200 */}
 							<tbody className="bg-white divide-y divide-gray-200">
-								{comments.map((comment, index) => (
+								{votes.map((vote, index) => (
 									<tr key={index} className={`hover:bg-gray-50 `}>
 										<td className="px-4 py-3 text-sm font-medium">
 											<div className="flex flex-col">
-												<span className="truncate max-w-[200px]">{comment.review.title}</span>
+												<span className="truncate max-w-[200px]">{vote.review.title}</span>
 											</div>
 										</td>
 
 										<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-											{comment.content || 'Untitled'}
+											{vote.review.excerp || 'Untitled'}
 										</td>
 
 										<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
@@ -138,19 +172,9 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 													size="icon"
 													className="h-8 w-8 text-blue-500"
 													title="View"
-													onClick={() => openDrawer(comment)}
+													onClick={() => openDrawer(vote)}
 												>
 													<Eye className="h-4 w-4" />
-												</Button>
-
-												<Button
-													variant="ghost"
-													size="icon"
-													className="h-8 w-8 text-red-500"
-													title="Delete"
-													onClick={() => deleteUserComment(comment)}
-												>
-													<Trash2 className="h-4 w-4" />
 												</Button>
 											</div>
 										</td>
