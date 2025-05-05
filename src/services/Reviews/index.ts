@@ -81,7 +81,7 @@ export async function createVote(reviewId: string, voteType: "up" | "down") {
 
         body: JSON.stringify({
           reviewId,
-          voteType: voteType === "up" ? "upVote" : "downVote",
+          type: voteType === "up" ? "UP" : "DOWN",
         }),
       }
     );
