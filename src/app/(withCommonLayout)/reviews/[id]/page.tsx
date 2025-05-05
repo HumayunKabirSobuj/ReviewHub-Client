@@ -48,7 +48,7 @@ function ReviewDetailSkeleton() {
 
 export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
   // Fetch review data
-  const { data: review, error } = await getReviewById(params.id)
+  const { data: review, error } = await getReviewById(params?.id)
 
   // console.log("review", review);
   // Handle error state
@@ -80,7 +80,6 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
       </div>
     )
   }
-
   // For demo purposes, using mock data for premium status
   // In a real app, this would come from the database or user session
   const isPremiumUnlocked = review.Payment && review.Payment.length > 0
