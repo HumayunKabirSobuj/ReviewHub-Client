@@ -211,7 +211,7 @@ import type React from 'react';
 import { useUser } from '@/components/context/UserContext';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { BarChart3, LayoutDashboard, Map, Users, X } from 'lucide-react';
+import { BarChart3, Home, LayoutDashboard, Map, Users, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -239,7 +239,7 @@ const sidebarItemsUser = [
 	{ icon: Users, label: 'Manage Comment', href: '/user/manage-comment' },
 	{ icon: Users, label: 'Manage Vote', href: '/user/manage-vote' },
 	{ icon: Users, label: 'My Payment', href: '/user/my-payments' },
-	{ icon: Users, label: 'Go to Home', href: '/' },
+	{ icon: Home, label: 'Go to Home', href: '/' },
 ];
 
 const revenueData = [
