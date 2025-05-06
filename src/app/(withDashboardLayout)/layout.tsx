@@ -251,19 +251,10 @@ const sidebarItemsAdmin = [
   //   { icon: Globe, label: "Site", href: "/admin/site" },
   { icon: Users, label: "Manage Users", href: "/admin/manage-users" },
   { icon: Map, label: "Manage Reviews", href: "/admin/manage-reviews" },
-  //   { icon: MapPin, label: "Routes", href: "/admin/routes" },
-  //   { icon: Building2, label: "Retailers", href: "/admin/retailers" },
-  //   { icon: ShoppingCart, label: "Orders", href: "/admin/orders" },
-  //   { icon: Package, label: "Products", href: "/admin/products" },
-  //   { icon: DollarSign, label: "Profit", href: "/admin/profit" },
-  //   { icon: Plus, label: "Extra", href: "/admin/extra" },
-  //   { icon: Building2, label: "Company", href: "/admin/company" },
-  //   { icon: MapPin, label: "Area", href: "/admin/area" },
-  //   { icon: Settings, label: "Management", href: "/admin/management" },
+  { icon: Home, label: "Go to Home", href: "/" },
 ];
 const sidebarItemsUser = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/user/dashboard" },
-  //   { icon: Globe, label: "Site", href: "/admin/site" },
   { icon: CalendarRange, label: "Add Reviews", href: "/user/add-reviews" },
   {
     icon: MessageSquareDiff,
