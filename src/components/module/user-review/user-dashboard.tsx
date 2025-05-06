@@ -5,7 +5,7 @@ import { SquareKanban, Vote } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-export default function UserDashboardSection() {
+export default function UserDashboardSection({ voteCount, commentCount }: { commentCount: number; voteCount: number }) {
 	const [profileData, setProfileData] = useState<Record<string, string>>({
 		name: '',
 		email: '',
@@ -18,7 +18,7 @@ export default function UserDashboardSection() {
 		try {
 			const res = await getCurrentUser();
 			if (res) {
-				console.log('user', res);
+				setProfileData(res);
 			}
 		} catch (err) {
 			console.log(err);
@@ -37,8 +37,8 @@ export default function UserDashboardSection() {
 							alt="user-image"
 						/>
 						<div className="pt-4">
-							<h1 className="text-6xl font-bold">Shaun Hossain</h1>
-							<h1 className="text-4xl font-semibold text-gray-400">shaun@gmail.com</h1>
+							<h1 className="text-6xl font-bold">{profileData.name}</h1>
+							<h1 className="text-4xl font-semibold text-gray-400">{profileData.email}</h1>
 						</div>
 					</div>
 				</CardHeader>
@@ -52,7 +52,7 @@ export default function UserDashboardSection() {
 								</div>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">21</div>
+								<div className="text-2xl font-bold">{commentCount}</div>
 							</CardContent>
 						</Card>
 						<Card>
@@ -63,7 +63,7 @@ export default function UserDashboardSection() {
 								</div>
 							</CardHeader>
 							<CardContent>
-								<div className="text-2xl font-bold">21</div>
+								<div className="text-2xl font-bold">{voteCount}</div>
 							</CardContent>
 						</Card>
 					</div>
