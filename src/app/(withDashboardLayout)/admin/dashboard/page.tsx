@@ -1,13 +1,14 @@
 import AdminDashboardPage from '@/components/modules/admin/AdminDashboardPage';
-import { getAdminDashboardInfo } from '@/services/AdminDashboard';
+import { getAdminDashboardInfo, getReveiwDataForAdminDashboard } from '@/services/AdminDashboard';
 import React from 'react';
 
 const AdminDashboard = async() => {
     const data = await getAdminDashboardInfo()
-    // console.log(data);
+    const tableData = await getReveiwDataForAdminDashboard()
+    // console.log(tableData.data);
     return (
         <div>
-            <AdminDashboardPage data={data}></AdminDashboardPage>
+            <AdminDashboardPage data={data} tableData={tableData}></AdminDashboardPage>
         </div>
     );
 };
