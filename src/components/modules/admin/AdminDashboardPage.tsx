@@ -1,5 +1,3 @@
-
-
 // "use client"
 
 // import { Button } from "@/components/ui/button"
@@ -37,8 +35,6 @@
 
 //   return breakpoints
 // }
-
-
 
 // const revenueData = [
 //   { month: "Jan", revenue: 20000 },
@@ -421,16 +417,30 @@
 //   )
 // }
 
+"use client";
 
-
-"use client"
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Building2, Package, ShoppingCart } from "lucide-react"
-import { useState } from "react"
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Building2, Package, ShoppingCart, Star } from "lucide-react";
+import { useState } from "react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 function useBreakpoints() {
   const [breakpoints, setBreakpoints] = useState({
@@ -439,7 +449,7 @@ function useBreakpoints() {
     isMd: false,
     isLg: false,
     isXl: false,
-  })
+  });
 
   useState(() => {
     if (typeof window !== "undefined") {
@@ -450,16 +460,16 @@ function useBreakpoints() {
           isMd: window.innerWidth >= 768,
           isLg: window.innerWidth >= 1024,
           isXl: window.innerWidth >= 1280,
-        })
-      }
+        });
+      };
 
-      checkBreakpoints()
-      window.addEventListener("resize", checkBreakpoints)
-      return () => window.removeEventListener("resize", checkBreakpoints)
+      checkBreakpoints();
+      window.addEventListener("resize", checkBreakpoints);
+      return () => window.removeEventListener("resize", checkBreakpoints);
     }
-  })
+  });
 
-  return breakpoints
+  return breakpoints;
 }
 
 const revenueData = [
@@ -475,7 +485,7 @@ const revenueData = [
   { month: "Oct", revenue: 40000 },
   { month: "Nov", revenue: 45000 },
   { month: "Dec", revenue: 48000 },
-]
+];
 
 const productData = [
   {
@@ -505,12 +515,24 @@ const productData = [
     quantity: "100",
     srName: "John Smith",
   },
-]
+];
+type AdminDashboardPageProps = {
+  data: any;
+  tableData: any;
+};
+export default function AdminDashboardPage({
+  data,
+  tableData,
+}: AdminDashboardPageProps) {
+  // console.log(data);
 
-export default function AdminDashboardPage(data: any) {
-  const AdminData = data?.data?.data
-  const [activeTab, setActiveTab] = useState("this-week")
-  const { isSm } = useBreakpoints()
+  const tableWithFiveRow = tableData?.data?.slice(0, 5);
+  // console.log(tableWithFiveRow);
+
+  const AdminData = data?.data;
+  console.log(AdminData);
+  const [activeTab, setActiveTab] = useState("this-week");
+  const { isSm } = useBreakpoints();
 
   return (
     <main className="flex-1 overflow-auto">
@@ -519,24 +541,32 @@ export default function AdminDashboardPage(data: any) {
         <div className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Pay Amount</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Pay Amount
+              </CardTitle>
               <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
                 <Package className="h-4 w-4 text-green-500" />
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4">
-              <div className="text-2xl font-bold">{AdminData?.totalPaymentAmount} BDT</div>
+              <div className="text-2xl font-bold">
+                {AdminData?.totalPaymentAmount} BDT
+              </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Number Of Payments</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Number Of Payments
+              </CardTitle>
               <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
                 <Package className="h-4 w-4 text-green-500" />
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4">
-              <div className="text-2xl font-bold">{AdminData?.totalPayments}</div>
+              <div className="text-2xl font-bold">
+                {AdminData?.totalPayments}
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -552,24 +582,32 @@ export default function AdminDashboardPage(data: any) {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Published Reviews</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Published Reviews
+              </CardTitle>
               <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center">
                 <Building2 className="h-4 w-4 text-yellow-500" />
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4">
-              <div className="text-2xl font-bold">{AdminData?.totalPublishedReviews}</div>
+              <div className="text-2xl font-bold">
+                {AdminData?.totalPublishedReviews}
+              </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Unpublished Reviews</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Unpublished Reviews
+              </CardTitle>
               <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center">
                 <Building2 className="h-4 w-4 text-yellow-500" />
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4">
-              <div className="text-2xl font-bold">{AdminData?.totalUnpublishedReviews}</div>
+              <div className="text-2xl font-bold">
+                {AdminData?.totalUnpublishedReviews}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -582,11 +620,19 @@ export default function AdminDashboardPage(data: any) {
               <div>
                 <CardTitle className="text-base">Overall Total</CardTitle>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold">{AdminData?.totalPaymentAmount} BDT</span>
-                  <span className="rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-600">+20%</span>
+                  <span className="text-2xl font-bold">
+                    {AdminData?.totalPaymentAmount} BDT
+                  </span>
+                  <span className="rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-600">
+                    +20%
+                  </span>
                 </div>
               </div>
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="sm:ml-auto">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="sm:ml-auto"
+              >
                 <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-8 w-full max-w-xs">
                   <TabsTrigger value="this-week" className="text-xs">
                     This Week
@@ -624,7 +670,9 @@ export default function AdminDashboardPage(data: any) {
                       tick={{ fontSize: 12 }}
                       tickFormatter={(value) => {
                         // On small screens, show fewer labels
-                        return !isSm && value.length > 1 ? value.substring(0, 1) : value
+                        return !isSm && value.length > 1
+                          ? value.substring(0, 1)
+                          : value;
                       }}
                     />
                     <YAxis
@@ -639,11 +687,11 @@ export default function AdminDashboardPage(data: any) {
                         if (active && payload && payload.length) {
                           return (
                             <div className="rounded-lg border bg-blue-600 text-white p-2 shadow-sm">
-                              <div className="text-xs">₹50</div>
+                              <div className="text-xs">BDT</div>
                             </div>
-                          )
+                          );
                         }
-                        return null
+                        return null;
                       }}
                     />
                     <Line
@@ -722,7 +770,12 @@ export default function AdminDashboardPage(data: any) {
                     transform="rotate(-90 50 50)"
                   />
                   {/* Center text */}
-                  <text x="50" y="45" textAnchor="middle" className="text-3xl font-bold">
+                  <text
+                    x="50"
+                    y="45"
+                    textAnchor="middle"
+                    className="text-3xl font-bold"
+                  >
                     80%
                   </text>
                   <text x="50" y="60" textAnchor="middle" className="text-xs">
@@ -757,48 +810,116 @@ export default function AdminDashboardPage(data: any) {
             <div className="overflow-x-auto -mx-4 sm:-mx-0">
               <div className="inline-block min-w-full align-middle">
                 <div className="overflow-hidden rounded-md">
-                  <Table className="min-w-full">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="whitespace-nowrap">Product</TableHead>
-                        <TableHead className="whitespace-nowrap hidden sm:table-cell">Dealer</TableHead>
-                        <TableHead className="whitespace-nowrap hidden md:table-cell">Retailer</TableHead>
-                        <TableHead className="whitespace-nowrap hidden md:table-cell">SR</TableHead>
-                        <TableHead className="whitespace-nowrap hidden lg:table-cell">Union</TableHead>
-                        <TableHead className="whitespace-nowrap hidden lg:table-cell">Buyer</TableHead>
-                        <TableHead className="whitespace-nowrap">BRAND</TableHead>
-                        <TableHead className="whitespace-nowrap">NAME</TableHead>
-                        <TableHead className="whitespace-nowrap">PRICE</TableHead>
-                        <TableHead className="whitespace-nowrap hidden sm:table-cell">BRAND</TableHead>
-                        <TableHead className="whitespace-nowrap">QUANTITY</TableHead>
-                        <TableHead className="whitespace-nowrap hidden sm:table-cell">SR NAME</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {productData.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <div className="h-8 w-8 bg-yellow-100 rounded-md flex items-center justify-center">
-                                <Package className="h-4 w-4 text-yellow-600" />
+                  <div>
+                    {/* Desktop and tablet view */}
+                    <div className="hidden sm:block">
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Title</TableHead>
+                              <TableHead>Author</TableHead>
+                              <TableHead>Category</TableHead>
+                              <TableHead>Rating</TableHead>
+                              <TableHead>Status</TableHead>
+                              <TableHead>Price</TableHead>
+                              <TableHead>Date</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {tableWithFiveRow?.map((table: any, idx: any) => (
+                              <TableRow key={idx + 1}>
+                                <TableCell className="font-medium">
+                                  {table?.title}
+                                </TableCell>
+                                <TableCell> {table?.author?.name}</TableCell>
+                                <TableCell> {table?.category?.name}</TableCell>
+                                <TableCell>
+                                  <div className="flex items-center">
+                                    {table?.rating}{" "}
+                                    <Star className="ml-1 h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                  </div>
+                                </TableCell>
+                                <TableCell>
+                                  <Badge
+                                    variant="outline"
+                                    className="bg-green-50 text-green-700 border-green-200"
+                                  >
+                                    Published
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="text-purple-600 font-medium">
+                                  {table?.price}
+                                </TableCell>
+                                <TableCell>
+                                  {" "}
+                                  {new Date(
+                                    table?.createdAt
+                                  ).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                  })}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </div>
+
+                    {/* Mobile view */}
+                    <div className="sm:hidden">
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="grid gap-2">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h3 className="font-semibold">
+                                  Get this review
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                  Shaun Hossain
+                                </p>
+                              </div>
+                              <Badge
+                                variant="outline"
+                                className="bg-green-50 text-green-700 border-green-200"
+                              >
+                                Published
+                              </Badge>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <p className="text-muted-foreground">
+                                  Category
+                                </p>
+                                <p>Gadgets</p>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Rating</p>
+                                <div className="flex items-center">
+                                  4{" "}
+                                  <Star className="ml-1 h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Price</p>
+                                <p className="text-purple-600 font-medium">
+                                  $233.00
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Date</p>
+                                <p>May 5, 2025</p>
                               </div>
                             </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell"></TableCell>
-                          <TableCell className="hidden md:table-cell"></TableCell>
-                          <TableCell className="hidden md:table-cell"></TableCell>
-                          <TableCell className="hidden lg:table-cell"></TableCell>
-                          <TableCell className="hidden lg:table-cell"></TableCell>
-                          <TableCell className="font-medium">{product.brand}</TableCell>
-                          <TableCell>{product.name}</TableCell>
-                          <TableCell>{product.price}</TableCell>
-                          <TableCell className="hidden sm:table-cell">{product.brandName}</TableCell>
-                          <TableCell>{product.quantity}</TableCell>
-                          <TableCell className="hidden sm:table-cell">{product.srName}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -806,5 +927,5 @@ export default function AdminDashboardPage(data: any) {
         </Card>
       </div>
     </main>
-  )
+  );
 }
