@@ -2,9 +2,9 @@
 
 import type React from 'react';
 
-import { useState, useEffect, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { format } from 'date-fns';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,18 +17,21 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import RatingComponent from '@/components/usefulComponents/ratingComponent';
 import {
+	BookCheck,
 	Calendar,
 	Check,
 	ChevronDown,
@@ -47,8 +50,14 @@ import {
 	Trash2,
 	X,
 } from 'lucide-react';
+import { toast } from 'sonner';
+import { approveReviewApi } from '@/services/Reviews';
+import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import RatingComponent from '@/components/usefulComponents/ratingComponent';
+
+
+
+
 
 // Types
 interface Author {
@@ -106,7 +115,6 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 	const openDrawer = (review: Review) => {
 		setOpen(true);
 		setReviewDtl(review);
-		console.log('review', review);
 	};
 
 	// Loading state
@@ -120,7 +128,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 
 	const [itemsPerPage, setItemsPerPage] = useState(() => {
 		const limit = searchParams.get('limit');
-		return limit ? Number.parseInt(limit) : 2;
+		return limit ? Number.parseInt(limit) : 5;
 	});
 
 	// State for filters
@@ -199,8 +207,8 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 				? tabValue === 'published'
 					? true
 					: tabValue === 'unpublished'
-					? false
-					: undefined
+						? false
+						: undefined
 				: isPublished;
 
 			if (pubStatus !== undefined) {
@@ -452,9 +460,8 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant={selectedCategory ? 'default' : 'outline'}
-									className={`cursor-pointer ${
-										selectedCategory ? 'bg-primary text-primary-foreground' : ''
-									}`}
+									className={`cursor-pointer ${selectedCategory ? 'bg-primary text-primary-foreground' : ''
+										}`}
 								>
 									{selectedCategory
 										? category.find((c) => c.id === selectedCategory)?.name || 'Category'
@@ -483,15 +490,14 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant={selectedPremium !== undefined ? 'default' : 'outline'}
-									className={`cursor-pointer ${
-										selectedPremium !== undefined ? 'bg-primary text-primary-foreground' : ''
-									}`}
+									className={`cursor-pointer ${selectedPremium !== undefined ? 'bg-primary text-primary-foreground' : ''
+										}`}
 								>
 									{selectedPremium === undefined
 										? 'Premium Status'
 										: selectedPremium
-										? 'Premium'
-										: 'Free'}
+											? 'Premium'
+											: 'Free'}
 									<ChevronDown className="ml-2 h-4 w-4" />
 								</Button>
 							</DropdownMenuTrigger>
@@ -800,9 +806,8 @@ function SummaryCard({
 }) {
 	return (
 		<Card
-			className={`transition-all duration-200 ${
-				isActive ? 'ring-2 ring-primary' : 'hover:shadow-md'
-			} cursor-pointer`}
+			className={`transition-all duration-200 ${isActive ? 'ring-2 ring-primary' : 'hover:shadow-md'
+				} cursor-pointer`}
 			onClick={onClick}
 		>
 			<CardContent className="p-4 flex items-center justify-between">
@@ -828,6 +833,33 @@ function ReviewsTable({
 	if (reviews.length === 0) {
 		return <div className="text-center py-8 text-gray-500">No reviews found.</div>;
 	}
+	const approveReview = async (review: Review) => {
+		try {
+			const toastId = toast.loading('...Loading', { id: 1 });
+			const res = await approveReviewApi(review.id);
+			if (res?.success) {
+				toast.success(res.message, { id: toastId });
+			} else {
+				toast.error(res.message, { id: toastId });
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const deleteReviewMethod = async (review: Review) => {
+		try {
+			const toastId = toast.loading('...Loading', { id: 1 });
+			const res = await deleteUserReviewApi(review.id);
+			if (res?.success) {
+				toast.success(res.message, { id: toastId });
+			} else {
+				toast.error(res.message, { id: toastId });
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	return (
 		<div className="rounded-md border">
@@ -889,14 +921,15 @@ function ReviewsTable({
 										variant="ghost"
 										size="icon"
 										className="h-8 w-8 text-green-500 cursor-pointer"
+										onClick={() => approveReview(review)}
 									>
-										<Edit className="h-4 w-4" />
+										<BookCheck className="h-4 w-4" />
 									</Button>
 									<Button
 										variant="ghost"
 										size="icon"
 										className="h-8 w-8 text-red-500 cursor-pointer"
-										onClick={() => onDelete(review)}
+										onClick={() => deleteReviewMethod(review)}
 									>
 										<Trash2 className="h-4 w-4" />
 									</Button>

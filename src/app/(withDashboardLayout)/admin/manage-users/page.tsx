@@ -1,11 +1,35 @@
-import ManageUsersForAdmin from "@/components/module/admin/manageUsers/manageUsers";
+import ManageUsersForAdmin from '@/components/module/admin/manageUsers/manageUsers';
+import { createSafeQueryString } from '@/helpers';
+import { getAllUsers } from '@/services/User';
+import { Suspense } from 'react';
+import { Toaster } from 'sonner';
 
-const ManageUsers = () => {
-    return (
-        <div>
-          <ManageUsersForAdmin></ManageUsersForAdmin>
-        </div>
-    );
-};
+export default async function ManageUsersPage({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] };
+}) {
+	// Create a safe query string from the search parameters
+	const queryString = createSafeQueryString(searchParams);
 
-export default ManageUsers;
+	// Fetch data based on the query parameters
+	let users = [];
+	try {
+		const { data, error } = await getAllUsers(queryString);
+		users = data || [];
+
+		if (error) {
+			console.error('Error fetching users:', error);
+		}
+	} catch (error) {
+		console.error('Error fetching users:', error);
+	}
+
+	return (
+		<>
+			<Suspense fallback={<div>Loading users...</div>}>
+				<ManageUsersForAdmin users={users} />
+			</Suspense>
+		</>
+	);
+}

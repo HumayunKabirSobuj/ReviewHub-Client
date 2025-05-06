@@ -17,7 +17,6 @@ export default function RatingComponent({
 
 	return (
 		<div className="flex gap-1">
-			<h1>Rating</h1>
 			{Array.from({ length: max }, (_, i) => {
 				const contained = (activeStatus ?? value) > i;
 				return selectable === true ? (
