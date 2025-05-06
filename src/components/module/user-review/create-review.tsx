@@ -338,7 +338,7 @@ export default function CreateReviewComponent({
 									</div>
 								)}
 
-								<div className="flex items-center space-x-2 mb-4">
+								{/* <div className="flex items-center space-x-2 mb-4">
 									<Controller
 										name="isPublished"
 										defaultValue={false}
@@ -356,7 +356,7 @@ export default function CreateReviewComponent({
 									<label htmlFor="publish" className="text-sm font-medium leading-none ">
 										Publish
 									</label>
-								</div>
+								</div> */}
 								<div className="flex flex-col gap-4">
 									<Label htmlFor="multi-image">Upload Images</Label>
 									<Input
