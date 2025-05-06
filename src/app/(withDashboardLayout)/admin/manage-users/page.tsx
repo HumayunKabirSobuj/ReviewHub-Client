@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ManageUsersForAdmin from "@/components/module/admin/manageUsers/manageUsers"
 import { createSafeQueryString } from "@/helpers"
 import { getAllUsers } from "@/services/User"
@@ -32,3 +33,16 @@ export default async function ManageUsersPage({
     </>
   )
 }
+=======
+import ManageUsersForAdmin from '@/components/module/admin/manageUsers/manageUsers';
+
+const ManageUsers = () => {
+	return (
+		<div>
+			<ManageUsersForAdmin />
+		</div>
+	);
+};
+
+export default ManageUsers;
+>>>>>>> 5cdde3f447b67ad34755e92678933cf270f56c1c
