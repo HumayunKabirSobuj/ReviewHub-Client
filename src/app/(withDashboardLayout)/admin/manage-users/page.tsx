@@ -1,4 +1,4 @@
-import ManageUsersForAdmin from '@/components/module/admin/manageUsers/manageUsers';
+import ManageUsersForAdmin from '@/components/modules/admin/manageUsers';
 import { createSafeQueryString } from '@/helpers';
 import { getAllUsers } from '@/services/User';
 import { Suspense } from 'react';
