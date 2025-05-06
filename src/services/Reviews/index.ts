@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 export const getAllReviews = async (queryString: string) => {
-  console.log("queryString", { queryString });
+  // console.log("queryString", { queryString });
   try {
     const res = await fetch(
       //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
@@ -76,11 +76,12 @@ export async function createVote(reviewId: string, voteType: "up" | "down") {
         method: "POST",
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          "Content-Type": "Application/json",
         },
 
         body: JSON.stringify({
           reviewId,
-          voteType: voteType === "up" ? "upVote" : "downVote",
+          type: voteType === "up" ? "UP" : "DOWN",
         }),
       }
     );
@@ -110,6 +111,7 @@ export async function createComment(reviewId: string, content: string) {
         method: "POST",
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          "Content-Type": "Application/json",
         },
 
         body: JSON.stringify({

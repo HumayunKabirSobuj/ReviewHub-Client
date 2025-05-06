@@ -49,7 +49,6 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
     try {
       setIsSubmitting(true)
 
-      // Only make API call if adding a vote (not removing)
       if (newVote) {
         const response = await createVote(reviewId, newVote)
 

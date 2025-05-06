@@ -48,10 +48,9 @@ function ReviewDetailSkeleton() {
 
 export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
   // Fetch review data
-  const { data: review, error } = await getReviewById(params.id)
+  const { data: review, error } = await getReviewById(params?.id)
 
-  console.log("review", review);
-
+  // console.log("review", review);
   // Handle error state
   if (error) {
     return (
@@ -81,7 +80,6 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
       </div>
     )
   }
-
   // For demo purposes, using mock data for premium status
   // In a real app, this would come from the database or user session
   const isPremiumUnlocked = review.Payment && review.Payment.length > 0
@@ -129,7 +127,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
 
   // Format comments from API response
   const formattedComments =
-    review.comments?.map((comment) => ({
+    review.comments?.map((comment:any) => ({
       id: comment.id,
       author: {
         id: comment.author.id,
@@ -370,9 +368,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                     decisions.
                   </p>
                 </div>
-                <Button variant="outline" className="w-full" asChild>
+                {/* <Button variant="outline" className="w-full" asChild>
                   <Link href={`/profile/${review.author?.id}`}>View Profile</Link>
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
 
