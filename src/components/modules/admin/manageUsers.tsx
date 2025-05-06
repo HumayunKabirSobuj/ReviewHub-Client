@@ -15,20 +15,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { blockUser, deleteUser, makeAdmin, makeUser, unblockUser } from "@/services/User"
-import {
-  AlertCircle,
-  ChevronFirst,
-  ChevronLast,
-  ChevronLeft,
-  ChevronRight,
-  Loader2,
-  Shield,
-  Trash2,
-  User,
-  UserX,
-} from "lucide-react"
+import { AlertCircle, ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Loader2, Search, Shield, Trash2, User, UserX, X } from 'lucide-react'
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
 // Types
@@ -53,10 +42,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get("searchTerm") || "")
 
   // Update role handling - default to "all" if not specified
-  const [selectedRole, setSelectedRole] = useState(() => {
-    const role = searchParams.get("role")
-    return role || "all" // Default to "all" if no role is specified
-  })
+  const [selectedRole, setSelectedRole] = useState("all")
 
   const [currentPage, setCurrentPage] = useState(() => {
     const page = searchParams.get("page")
@@ -83,35 +69,31 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
   const [dialogType, setDialogType] = useState<"delete" | "block" | "unblock" | "makeAdmin" | "makeUser">("delete")
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
 
-  // Ensure role=all is set on initial load if not already in URL
-  useEffect(() => {
-    // Only run this effect once on component mount
-    const params = new URLSearchParams(searchParams.toString())
-    if (!params.has("role")) {
-      params.set("role", "all")
-      router.replace(`/admin/manage-users?${params.toString()}`)
-    }
-  }, []) // Empty dependency array ensures this only runs once
-
-  // Update URL when filters change
-  const updateUrlWithFilters = (params: Record<string, string>) => {
-    const newParams = new URLSearchParams(searchParams.toString())
-
-    // Update parameters - always include role even if it's "all"
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        newParams.set(key, value)
-      } else if (key !== "role") {
-        // Don't remove role parameter
-        newParams.delete(key)
+  // Filter users based on current filters
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
+      // Filter by status (tab)
+      if (activeTab !== "all" && user.status !== activeTab) {
+        return false
       }
+
+      // Filter by role
+      if (selectedRole && selectedRole !== "all" && user.role !== selectedRole) {
+        return false
+      }
+
+      // Filter by search query
+      if (
+        searchQuery &&
+        !user.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
+        return false
+      }
+
+      return true
     })
-
-    // Always reset to page 1 when filters change
-    newParams.set("page", "1")
-
-    router.push(`/admin/manage-users?${newParams.toString()}`)
-  }
+  }, [users, activeTab, selectedRole, searchQuery])
 
   // Summary counts
   const summaries = {
@@ -123,29 +105,24 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
   // Handle search change
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
-    // No URL update here - will be done when Apply Filters is clicked
+    setCurrentPage(1) // Reset to first page when search changes
   }
 
   // Handle role change
   const handleRoleChange = (value: string) => {
     setSelectedRole(value)
-    // No URL update here - will be done when Apply Filters is clicked
+    setCurrentPage(1) // Reset to first page when role changes
   }
 
   // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value)
-    updateUrlWithFilters({
-      status: value === "all" ? "" : value,
-    })
+    setCurrentPage(1) // Reset to first page when tab changes
   }
 
   // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set("page", page.toString())
-    router.push(`/admin/manage-users?${newParams.toString()}`)
   }
 
   // Reset all filters
@@ -153,9 +130,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
     setSearchQuery("")
     setSelectedRole("all")
     setActiveTab("all")
-
-    // Make sure role=all is included in the reset URL
-    router.push(`/admin/manage-users?role=all&page=1&limit=${itemsPerPage}`)
+    setCurrentPage(1)
   }
 
   // Open dialog for actions
@@ -246,19 +221,13 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
   }
 
   // Calculate pagination
-  const totalPages = Math.ceil(users.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = Math.min(startIndex + itemsPerPage, users.length)
-  const paginatedUsers = users.slice(startIndex, endIndex)
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredUsers.length)
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex)
 
-  // Add a new applyFilters function that updates all filters at once
-  const applyFilters = () => {
-    updateUrlWithFilters({
-      searchTerm: searchQuery,
-      role: selectedRole, // Always include role, even if it's "all"
-      status: activeTab === "all" ? "" : activeTab,
-    })
-  }
+  // Check if any filter is active
+  const hasActiveFilters = searchQuery !== "" || selectedRole !== "all" || activeTab !== "all"
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -268,7 +237,9 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* All Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${activeTab === "all" ? "ring-2 ring-primary" : ""}`}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
+            activeTab === "all" ? "ring-2 ring-primary" : ""
+          }`}
           onClick={() => handleTabChange("all")}
         >
           <div>
@@ -282,7 +253,9 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 
         {/* Active Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${activeTab === "ACTIVE" ? "ring-2 ring-primary" : ""}`}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
+            activeTab === "ACTIVE" ? "ring-2 ring-primary" : ""
+          }`}
           onClick={() => handleTabChange("ACTIVE")}
         >
           <div>
@@ -296,7 +269,9 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 
         {/* Blocked Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${activeTab === "BLOCKED" ? "ring-2 ring-primary" : ""}`}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
+            activeTab === "BLOCKED" ? "ring-2 ring-primary" : ""
+          }`}
           onClick={() => handleTabChange("BLOCKED")}
         >
           <div>
@@ -311,10 +286,11 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-1">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             placeholder="Search users..."
-            className="w-full"
+            className="w-full pl-9"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
           />
@@ -332,13 +308,10 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
             </SelectContent>
           </Select>
 
-          <Button variant="default" onClick={applyFilters}>
-            Apply Filters
-          </Button>
-
-          {(searchQuery || selectedRole !== "all" || activeTab !== "all") && (
-            <Button variant="outline" onClick={resetFilters}>
-              Reset Filters
+          {hasActiveFilters && (
+            <Button variant="ghost" onClick={resetFilters}>
+              <X className="mr-2 h-4 w-4" />
+              Reset
             </Button>
           )}
         </div>
@@ -385,16 +358,18 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.role === "ADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
-                              }`}
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              user.role === "ADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
+                            }`}
                           >
                             {user.role}
                           </span>
                         </TableCell>
                         <TableCell>
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.status === "ACTIVE" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                              }`}
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              user.status === "ACTIVE" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}
                           >
                             {user.status}
                           </span>
@@ -473,10 +448,10 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
           </div>
 
           {/* Pagination */}
-          {users.length > 0 && (
+          {filteredUsers.length > 0 && (
             <div className="flex items-center justify-between mt-4">
               <p className="text-sm text-muted-foreground">
-                Showing {startIndex + 1} to {endIndex} of {users.length} users
+                Showing {startIndex + 1} to {endIndex} of {filteredUsers.length} users
               </p>
               <div className="flex items-center space-x-2">
                 <Button
