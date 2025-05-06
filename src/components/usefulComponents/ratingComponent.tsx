@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Heading1, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function RatingComponent({
 	max = 5,
 	value,
 	onChange,
+	selectable,
 }: {
 	max?: number;
+	selectable: boolean;
 	value: number;
 	onChange: (val: number) => void;
 }) {
@@ -17,11 +19,9 @@ export default function RatingComponent({
 		<div className="flex gap-1">
 			{Array.from({ length: max }, (_, i) => {
 				const contained = (activeStatus ?? value) > i;
-				return (
-					<Button
+				return selectable === true ? (
+					<span
 						key={i}
-						variant="ghost"
-						size="icon"
 						onClick={() => onChange(i + 1)}
 						onMouseEnter={() => setActiveStatus(i + 1)}
 						onMouseLeave={() => setActiveStatus(null)}
@@ -30,7 +30,14 @@ export default function RatingComponent({
 							fill={contained ? 'currentColor' : 'none'}
 							className={contained ? 'text-yellow-400' : 'text-gray-400'}
 						/>
-					</Button>
+					</span>
+				) : (
+					<span key={i}>
+						<Star
+							fill={contained ? 'currentColor' : 'none'}
+							className={contained ? 'text-yellow-400' : 'text-gray-400'}
+						/>
+					</span>
 				);
 			})}
 		</div>
