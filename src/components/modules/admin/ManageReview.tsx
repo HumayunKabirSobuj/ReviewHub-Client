@@ -48,6 +48,7 @@ import {
 	X,
 } from 'lucide-react';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import RatingComponent from '@/components/usefulComponents/ratingComponent';
 
 // Types
 interface Author {
@@ -105,6 +106,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 	const openDrawer = (review: Review) => {
 		setOpen(true);
 		setReviewDtl(review);
+		console.log('review', review);
 	};
 
 	// Loading state
@@ -363,6 +365,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 			</div>
 
 			{/* Drawer codes */}
+			{/* add fields of title, description, comments and by whom, rating */}
 			<Drawer direction={'right'} open={open} onOpenChange={setOpen}>
 				<DrawerContent className="min-w-3xl overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto w-full max-w-2xl">
@@ -375,7 +378,56 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 							</div>
 						</DrawerHeader>
 						<div className="pt-4 pb-0">
-							<div className="">Review Detail</div>
+							<Card className="w-full border-none">
+								<CardContent>
+									<div className="space-y-1 mb-4 flex ">
+										<label htmlFor="" className="w-[130px]">
+											Title
+										</label>
+										<p className="text-gray-500 w-[calc(100%-130px)]">{review?.title}</p>
+									</div>
+
+									<div className="space-y-1 mb-4 flex">
+										<label htmlFor="" className=" w-[130px]">
+											Description
+										</label>
+										<p className="text-gray-500 w-[calc(100%-130px)]">{review?.description}</p>
+									</div>
+									<div className="space-y-1 mb-4 flex ">
+										<label htmlFor="" className="w-[130px]">
+											Rating
+										</label>
+										<div className="text-gray-500 w-[calc(100%-130px)]">
+											<RatingComponent
+												value={review?.rating as number}
+												onChange={() => ''}
+												selectable={false}
+											/>
+										</div>
+									</div>
+									<div className="mb-4 flex ">
+										<label htmlFor="" className="w-[130px]">
+											Comments
+										</label>
+										<div className="text-gray-500 w-[calc(100%-130px)]">
+											{review?.comments &&
+												Array.from(review.comments).map((comment, index) => (
+													<div key={index} className="mb-2">
+														<div className="flex flex-col">
+															<p>{comment.content}</p>
+															<span className="text-gray-800">
+																by{' '}
+																<span className="font-bold text-gray-700">
+																	{comment.author && comment.author.name}
+																</span>{' '}
+															</span>
+														</div>
+													</div>
+												))}
+										</div>
+									</div>
+								</CardContent>
+							</Card>
 						</div>
 					</div>
 				</DrawerContent>
