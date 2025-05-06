@@ -7,7 +7,13 @@ export const getAllReviews = async (queryString: string) => {
   try {
     const res = await fetch(
       //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
-      `${process.env.NEXT_PUBLIC_BASE_API}/review?${queryString}`
+      `${process.env.NEXT_PUBLIC_BASE_API}/review?${queryString}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+        },
+      }
     );
 
     return await res.json();
