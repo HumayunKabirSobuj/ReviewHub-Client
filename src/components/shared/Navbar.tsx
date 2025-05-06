@@ -19,7 +19,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useUser } from '../context/UserContext';
 import { logout } from '@/services/AuthServices';
-import { ModeToggle } from '../usefulComponents/mode-toggle';
 
 type NavItem = {
 	title: string;
@@ -113,7 +112,7 @@ export function Navbar() {
 						<Button variant="ghost" size="icon" className="mr-2 text-gray-600">
 							<Bell className="h-5 w-5" />
 						</Button>
-						<ModeToggle />
+
 						{/* User dropdown or Login button */}
 						{user ? (
 							<DropdownMenu>
