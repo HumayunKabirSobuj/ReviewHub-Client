@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
+	BookCheck,
 	Calendar,
 	Check,
 	ChevronDown,
@@ -49,6 +50,9 @@ import {
 } from 'lucide-react';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import RatingComponent from '@/components/usefulComponents/ratingComponent';
+import { approveReviewApi } from '@/services/Reviews';
+import { toast } from 'sonner';
+import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
 
 // Types
 interface Author {
@@ -106,7 +110,6 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 	const openDrawer = (review: Review) => {
 		setOpen(true);
 		setReviewDtl(review);
-		console.log('review', review);
 	};
 
 	// Loading state
@@ -828,6 +831,33 @@ function ReviewsTable({
 	if (reviews.length === 0) {
 		return <div className="text-center py-8 text-gray-500">No reviews found.</div>;
 	}
+	const approveReview = async (review: Review) => {
+		try {
+			const toastId = toast.loading('...Loading', { id: 1 });
+			const res = await approveReviewApi(review.id);
+			if (res?.success) {
+				toast.success(res.message, { id: toastId });
+			} else {
+				toast.error(res.message, { id: toastId });
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const deleteReviewMethod = async (review: Review) => {
+		try {
+			const toastId = toast.loading('...Loading', { id: 1 });
+			const res = await deleteUserReviewApi(review.id);
+			if (res?.success) {
+				toast.success(res.message, { id: toastId });
+			} else {
+				toast.error(res.message, { id: toastId });
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	return (
 		<div className="rounded-md border">
@@ -889,14 +919,15 @@ function ReviewsTable({
 										variant="ghost"
 										size="icon"
 										className="h-8 w-8 text-green-500 cursor-pointer"
+										onClick={() => approveReview(review)}
 									>
-										<Edit className="h-4 w-4" />
+										<BookCheck className="h-4 w-4" />
 									</Button>
 									<Button
 										variant="ghost"
 										size="icon"
 										className="h-8 w-8 text-red-500 cursor-pointer"
-										onClick={() => onDelete(review)}
+										onClick={() => deleteReviewMethod(review)}
 									>
 										<Trash2 className="h-4 w-4" />
 									</Button>

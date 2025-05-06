@@ -1,11 +1,11 @@
-import ManageUsersForAdmin from "@/components/module/admin/manageUsers/manageUsers";
+import ManageUsersForAdmin from '@/components/module/admin/manageUsers/manageUsers';
 
 const ManageUsers = () => {
-    return (
-        <div>
-          <ManageUsersForAdmin></ManageUsersForAdmin>
-        </div>
-    );
+	return (
+		<div>
+			<ManageUsersForAdmin />
+		</div>
+	);
 };
 
 export default ManageUsers;
