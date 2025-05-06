@@ -33,13 +33,13 @@ export async function getReveiwDataForAdminDashboard() {
       }
     );
 
-    const data = await response.json();
-    return { data:data.data };
-  } catch (error) {
-    // console.error("Error fetching review:", error);
-    return {
-      data: null,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+		const data = await response.json();
+		return { data: data.data };
+	} catch (error) {
+		// console.error("Error fetching review:", error);
+		return {
+			data: null,
+			error: error instanceof Error ? error.message : 'Unknown error',
+		};
+	}
 }
