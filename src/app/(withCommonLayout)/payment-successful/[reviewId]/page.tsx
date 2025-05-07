@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   CheckCircle2,
-  ShoppingBag,
   ArrowRight,
   LayoutDashboardIcon,
 } from "lucide-react";

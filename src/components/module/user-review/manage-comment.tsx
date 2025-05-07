@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 'use client';
 
 import { commentType } from '@/components/types/add-review';

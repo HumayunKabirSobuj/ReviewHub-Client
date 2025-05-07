@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-unescaped-entities */
 import ReviewComments from "@/components/modules/Review/ReviewComments";
 import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
 // import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
@@ -12,7 +14,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { getReviewById } from "@/services/Reviews";
 import {

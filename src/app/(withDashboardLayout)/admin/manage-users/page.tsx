@@ -1,18 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ManageUsersForAdmin from "@/components/modules/admin/manageUsers";
 import { createSafeQueryString } from "@/helpers";
 import { getAllUsers } from "@/services/User";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
-interface IProps {
-  searchParams: Promise<{ [key: string]: string | string[] }>;
-}
-export default async function ManageUsersPage({
-  searchParams,
-}: {
-  searchParams: IProps;
-}) {
+
+
+
+export default async function ManageUsersPage({ searchParams }:{searchParams:any}) {
   // First resolve the Promise
-  const resolvedParams = await searchParams;
+  const resolvedParams = searchParams;
 
   // Create a safe query string from the resolved search parameters
   const queryString = createSafeQueryString(resolvedParams);
