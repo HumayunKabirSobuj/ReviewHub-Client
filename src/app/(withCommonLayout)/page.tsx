@@ -19,13 +19,13 @@ export default function Home() {
             <div className="w-full lg:w-1/2 space-y-6">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black leading-tight">
                 ReviewHub - Your trusted <br />
-                source for <span className="text-purple-600">honest reviews.</span>
+                source for <span className="text-primary">honest reviews.</span>
               </h1>
               <p className="text-black max-w-md">
                 Join our community of reviewers and consumers to discover the best products, share your experiences, and
                 make informed purchasing decisions.
               </p>
-              <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full transition-all">
+              <button className="flex items-center gap-2 bg-primary hover:bg-purple-600 text-white px-6 py-3 rounded-full transition-all">
                 <span>Get Started</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
@@ -34,19 +34,19 @@ export default function Home() {
             {/* Right column - Cards */}
             <div className="w-full lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* Main card */}
-              <div className="bg-white text-black p-6 rounded-xl col-span-1 md:col-span-2 md:max-w-sm border border-purple-600">
+              <div className="bg-white text-black p-6 rounded-xl col-span-1 md:col-span-2 md:max-w-sm border border-primary">
                 <div className="flex flex-col gap-4">
-                  <div className="bg-purple-600 w-10 h-10 rounded-full flex items-center justify-center">
+                  <div className="bg-primary w-10 h-10 rounded-full flex items-center justify-center">
                     <Star className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-lg font-medium">Discover Trusted Reviews</h3>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-purple-600"></div>
+                      <div className="w-3 h-3 rounded-full bg-primary"></div>
                       <p className="text-sm">Verified User Reviews</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-purple-600"></div>
+                      <div className="w-3 h-3 rounded-full bg-primary"></div>
                       <p className="text-sm">Premium Content Access</p>
                     </div>
                   </div>
@@ -54,9 +54,9 @@ export default function Home() {
               </div>
 
               {/* Card 1 */}
-              <div className="bg-white text-black p-4 rounded-xl border border-purple-600">
+              <div className="bg-white text-black p-4 rounded-xl border border-primary">
                 <div className="flex flex-col gap-2">
-                  <div className="bg-purple-600 w-8 h-8 rounded-full flex items-center justify-center">
+                  <div className="bg-primary w-8 h-8 rounded-full flex items-center justify-center">
                     <span className="text-white">⏱️</span>
                   </div>
                   <h3 className="text-sm font-medium">Timely & Relevant Reviews</h3>
@@ -64,9 +64,9 @@ export default function Home() {
               </div>
 
               {/* Card 2 */}
-              <div className="bg-white text-black p-4 rounded-xl border border-purple-600">
+              <div className="bg-white text-black p-4 rounded-xl border border-primary">
                 <div className="flex flex-col gap-2">
-                  <div className="bg-purple-600 w-8 h-8 rounded-full flex items-center justify-center">
+                  <div className="bg-primary w-8 h-8 rounded-full flex items-center justify-center">
                     <span className="text-white">🔒</span>
                   </div>
                   <h3 className="text-sm font-medium">Secure & Trusted Platform</h3>
@@ -82,7 +82,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-16 max-w-6xl">
           {/* Header section */}
           <div className="text-center mb-12">
-            <p className="text-purple-600 font-medium mb-2">Our Services</p>
+            <p className="text-primary font-medium mb-2">Our Services</p>
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-black">Premium Features for Our Community</h1>
             <p className="text-black max-w-3xl mx-auto mb-2">
               Our comprehensive suite of features helps you discover, review, and connect with products and services that
@@ -96,86 +96,86 @@ export default function Home() {
           {/* Services grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Service 1 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Star className="w-6 h-6 text-purple-600" />
+                <Star className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Product Reviews</h3>
               <p className="text-black mb-4">
                 Read and write detailed reviews on a wide range of products across multiple categories.
               </p>
-              <Link href="/reviews" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/reviews" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             {/* Service 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-purple-600" />
+                <Users className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Community Engagement</h3>
               <p className="text-black mb-4">
                 Connect with other users, vote on reviews, and participate in discussions about products.
               </p>
-              <Link href="/community" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/community" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             {/* Service 3 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Activity className="w-6 h-6 text-purple-600" />
+                <Activity className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Premium Content</h3>
               <p className="text-black mb-4">
                 Access in-depth expert reviews and exclusive content with our premium subscription.
               </p>
-              <Link href="/premium" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/premium" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             {/* Service 4 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-purple-600" />
+                <BookOpen className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Category Exploration</h3>
               <p className="text-black mb-4">
                 Browse reviews by categories like Gadgets, Clothing, Books, and more to find exactly what you're looking
                 for.
               </p>
-              <Link href="/categories" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/categories" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             {/* Service 5 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Building className="w-6 h-6 text-purple-600" />
+                <Building className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Verified Purchases</h3>
               <p className="text-black mb-4">
                 Identify reviews from verified purchasers to ensure you're getting authentic feedback.
               </p>
-              <Link href="/verified" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/verified" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             {/* Service 6 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-purple-600 hover:shadow-md transition-all">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-purple-200 hover:border-primary hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <FileText className="w-6 h-6 text-purple-600" />
+                <FileText className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2 text-black">Review Analytics</h3>
               <p className="text-black mb-4">
                 Track the performance of your reviews and see how they're helping others make decisions.
               </p>
-              <Link href="/analytics" className="text-purple-600 flex items-center text-sm font-medium">
+              <Link href="/analytics" className="text-primary flex items-center text-sm font-medium">
                 Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
@@ -185,11 +185,11 @@ export default function Home() {
         {/* How it works section */}
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Top section - CTA */}
-          <div className="bg-white p-6 rounded-lg mb-12 border border-purple-600">
+          <div className="bg-white p-6 rounded-lg mb-12 border border-primary">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-2">
                 <h2 className="text-xl font-bold text-black">
-                  Enhance your shopping experience with <span className="text-purple-600">honest reviews</span>
+                  Enhance your shopping experience with <span className="text-primary">honest reviews</span>
                 </h2>
                 <p className="text-sm text-black">
                   Join thousands of users who make better purchasing decisions with our community-driven reviews.
@@ -197,7 +197,7 @@ export default function Home() {
                   Start today and never regret a purchase again.
                 </p>
               </div>
-              <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors">
+              <button className="bg-primary hover:bg-purple-600 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors">
                 <span>Get Started Now</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -206,7 +206,7 @@ export default function Home() {
 
           {/* Main section - How it works */}
           <div className="mt-8">
-            <h3 className="text-purple-600 uppercase text-sm font-medium mb-2">Our Process</h3>
+            <h3 className="text-primary uppercase text-sm font-medium mb-2">Our Process</h3>
             <h2 className="text-2xl font-bold mb-8 text-black">How Our Review Platform Works!</h2>
 
             <div className="flex flex-col md:flex-row gap-8 items-center">
@@ -219,7 +219,7 @@ export default function Home() {
 
               {/* Right side - Text content */}
               <div className="w-full md:w-3/5 space-y-4">
-                <div className="border-l-4 border-purple-600 pl-4 py-1">
+                <div className="border-l-4 border-primary pl-4 py-1">
                   <p className="text-sm text-black">
                     Our platform connects consumers with honest, detailed reviews to help them make informed decisions.
                     <br />
@@ -320,25 +320,25 @@ export default function Home() {
               <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {/* Statistic 1 */}
                 <div className="text-center">
-                  <p className="text-purple-600 text-2xl font-bold">10,000+</p>
+                  <p className="text-primary text-2xl font-bold">10,000+</p>
                   <p className="text-sm text-black">Active Users</p>
                 </div>
 
                 {/* Statistic 2 */}
                 <div className="text-center">
-                  <p className="text-purple-600 text-2xl font-bold">25,000+</p>
+                  <p className="text-primary text-2xl font-bold">25,000+</p>
                   <p className="text-sm text-black">Product Reviews</p>
                 </div>
 
                 {/* Statistic 3 */}
                 <div className="text-center">
-                  <p className="text-purple-600 text-2xl font-bold">500+</p>
+                  <p className="text-primary text-2xl font-bold">500+</p>
                   <p className="text-sm text-black">Premium Reviews</p>
                 </div>
 
                 {/* Statistic 4 */}
                 <div className="text-center">
-                  <p className="text-purple-600 text-2xl font-bold">50+</p>
+                  <p className="text-primary text-2xl font-bold">50+</p>
                   <p className="text-sm text-black">Product Categories</p>
                 </div>
               </div>
@@ -351,7 +351,7 @@ export default function Home() {
               {/* Left Column - Text and Illustration */}
               <div className="w-full md:w-1/2 space-y-6">
                 <div>
-                  <p className="text-purple-600 text-sm mb-2">Contact Us</p>
+                  <p className="text-primary text-sm mb-2">Contact Us</p>
                   <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
                     Get in Touch With
                     <br />
@@ -372,30 +372,30 @@ export default function Home() {
                 <div className="bg-white rounded-lg shadow-md p-6 border border-purple-200">
                   {/* Top border */}
                   <div className="flex h-1 mb-6">
-                    <div className="w-full bg-purple-600"></div>
+                    <div className="w-full bg-primary"></div>
                   </div>
 
                   <form className="space-y-4">
                     {/* Name Input */}
                     <div>
-                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-purple-600">
-                        <span className="text-purple-600 mr-2">👤</span>
+                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
+                        <span className="text-primary mr-2">👤</span>
                         <input type="text" placeholder="Your Name" className="w-full outline-none text-sm text-black" />
                       </div>
                     </div>
 
                     {/* Email Input */}
                     <div>
-                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-purple-600">
-                        <span className="text-purple-600 mr-2">✉️</span>
+                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
+                        <span className="text-primary mr-2">✉️</span>
                         <input type="email" placeholder="Your Email" className="w-full outline-none text-sm text-black" />
                       </div>
                     </div>
 
                     {/* Message Input */}
                     <div>
-                      <div className="flex items-start border border-purple-200 rounded-md px-3 py-2 focus-within:border-purple-600">
-                        <span className="text-purple-600 mr-2 mt-1">💬</span>
+                      <div className="flex items-start border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
+                        <span className="text-primary mr-2 mt-1">💬</span>
                         <textarea
                           placeholder="Your Message"
                           rows={5}
@@ -407,7 +407,7 @@ export default function Home() {
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-md flex items-center justify-center gap-2 transition-colors"
+                      className="w-full bg-primary hover:bg-purple-600 text-white py-3 rounded-md flex items-center justify-center gap-2 transition-colors"
                     >
                       <span>Send Message</span>
                       <ArrowRight className="w-4 h-4" />
