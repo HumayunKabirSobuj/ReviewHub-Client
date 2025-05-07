@@ -1,13 +1,15 @@
-import { Suspense } from "react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ReviewsPageCard from "@/components/modules/Review/ReviewsPageCard"
+import { Skeleton } from "@/components/ui/skeleton"
 import { createSafeQueryString } from "@/helpers"
 import { getAllCategories } from "@/services/Categories"
 import { getAllReviews } from "@/services/Reviews"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Suspense } from "react"
 
 // Define proper types for the page props
 interface ReviewsPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] }>
+  // searchParams: { [key: string]: string | string[] }
+  searchParams: any
 }
 
 // Loading component for Suspense fallback
@@ -71,21 +73,11 @@ export default async function Reviews({ searchParams }: ReviewsPageProps) {
     const queryString = createSafeQueryString(resolvedParams)
 
     // Fetch data in parallel for better performance
-    const [reviewsResponse, categoriesResponse] = await Promise.all([getAllReviews(queryString), getAllCategories()])
+    // const [reviewsResponse, categoriesResponse] = await Promise.all([getAllReviews(queryString), getAllCategories()])
+    const {data: reviewsResponse} = await getAllReviews(queryString)
+    const {data: categoriesResponse} = await getAllCategories()
 
-    // Handle errors from either API call
-    if (reviewsResponse.error) {
-      return <ErrorDisplay message={`Failed to load reviews: ${reviewsResponse.error}`} />
-    }
-
-    if (categoriesResponse.error) {
-      return <ErrorDisplay message={`Failed to load categories: ${categoriesResponse.error}`} />
-    }
-
-    // Ensure we have data to display
-    if (!reviewsResponse.data || !categoriesResponse.data) {
-      return <ErrorDisplay message="No data available" />
-    }
+    console.log("data", reviewsResponse, categoriesResponse);
 
     return (
       <Suspense fallback={<ReviewsLoading />}>

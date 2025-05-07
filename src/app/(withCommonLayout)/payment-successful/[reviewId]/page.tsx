@@ -1,10 +1,9 @@
-import Link from "next/link";
 import {
-  CheckCircle2,
-  ShoppingBag,
   ArrowRight,
-  LayoutDashboardIcon,
+  CheckCircle2,
+  LayoutDashboardIcon
 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {

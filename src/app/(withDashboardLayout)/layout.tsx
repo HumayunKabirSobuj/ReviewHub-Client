@@ -243,8 +243,8 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const sidebarItemsAdmin = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin/dashboard" },
@@ -274,7 +274,7 @@ const sidebarItemsUser = [
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { user, setIsLoading, isLoading } = useUser();
+  const { user } = useUser();
 
   const pathname = usePathname();
   const [activePath, setActivePath] = useState(pathname);
@@ -337,43 +337,41 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               {/* check if user is admin then map sidebarItemsAdmin, and if the user is normal user then map over sidebarItemsUser */}
               {user?.role === "ADMIN"
                 ? sidebarItemsAdmin?.map((item, index) => {
-                    const isActive = activePath === item.href;
+                  const isActive = activePath === item.href;
 
-                    return (
-                      <Link
-                        key={index}
-                        href={item.href}
-                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                          isActive
-                            ? "bg-blue-50 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
+                  return (
+                    <Link
+                      key={index}
+                      href={item.href}
+                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-600 hover:bg-gray-100"
                         }`}
-                        onClick={() => isMobile && setSidebarOpen(false)}
-                      >
-                        <item.icon className="h-4 w-4" />
-                        {item.label}
-                      </Link>
-                    );
-                  })
+                      onClick={() => isMobile && setSidebarOpen(false)}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })
                 : sidebarItemsUser?.map((item, index) => {
-                    const isActive = activePath === item.href;
+                  const isActive = activePath === item.href;
 
-                    return (
-                      <Link
-                        key={index}
-                        href={item.href}
-                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                          isActive
-                            ? "bg-blue-50 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
+                  return (
+                    <Link
+                      key={index}
+                      href={item.href}
+                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-600 hover:bg-gray-100"
                         }`}
-                        onClick={() => isMobile && setSidebarOpen(false)}
-                      >
-                        <item.icon className="h-4 w-4" />
-                        {item.label}
-                      </Link>
-                    );
-                  })}
+                      onClick={() => isMobile && setSidebarOpen(false)}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
             </nav>
           </div>
         </div>

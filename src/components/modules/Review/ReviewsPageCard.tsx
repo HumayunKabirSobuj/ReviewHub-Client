@@ -1,20 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
-import { Filter, Search } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import type React from 'react';
-import { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import ReviewCard from './ReviewCard';
-import { Badge } from '@/components/ui/badge';
-import ReviewCardSkeleton from './REviewCardSkeleton';
-import { toast } from 'sonner';
 import {
 	Pagination,
 	PaginationContent,
@@ -24,6 +13,18 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
+import { Filter, Search } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import type React from 'react';
+import { memo, useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import ReviewCard from './ReviewCard';
+import ReviewCardSkeleton from './REviewCardSkeleton';
 
 interface Review {
 	id: string;

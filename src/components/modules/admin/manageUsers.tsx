@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -24,10 +25,9 @@ import {
 	Loader2,
 	Search,
 	Shield,
-	Trash2,
 	User,
 	UserX,
-	X,
+	X
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -251,7 +251,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 				{/* All Users */}
 				<Card
 					className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md `}
-					// onClick={() => handleTabChange("all")}
+				// onClick={() => handleTabChange("all")}
 				>
 					<div>
 						<p className="text-sm text-muted-foreground">All Users</p>
@@ -265,7 +265,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 				{/* Active Users */}
 				<Card
 					className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md $`}
-					// onClick={() => handleTabChange("ACTIVE")}
+				// onClick={() => handleTabChange("ACTIVE")}
 				>
 					<div>
 						<p className="text-sm text-muted-foreground">Active</p>
@@ -279,7 +279,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 				{/* Blocked Users */}
 				<Card
 					className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md `}
-					// onClick={() => handleTabChange("BLOCKED")}
+				// onClick={() => handleTabChange("BLOCKED")}
 				>
 					<div>
 						<p className="text-sm text-muted-foreground">Blocked</p>
@@ -365,22 +365,20 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 												<TableCell>{user.email}</TableCell>
 												<TableCell>
 													<span
-														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-															user.role === 'ADMIN'
-																? 'bg-purple-100 text-purple-800'
-																: 'bg-blue-100 text-blue-800'
-														}`}
+														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.role === 'ADMIN'
+															? 'bg-purple-100 text-purple-800'
+															: 'bg-blue-100 text-blue-800'
+															}`}
 													>
 														{user.role}
 													</span>
 												</TableCell>
 												<TableCell>
 													<span
-														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-															user.status === 'ACTIVE'
-																? 'bg-green-100 text-green-800'
-																: 'bg-red-100 text-red-800'
-														}`}
+														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.status === 'ACTIVE'
+															? 'bg-green-100 text-green-800'
+															: 'bg-red-100 text-red-800'
+															}`}
 													>
 														{user.status}
 													</span>
@@ -553,23 +551,23 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 							{dialogType === 'delete'
 								? 'Delete User'
 								: dialogType === 'block'
-								? 'Block User'
-								: dialogType === 'unblock'
-								? 'Activate User'
-								: dialogType === 'makeAdmin'
-								? 'Make User Admin'
-								: 'Remove Admin Privileges'}
+									? 'Block User'
+									: dialogType === 'unblock'
+										? 'Activate User'
+										: dialogType === 'makeAdmin'
+											? 'Make User Admin'
+											: 'Remove Admin Privileges'}
 						</DialogTitle>
 						<DialogDescription>
 							{dialogType === 'delete'
 								? 'This action cannot be undone. The user will be permanently removed from the system.'
 								: dialogType === 'block'
-								? 'The user will not be able to log in or use the system while blocked.'
-								: dialogType === 'unblock'
-								? 'The user will regain access to the system.'
-								: dialogType === 'makeAdmin'
-								? 'This will grant administrative privileges to this user.'
-								: 'This will remove administrative privileges from this user.'}
+									? 'The user will not be able to log in or use the system while blocked.'
+									: dialogType === 'unblock'
+										? 'The user will regain access to the system.'
+										: dialogType === 'makeAdmin'
+											? 'This will grant administrative privileges to this user.'
+											: 'This will remove administrative privileges from this user.'}
 						</DialogDescription>
 					</DialogHeader>
 

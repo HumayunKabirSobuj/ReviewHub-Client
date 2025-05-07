@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,10 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Lock } from 'lucide-react'
 import { makePayment } from "@/services/Payments"
+import { Lock } from 'lucide-react'
+import { useState } from "react"
 import { toast } from "sonner"
 
 interface PaywallModalProps {
@@ -35,7 +35,6 @@ export default function PaywallModal({
   price,
   author,
 }: PaywallModalProps) {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   const handlePayment = async (reviewIdHere: string) => {
@@ -44,9 +43,9 @@ export default function PaywallModal({
       toast.loading("Processing your payment...", {
         id: "payment-toast",
       })
-      
+
       const result = await makePayment(reviewIdHere)
-      
+
       if (result.url) {
         toast.success("Payment initiated successfully!", {
           id: "payment-toast",

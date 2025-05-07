@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Activity, ArrowRight, BookOpen, Building, FileText, Star, Users } from 'lucide-react'
