@@ -1,37 +1,31 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
-// Extracted skeleton component for better code organization
-const ReviewCardSkeleton = () => (
-  <Card className="h-full flex flex-col max-w-md animate-pulse">
-    <CardHeader className="pb-2">
-      <div className="flex justify-between items-start">
-        <div className="space-y-2">
-          <div className="h-5 bg-muted rounded w-3/4"></div>
-          <div className="h-3 bg-muted rounded w-1/2"></div>
+export default function ReviewCardSkeleton() {
+  return (
+    <Card className="overflow-hidden flex flex-col h-full">
+      <div className="relative aspect-video overflow-hidden bg-muted">
+        <Skeleton className="h-full w-full" />
+      </div>
+      <CardHeader className="p-4 pb-2 space-y-2">
+        <Skeleton className="h-5 w-3/4" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-20" />
         </div>
-        <div className="h-5 bg-muted rounded w-16"></div>
-      </div>
-    </CardHeader>
-    <CardContent className="py-2 flex-grow">
-      <div className="flex items-center mb-2">
-        <div className="flex space-x-1">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="w-4 h-4 bg-muted rounded-full"></div>
-          ))}
+      </CardHeader>
+      <CardContent className="p-4 pt-2 flex-grow">
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-5/6 mb-2" />
+        <Skeleton className="h-4 w-4/6" />
+      </CardContent>
+      <CardFooter className="p-4 pt-0 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-4 w-10" />
+          <Skeleton className="h-4 w-10" />
         </div>
-      </div>
-      <div className="h-5 bg-muted rounded w-1/3 mb-2"></div>
-      <div className="space-y-2 mt-4">
-        <div className="h-3 bg-muted rounded w-full"></div>
-        <div className="h-3 bg-muted rounded w-full"></div>
-        <div className="h-3 bg-muted rounded w-3/4"></div>
-      </div>
-    </CardContent>
-    <CardFooter className="pt-2 flex justify-between">
-      <div className="h-4 bg-muted rounded w-1/4"></div>
-      <div className="h-4 bg-muted rounded w-1/4"></div>
-    </CardFooter>
-  </Card>
-)
-
-export default ReviewCardSkeleton
+        <Skeleton className="h-4 w-20" />
+      </CardFooter>
+    </Card>
+  )
+}

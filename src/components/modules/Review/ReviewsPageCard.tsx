@@ -14,6 +14,16 @@ import { memo, useCallback, useEffect, useMemo, useState, useTransition } from "
 import ReviewCard from "./ReviewCard"
 import { Badge } from "@/components/ui/badge"
 import ReviewCardSkeleton from "./REviewCardSkeleton"
+import { toast } from "sonner"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 interface Review {
   id: string
@@ -29,11 +39,14 @@ interface Review {
     id: string
     name: string
   }
+  userId: string // Add this property
   isPremium: boolean
   price?: number
   votes?: string[]
   comments?: string[]
   createdAt: string
+  imageUrls?: string[]
+  Payment?: any[] // Add this property
 }
 
 interface Category {
@@ -70,15 +83,30 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
   const [shouldApplyFilters, setShouldApplyFilters] = useState(false)
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page") || 1))
+  const itemsPerPage = 9
+  const [totalPages, setTotalPages] = useState(1)
+
   // Initialize data
   useEffect(() => {
     if (initialData) {
       // Apply initial filters based on URL params
       const filtered = filterReviews(initialData, selectedCategory, ratingFilter, sortBy, searchQuery, premiumFilter)
-      setFilteredReviews(filtered)
+      setTotalPages(Math.ceil(filtered.length / itemsPerPage))
+
+      // Apply pagination
+      const paginatedData = getPaginatedData(filtered, currentPage, itemsPerPage)
+      setFilteredReviews(paginatedData)
       setLoadingInitial(false)
     }
   }, [initialData]) // Only run on initial data load
+
+  // Get paginated data
+  const getPaginatedData = (data: Review[], page: number, perPage: number) => {
+    const startIndex = (page - 1) * perPage
+    return data.slice(startIndex, startIndex + perPage)
+  }
 
   // Debounce search input
   useEffect(() => {
@@ -169,36 +197,70 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       premiumFilter,
     )
 
+    // Calculate total pages
+    const pages = Math.ceil(filtered.length / itemsPerPage)
+    setTotalPages(pages)
+
+    // Ensure current page is valid
+    const validPage = Math.min(currentPage, pages || 1)
+    if (validPage !== currentPage) {
+      setCurrentPage(validPage)
+    }
+
+    // Get paginated data
+    const paginatedData = getPaginatedData(filtered, validPage, itemsPerPage)
+
     // Update state with filtered reviews
-    setFilteredReviews(filtered)
+    setFilteredReviews(paginatedData)
 
     // Update URL with filters (without triggering navigation)
-    updateUrl()
+    updateUrl(validPage)
+
+    // Show toast notification for filter changes
+    if (shouldApplyFilters) {
+      toast.success("Filters applied", {
+        description: `Found ${filtered.length} reviews matching your criteria`,
+      })
+    }
 
     // Simulate network delay for smoother UX
     setTimeout(() => {
       setIsLoading(false)
     }, 300)
-  }, [initialData, selectedCategory, ratingFilter, sortBy, debouncedSearchQuery, premiumFilter, filterReviews])
+  }, [
+    initialData,
+    selectedCategory,
+    ratingFilter,
+    sortBy,
+    debouncedSearchQuery,
+    premiumFilter,
+    currentPage,
+    itemsPerPage,
+    filterReviews,
+  ])
 
   // Update URL without triggering navigation
-  const updateUrl = useCallback(() => {
-    const params = new URLSearchParams()
+  const updateUrl = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams()
 
-    if (selectedCategory) params.set("categoryId", selectedCategory)
-    if (ratingFilter > 0) params.set("minRating", ratingFilter.toString())
-    if (sortBy !== "newest") params.set("sort", sortBy)
-    if (debouncedSearchQuery) params.set("searchTerm", debouncedSearchQuery)
-    if (premiumFilter === "premium") params.set("isPremium", "true")
-    if (premiumFilter === "free") params.set("isPremium", "false")
+      if (selectedCategory) params.set("categoryId", selectedCategory)
+      if (ratingFilter > 0) params.set("minRating", ratingFilter.toString())
+      if (sortBy !== "newest") params.set("sort", sortBy)
+      if (debouncedSearchQuery) params.set("searchTerm", debouncedSearchQuery)
+      if (premiumFilter === "premium") params.set("isPremium", "true")
+      if (premiumFilter === "free") params.set("isPremium", "false")
+      if (page > 1) params.set("page", page.toString())
 
-    const queryString = params.toString()
+      const queryString = params.toString()
 
-    // Use startTransition for URL updates to avoid blocking the UI
-    startTransition(() => {
-      router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
-    })
-  }, [router, selectedCategory, ratingFilter, sortBy, debouncedSearchQuery, premiumFilter])
+      // Use startTransition for URL updates to avoid blocking the UI
+      startTransition(() => {
+        router.push(`/reviews${queryString ? `?${queryString}` : ""}`, { scroll: false })
+      })
+    },
+    [router, selectedCategory, ratingFilter, sortBy, debouncedSearchQuery, premiumFilter],
+  )
 
   const sortReviews = useCallback((reviews: Review[], sortType: string) => {
     switch (sortType) {
@@ -217,14 +279,63 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
     }
   }, [])
 
+  // Handle page change
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page < 1 || page > totalPages || page === currentPage) return
+
+      setCurrentPage(page)
+      setIsLoading(true)
+
+      // Filter all data
+      const filtered = filterReviews(
+        initialData,
+        selectedCategory,
+        ratingFilter,
+        sortBy,
+        debouncedSearchQuery,
+        premiumFilter,
+      )
+
+      // Get paginated data for the new page
+      const paginatedData = getPaginatedData(filtered, page, itemsPerPage)
+      setFilteredReviews(paginatedData)
+
+      // Update URL with the new page
+      updateUrl(page)
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" })
+
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 300)
+    },
+    [
+      currentPage,
+      totalPages,
+      initialData,
+      selectedCategory,
+      ratingFilter,
+      sortBy,
+      debouncedSearchQuery,
+      premiumFilter,
+      itemsPerPage,
+      filterReviews,
+      updateUrl,
+    ],
+  )
+
   // Handle filter changes
   const handleCategoryChange = useCallback((categoryId: string) => {
     setSelectedCategory(categoryId)
+    setCurrentPage(1) // Reset to first page when filter changes
     setShouldApplyFilters(true)
   }, [])
 
   const handleRatingChange = useCallback((value: number) => {
     setRatingFilter(value)
+    setCurrentPage(1) // Reset to first page when filter changes
     setShouldApplyFilters(true)
   }, [])
 
@@ -235,6 +346,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 
   const handlePremiumFilterChange = useCallback((value: string | null) => {
     setPremiumFilter(value)
+    setCurrentPage(1) // Reset to first page when filter changes
     setShouldApplyFilters(true)
   }, [])
 
@@ -244,7 +356,12 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
     setSortBy("newest")
     setSearchQuery("")
     setPremiumFilter(null)
+    setCurrentPage(1)
     setShouldApplyFilters(true)
+
+    toast.info("Filters reset", {
+      description: "All filters have been cleared",
+    })
   }, [])
 
   // Memoize the category list to prevent unnecessary re-renders
@@ -284,6 +401,62 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
     [category, selectedCategory, handleCategoryChange],
   )
 
+  // Generate pagination items
+  const paginationItems = useMemo(() => {
+    const items = []
+
+    // Always show first page
+    items.push(
+      <PaginationItem key="first">
+        <PaginationLink isActive={currentPage === 1} onClick={() => handlePageChange(1)}>
+          1
+        </PaginationLink>
+      </PaginationItem>,
+    )
+
+    // Show ellipsis if needed
+    if (currentPage > 3) {
+      items.push(
+        <PaginationItem key="ellipsis-start">
+          <PaginationEllipsis />
+        </PaginationItem>,
+      )
+    }
+
+    // Show pages around current page
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink isActive={currentPage === i} onClick={() => handlePageChange(i)}>
+            {i}
+          </PaginationLink>
+        </PaginationItem>,
+      )
+    }
+
+    // Show ellipsis if needed
+    if (currentPage < totalPages - 2) {
+      items.push(
+        <PaginationItem key="ellipsis-end">
+          <PaginationEllipsis />
+        </PaginationItem>,
+      )
+    }
+
+    // Always show last page if there's more than one page
+    if (totalPages > 1) {
+      items.push(
+        <PaginationItem key="last">
+          <PaginationLink isActive={currentPage === totalPages} onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>,
+      )
+    }
+
+    return items
+  }, [currentPage, totalPages, handlePageChange])
+
   // Memoize the review grid to prevent unnecessary re-renders
   const reviewGrid = useMemo(() => {
     if (loadingInitial) {
@@ -308,7 +481,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
       )
     }
 
-    return filteredReviews.map((review) => <ReviewCard  key={review.id} review={review} />)
+    return filteredReviews.map((review) => <ReviewCard key={review.id} review={review} />)
   }, [filteredReviews, isLoading, loadingInitial, resetFilters])
 
   return (
@@ -389,7 +562,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                       <SelectValue placeholder="All Reviews" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Reviews</SelectItem>
+                      <SelectItem value="">All Reviews</SelectItem>
                       <SelectItem value="premium">Premium Only</SelectItem>
                       <SelectItem value="free">Free Only</SelectItem>
                     </SelectContent>
@@ -492,7 +665,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
                       onClick={() => handlePremiumFilterChange("premium")}
                     >
                       Premium Only
-                      <Badge variant="default" className="ml-2 bg-amber-500 hover:bg-amber-500">
+                      <Badge variant="default" className="ml-2 bg-primary hover:bg-primary/90">
                         PRO
                       </Badge>
                     </button>
@@ -540,6 +713,33 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 
         <div className="col-span-4 md:col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">{reviewGrid}</div>
+
+          {/* Pagination */}
+          {!loadingInitial && !isLoading && filteredReviews.length > 0 && totalPages > 1 && (
+            <Pagination className="mt-8">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    aria-disabled={currentPage === 1}
+                    tabIndex={currentPage === 1 ? -1 : undefined}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+
+                {paginationItems}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    aria-disabled={currentPage === totalPages}
+                    tabIndex={currentPage === totalPages ? -1 : undefined}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </div>
     </div>
