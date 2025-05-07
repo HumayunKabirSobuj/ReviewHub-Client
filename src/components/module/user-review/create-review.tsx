@@ -48,7 +48,6 @@ export default function CreateReviewComponent({
 	// const [ratingNumber, setRatingNumber] = useState(0);
 	const [imageLinks, setImageLinks] = useState<string[]>([]);
 	const [premiumChecked, setPremiumChecked] = useState(false);
-	const [imageList, setImageList] = useState<File[]>([]);
 	const [getView, setGetView] = useState<string[]>([]);
 	const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
 	const [allCategories, setAllCategories] = useState<categoryList[]>([]);

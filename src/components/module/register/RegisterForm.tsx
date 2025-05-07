@@ -12,7 +12,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { registerUserApi } from '@/services/AuthServices';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 // Schema definition (similar to your StudentFormSchema)
 const StudentFormSchema = z
@@ -21,7 +23,6 @@ const StudentFormSchema = z
 		email: z.string().email('Invalid email address'),
 		password: z.string().min(6, 'Password must be at least 6 characters'),
 		passwordConfirm: z.string().min(1, 'Please confirm your password'),
-		image: z.any().refine((file) => file, 'Image is required'),
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
 		message: 'Passwords do not match',
@@ -31,6 +32,9 @@ const StudentFormSchema = z
 export default function RegistrationForm() {
 	const router = useRouter();
 	const imgFileInputRef = useRef<HTMLInputElement>(null);
+	const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
+	const [getView, setGetView] = useState<string[]>([]);
+	const [imgLink, setImgLink] = useState<string>('');
 
 	const form = useForm<z.infer<typeof StudentFormSchema>>({
 		resolver: zodResolver(StudentFormSchema),
@@ -39,7 +43,6 @@ export default function RegistrationForm() {
 			email: '',
 			password: '',
 			passwordConfirm: '',
-			image: undefined,
 		},
 	});
 
@@ -51,13 +54,54 @@ export default function RegistrationForm() {
 	const password = watch('password');
 	const passwordConfirm = watch('passwordConfirm');
 
+	const ImgChangeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		setDisableSubmit(true);
+		const files = e.target.files;
+		if (!files) return;
+
+		const fileArray = Array.from(files);
+		const formData = new FormData();
+
+		formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!);
+		formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
+
+		let images: string[] = [];
+		try {
+			await Promise.all(
+				fileArray.map(async (image) => {
+					formData.append(`file`, image);
+					const res = await fetch(
+						`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+						{
+							method: 'POST',
+							body: formData,
+						},
+					);
+					const resp = await res.json();
+					setImgLink(resp.secure_url);
+				}),
+			);
+			setDisableSubmit(false);
+		} catch (err) {
+			console.log(err);
+		}
+
+		const previewUrls = fileArray.map((file) => URL.createObjectURL(file));
+		setGetView(previewUrls);
+	};
+
 	const onSubmit = async (data: any) => {
 		let toastId: string | number = 1;
 		toastId = toast.loading('...Loading', { id: toastId });
+
+		const registerData = {
+			...data,
+			image: imgLink,
+		};
 		try {
 			let res;
 
-			res = await registerUserApi(data);
+			res = await registerUserApi(registerData);
 
 			if (res?.success) {
 				form.reset({
@@ -65,7 +109,6 @@ export default function RegistrationForm() {
 					email: '',
 					password: '',
 					passwordConfirm: '',
-					image: undefined,
 				});
 
 				imgFileInputRef.current?.value && (imgFileInputRef.current.value = '');
@@ -267,34 +310,37 @@ export default function RegistrationForm() {
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="image"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>
-											Upload Image <span className="text-red-400">*</span>
-										</FormLabel>
-										<FormControl>
-											<Input
-												type="file"
-												accept="image/*"
-												ref={imgFileInputRef}
-												onChange={(e) => {
-													const file = e.target.files?.[0];
-													field.onChange(file);
-												}}
+							<div className="flex flex-col gap-4">
+								<Label htmlFor="multi-image">Profile Image</Label>
+								<Input
+									id="multi-image"
+									type="file"
+									ref={imgFileInputRef}
+									accept="image/*"
+									onChange={ImgChangeHandler}
+								/>
+								{disableSubmit && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+
+								{getView.length > 0 && !disableSubmit && (
+									<div className="flex gap-2 flex-wrap">
+										{getView.map((src, idx) => (
+											<img
+												key={idx}
+												src={src}
+												alt={`Preview ${idx}`}
+												className="w-24 h-24 object-cover rounded-md border"
 											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
+										))}
+									</div>
 								)}
-							/>
+							</div>
 
 							<Button
 								type="submit"
 								className="w-full bg-blue-600 py-5"
-								disabled={isSubmitting || (!!passwordConfirm && password !== passwordConfirm)}
+								disabled={
+									isSubmitting || (!!passwordConfirm && password !== passwordConfirm) || disableSubmit
+								}
 							>
 								{isSubmitting ? 'Registering...' : 'REGISTER'}
 							</Button>
