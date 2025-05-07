@@ -20,17 +20,17 @@ export default function Footer() {
             <h3 className="font-bold text-sm text-black mb-4">CONTACT US</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="text-purple-600">📞</span>
+                <span className="text-primary">📞</span>
                 <span className="text-black text-sm">+8801747477746</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-purple-600">✉️</span>
+                <span className="text-primary">✉️</span>
                 <span className="text-black text-sm">
                   support@reviewportal.com
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-purple-600 mt-1">📍</span>
+                <span className="text-primary mt-1">📍</span>
                 <span className="text-black text-sm">Dhaka, Bangladesh</span>
               </div>
             </div>
@@ -43,7 +43,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   About Us
                 </Link>
@@ -51,7 +51,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Our Team
                 </Link>
@@ -59,7 +59,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Careers
                 </Link>
@@ -67,7 +67,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Press & Media
                 </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link
                    href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Review Guidelines
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
               <li>
                 <Link
                  href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Terms & Conditions
                 </Link>
@@ -100,7 +100,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Privacy Policy
                 </Link>
@@ -108,7 +108,7 @@ export default function Footer() {
               <li>
                 <Link
                  href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Content Policy
                 </Link>
@@ -123,7 +123,7 @@ export default function Footer() {
               <li>
                 <Link
                  href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Categories
                 </Link>
@@ -131,7 +131,7 @@ export default function Footer() {
               <li>
                 <Link
                 href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Premium Reviews
                 </Link>
@@ -139,7 +139,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   FAQ
                 </Link>
@@ -147,7 +147,7 @@ export default function Footer() {
               <li>
                 <Link
            href="/"
-                  className="text-black text-sm hover:text-purple-600"
+                  className="text-black text-sm hover:text-primary"
                 >
                   Contact Support
                 </Link>
@@ -159,7 +159,7 @@ export default function Footer() {
           <div className="lg:col-span-1 flex justify-start lg:justify-end">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <Star className="mr-2 h-6 w-6 text-purple-600" />
+                <Star className="mr-2 h-6 w-6 text-primary" />
                 
                 <span className="text-xl font-semibold text-black">Review Portal</span>
               </Link>
@@ -185,9 +185,9 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Your email address"
-                className="px-4 py-2 border border-purple-200 rounded-l-md focus:outline-none focus:ring-1 focus:ring-purple-600 w-full md:w-64 text-black"
+                className="px-4 py-2 border border-purple-200 rounded-l-md focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-64 text-black"
               />
-              <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-r-md transition-colors">
+              <button className="bg-primary hover:bg-purple-600 text-white px-4 py-2 rounded-r-md transition-colors">
                 Subscribe
               </button>
             </div>
@@ -205,35 +205,35 @@ export default function Footer() {
           <div className="flex gap-3 mb-4 md:mb-0">
             <Link
               href="#"
-              className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors"
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-purple-600 transition-colors"
               aria-label="Facebook"
             >
               <Facebook size={16} />
             </Link>
             <Link
               href="#"
-              className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors"
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-purple-600 transition-colors"
               aria-label="Twitter"
             >
               <Twitter size={16} />
             </Link>
             <Link
               href="#"
-              className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors"
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-purple-600 transition-colors"
               aria-label="Instagram"
             >
               <Instagram size={16} />
             </Link>
             <Link
               href="#"
-              className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors"
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-purple-600 transition-colors"
               aria-label="GitHub"
             >
               <Github size={16} />
             </Link>
             <Link
               href="#"
-              className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors"
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white hover:bg-purple-600 transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin size={16} />
@@ -243,7 +243,7 @@ export default function Footer() {
           {/* Back to Top */}
           <Link
             href="#"
-            className="flex items-center gap-1 text-black text-xs hover:text-purple-600 transition-colors"
+            className="flex items-center gap-1 text-black text-xs hover:text-primary transition-colors"
             aria-label="Back to top"
           >
             <span>Back to Top</span>
