@@ -114,6 +114,13 @@ export function LoginForm() {
 				>
 					LOGIN
 				</Button>
+
+				<p className="text-center text-sm mt-4">
+					Do not have an account?
+					<Link href="/register" className="text-blue-600 font-semibold hover:underline ml-2">
+						Signup in here
+					</Link>
+				</p>
 			</form>
 		</div>
 	);
