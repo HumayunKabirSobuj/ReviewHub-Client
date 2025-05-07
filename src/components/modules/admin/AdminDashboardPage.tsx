@@ -804,7 +804,7 @@ export default function AdminDashboardPage({
         {/* Top 10 List */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">TOP 10 List</CardTitle>
+            <CardTitle className="text-base">Top Reviews</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto -mx-4 sm:-mx-0">
