@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -182,58 +184,58 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 	};
 
 	// Filter handler function
-	const handleFilter = async (tabValue?: string, page?: number) => {
-		setIsLoading(true);
+	// const handleFilter = async (tabValue?: string, page?: number) => {
+	// 	setIsLoading(true);
 
-		try {
-			// Create a new URLSearchParams object based on the current search params
-			const params = new URLSearchParams(searchParams.toString());
+	// 	try {
+	// 		// Create a new URLSearchParams object based on the current search params
+	// 		const params = new URLSearchParams(searchParams.toString());
 
-			// Update parameters based on current state
-			if (searchQuery) params.set('searchTerm', searchQuery);
-			else params.delete('searchTerm');
+	// 		// Update parameters based on current state
+	// 		if (searchQuery) params.set('searchTerm', searchQuery);
+	// 		else params.delete('searchTerm');
 
-			if (selectedCategory) params.set('categoryId', selectedCategory);
-			else params.delete('categoryId');
+	// 		if (selectedCategory) params.set('categoryId', selectedCategory);
+	// 		else params.delete('categoryId');
 
-			// Handle publication status based on tab or current state
-			const pubStatus = tabValue
-				? tabValue === 'published'
-					? true
-					: tabValue === 'unpublished'
-					? false
-					: undefined
-				: isPublished;
+	// 		// Handle publication status based on tab or current state
+	// 		const pubStatus = tabValue
+	// 			? tabValue === 'published'
+	// 				? true
+	// 				: tabValue === 'unpublished'
+	// 					? false
+	// 					: undefined
+	// 			: isPublished;
 
-			if (pubStatus !== undefined) {
-				params.set('isPublished', pubStatus.toString());
-			} else {
-				params.delete('isPublished');
-			}
+	// 		if (pubStatus !== undefined) {
+	// 			params.set('isPublished', pubStatus.toString());
+	// 		} else {
+	// 			params.delete('isPublished');
+	// 		}
 
-			// Handle premium status
-			if (selectedPremium !== undefined) {
-				params.set('isPaid', selectedPremium.toString());
-			} else {
-				params.delete('isPaid');
-			}
+	// 		// Handle premium status
+	// 		if (selectedPremium !== undefined) {
+	// 			params.set('isPaid', selectedPremium.toString());
+	// 		} else {
+	// 			params.delete('isPaid');
+	// 		}
 
-			// Add pagination parameters
-			const pageToUse = page !== undefined ? page : currentPage;
-			params.set('page', pageToUse.toString());
-			params.set('limit', itemsPerPage.toString());
+	// 		// Add pagination parameters
+	// 		const pageToUse = page !== undefined ? page : currentPage;
+	// 		params.set('page', pageToUse.toString());
+	// 		params.set('limit', itemsPerPage.toString());
 
-			// Construct the URL with all parameters
-			const url = `/admin/manage-reviews?${params.toString()}`;
+	// 		// Construct the URL with all parameters
+	// 		const url = `/admin/manage-reviews?${params.toString()}`;
 
-			router.push(url);
+	// 		router.push(url);
 
-			// Add a small delay to show loading state
-			await new Promise((resolve) => setTimeout(resolve, 300));
-		} finally {
-			setIsLoading(false);
-		}
-	};
+	// 		// Add a small delay to show loading state
+	// 		await new Promise((resolve) => setTimeout(resolve, 300));
+	// 	} finally {
+	// 		setIsLoading(false);
+	// 	}
+	// };
 
 	// Handle page change
 	const handlePageChange = (page: number) => {
@@ -337,35 +339,35 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 					count={summaries.all}
 					icon={<Calendar className="h-5 w-5" />}
 					color="bg-blue-100 text-blue-700"
-					// isActive={activeTab === "all"}
-					// onClick={() => handleTabChange("all")}
+				// isActive={activeTab === "all"}
+				// onClick={() => handleTabChange("all")}
 				/>
 				<SummaryCard
 					title="Published"
 					count={summaries.published}
 					icon={<Check className="h-5 w-5" />}
 					color="bg-green-100 text-green-700"
-					// isActive={activeTab === "published"}
-					// onClick={() => handleTabChange("published")}
+				// isActive={activeTab === "published"}
+				// onClick={() => handleTabChange("published")}
 				/>
 				<SummaryCard
 					title="Unpublished"
 					count={summaries.unpublished}
 					icon={<X className="h-5 w-5" />}
 					color="bg-red-100 text-red-700"
-					// isActive={activeTab === "unpublished"}
-					// onClick={() => handleTabChange("unpublished")}
+				// isActive={activeTab === "unpublished"}
+				// onClick={() => handleTabChange("unpublished")}
 				/>
 				<SummaryCard
 					title="Premium"
 					count={summaries.premium}
 					icon={<DollarSign className="h-5 w-5" />}
 					color="bg-purple-100 text-purple-700"
-					// isActive={selectedPremium === true}
-					// onClick={() => {
-					// 	setSelectedPremium((prev) => (prev === true ? undefined : true))
-					// 	setCurrentPage(1)
-					// }}
+				// isActive={selectedPremium === true}
+				// onClick={() => {
+				// 	setSelectedPremium((prev) => (prev === true ? undefined : true))
+				// 	setCurrentPage(1)
+				// }}
 				/>
 			</div>
 			{/* Drawer codes */}
@@ -459,9 +461,8 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant={selectedCategory ? 'default' : 'outline'}
-									className={`cursor-pointer ${
-										selectedCategory ? 'bg-primary text-primary-foreground' : ''
-									}`}
+									className={`cursor-pointer ${selectedCategory ? 'bg-primary text-primary-foreground' : ''
+										}`}
 								>
 									{selectedCategory
 										? category.find((c) => c.id === selectedCategory)?.name || 'Category'
@@ -498,15 +499,14 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant={selectedPremium !== undefined ? 'default' : 'outline'}
-									className={`cursor-pointer ${
-										selectedPremium !== undefined ? 'bg-primary text-primary-foreground' : ''
-									}`}
+									className={`cursor-pointer ${selectedPremium !== undefined ? 'bg-primary text-primary-foreground' : ''
+										}`}
 								>
 									{selectedPremium === undefined
 										? 'Premium Status'
 										: selectedPremium
-										? 'Premium'
-										: 'Free'}
+											? 'Premium'
+											: 'Free'}
 									<ChevronDown className="ml-2 h-4 w-4" />
 								</Button>
 							</DropdownMenuTrigger>
@@ -816,9 +816,8 @@ function SummaryCard({
 }) {
 	return (
 		<Card
-			className={`transition-all duration-200 ${
-				isActive ? 'ring-2 ring-primary' : 'hover:shadow-md'
-			} cursor-pointer`}
+			className={`transition-all duration-200 ${isActive ? 'ring-2 ring-primary' : 'hover:shadow-md'
+				} cursor-pointer`}
 			onClick={onClick}
 		>
 			<CardContent className="p-4 flex items-center justify-between">
@@ -834,7 +833,7 @@ function SummaryCard({
 
 function ReviewsTable({
 	reviews,
-	onDelete,
+	
 	openDrawer,
 }: {
 	reviews: Review[];

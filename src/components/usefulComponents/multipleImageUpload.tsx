@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface ImageListProps {
 	setImageLinks: React.Dispatch<React.SetStateAction<string[]>>;
@@ -37,7 +38,7 @@ export function UploadMultipleImages({ setImageLinks }: ImageListProps) {
 		// 		return await CarouselModel.create({ image: secure_url });
 		// 	}),
 		// );
-		let images: string[] = [];
+		const images: string[] = [];
 		try {
 			await Promise.all(
 				imageList.map(async (image) => {
@@ -70,7 +71,9 @@ export function UploadMultipleImages({ setImageLinks }: ImageListProps) {
 			{getView.length > 0 && (
 				<div className="flex gap-2 flex-wrap">
 					{getView.map((src, idx) => (
-						<img
+						<Image
+						height={200}
+						width={200}
 							key={idx}
 							src={src}
 							alt={`Preview ${idx}`}

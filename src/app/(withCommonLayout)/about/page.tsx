@@ -69,7 +69,7 @@ export default function AboutPage() {
               is trustworthy and valuable.
             </p>
             <p className="text-black">
-              By fostering a community of honest reviewers and implementing rigorous verification processes, we're
+              By fostering a community of honest reviewers and implementing rigorous verification processes, we&apos;re
               creating a more transparent marketplace for everyone.
             </p>
           </div>

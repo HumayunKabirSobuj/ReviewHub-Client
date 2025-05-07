@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  type FieldValues,
-  type SubmitHandler,
-  useForm,
-  Controller,
+  useForm
 } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -22,11 +23,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { registerUserApi } from "@/services/AuthServices";
-import { useRef, useState } from "react";
-import { Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { registerUserApi } from "@/services/AuthServices";
+import { Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 // Schema definition (similar to your StudentFormSchema)
 const StudentFormSchema = z
@@ -119,9 +119,9 @@ export default function RegistrationForm() {
     };
     // console.log({ registerData });
     try {
-      let res;
+     
 
-      res = await registerUserApi(registerData);
+      const res = await registerUserApi(registerData);
 
       if (res?.success) {
         form.reset({
@@ -138,7 +138,7 @@ export default function RegistrationForm() {
         toast.error(res?.message, { id: toastId });
         // console.log(res);
       }
-    } catch (error) {
+    } catch (error:any) {
       toast.error("Something Went Wrong!", { duration: 2000 });
     }
   };

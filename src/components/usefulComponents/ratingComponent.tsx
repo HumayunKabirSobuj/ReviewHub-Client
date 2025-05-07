@@ -1,6 +1,5 @@
+import { Star } from 'lucide-react';
 import { useState } from 'react';
-import { Heading1, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export default function RatingComponent({
 	max = 5,

@@ -26,7 +26,7 @@ export default function ManageCommentClient({ comments }: { comments: commentTyp
 
 	const deleteUserComment = async (comment: commentType) => {
 		try {
-			let toastId = toast.loading('...Deleting', { id: 1 });
+			const toastId = toast.loading('...Deleting', { id: 1 });
 			const res = await deleteCommentApi(comment.id);
 			if (res?.success) {
 				toast.success(res.message, { id: toastId });

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -6,16 +10,16 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 // import RatingComponent from '@/components/usefulComponents/ratingComponent';
-import { useEffect, useRef, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { categoryList, reviewDtlType } from '@/components/types/add-review';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { categoryList, reviewDtlOne, reviewDtlType } from '@/components/types/add-review';
-import { createUserReview, getAllCategories, updateUserReview } from '@/services/UserDashboard/ReviewServices';
 import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+import { createUserReview, getAllCategories, updateUserReview } from '@/services/UserDashboard/ReviewServices';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Loader2 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const formSchemaPartOne = z.object({
 	title: z.string().min(1, {
@@ -93,7 +97,7 @@ export default function CreateReviewComponent({
 		formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!);
 		formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
 
-		let images: string[] = [];
+		const images: string[] = [];
 		try {
 			await Promise.all(
 				fileArray.map(async (image) => {
@@ -123,31 +127,31 @@ export default function CreateReviewComponent({
 	const formOne =
 		mode === 'create'
 			? useForm<z.infer<typeof formSchemaPartOne>>({
-					resolver: zodResolver(formSchemaPartOne),
-					defaultValues: {
-						title: '',
-						description: '',
-						excerp: '',
-						categoryId: '',
-						purchaseSource: '',
-						isPremium: false,
-						price: '',
-						isPublished: false,
-					},
-			  })
+				resolver: zodResolver(formSchemaPartOne),
+				defaultValues: {
+					title: '',
+					description: '',
+					excerp: '',
+					categoryId: '',
+					purchaseSource: '',
+					isPremium: false,
+					price: '',
+					isPublished: false,
+				},
+			})
 			: useForm<z.infer<typeof formSchemaPartOne>>({
-					resolver: zodResolver(formSchemaPartOne),
-					defaultValues: {
-						title: review?.title,
-						description: review?.description,
-						excerp: review?.excerp,
-						categoryId: review?.categoryId,
-						purchaseSource: review?.purchaseSource,
-						isPremium: review?.isPremium,
-						price: String(review?.price),
-						isPublished: review?.isPublished,
-					},
-			  });
+				resolver: zodResolver(formSchemaPartOne),
+				defaultValues: {
+					title: review?.title,
+					description: review?.description,
+					excerp: review?.excerp,
+					categoryId: review?.categoryId,
+					purchaseSource: review?.purchaseSource,
+					isPremium: review?.isPremium,
+					price: String(review?.price),
+					isPublished: review?.isPublished,
+				},
+			});
 
 	const onSubmitOne = async (data: any) => {
 		let toastId: string | number = 'updateProfile';

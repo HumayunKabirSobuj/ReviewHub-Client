@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { paymentType } from '@/components/types/add-review';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { CircleX, Eye, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ManagePaymentClient({ payments }: { payments: paymentType[] }) {

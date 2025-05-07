@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ReviewComments from "@/components/modules/Review/ReviewComments";
 import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
 // import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
@@ -12,7 +14,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { getReviewById } from "@/services/Reviews";
 import {
@@ -110,15 +111,15 @@ export default async function ReviewDetailPage({ params }: IProps) {
   const purchaseInfo =
     isPremiumUnlocked && review.Payment.length > 0
       ? {
-          date: new Date(review.Payment[0].createdAt).toLocaleDateString(),
-          transactionId: review.Payment[0].id,
-          price: review.price,
-        }
+        date: new Date(review.Payment[0].createdAt).toLocaleDateString(),
+        transactionId: review.Payment[0].id,
+        price: review.price,
+      }
       : {
-          date: "N/A",
-          transactionId: "N/A",
-          price: review.price || 0,
-        };
+        date: "N/A",
+        transactionId: "N/A",
+        price: review.price || 0,
+      };
 
   // Split content to separate regular and premium sections
   const contentParts = review.description.split("PREMIUM CONTENT SECTION:");
@@ -265,8 +266,8 @@ export default async function ReviewDetailPage({ params }: IProps) {
                           star <= Math.floor(review.rating)
                             ? "text-yellow-400 fill-yellow-400"
                             : star - 0.5 <= review.rating
-                            ? "text-yellow-400 fill-yellow-400"
-                            : "text-gray-300 fill-gray-300"
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-gray-300 fill-gray-300"
                         )}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -369,7 +370,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
-        
+
 
             {/* Author Card */}
             <Card>

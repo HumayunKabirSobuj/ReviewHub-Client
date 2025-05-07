@@ -80,7 +80,7 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
   }
 
   return (
-    <div className="flex items-center justify-between py-4 border-t border-b">F
+    <div className="flex items-center justify-between py-4 border-t border-b">
       <div className="flex items-center gap-4">
         <Button
           variant="outline"

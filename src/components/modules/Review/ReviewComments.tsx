@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useUser } from "@/components/context/UserContext";
@@ -16,7 +17,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createComment } from "@/services/Reviews";
-import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -172,7 +172,7 @@ export default function ReviewComments({
                     {comment.author.id === currentUser.id && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                        
+
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>

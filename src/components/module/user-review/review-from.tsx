@@ -1,13 +1,23 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Camera, Loader2, Upload } from 'lucide-react'
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Camera, Loader2, Star, Upload } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -18,7 +28,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -26,17 +35,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 
 // Define the form schema with validation
 const reviewFormSchema = z.object({
@@ -114,11 +115,11 @@ export function ReviewForm({
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       // Show success toast
-     
+
       // Redirect after successful submission
       router.push("/reviews")
       router.refresh()
-    } catch (error) {
+    } catch (error:any) {
     }
   }
 
@@ -137,7 +138,7 @@ export function ReviewForm({
   // Form completion percentage
   const formValues = form.getValues()
   const requiredFields = ["title", "description", "rating", "excerp", "categoryId"]
-  const completedFields = requiredFields.filter(field => 
+  const completedFields = requiredFields.filter(field =>
     formValues[field as keyof ReviewFormValues]
   )
   const completionPercentage = Math.round((completedFields.length / requiredFields.length) * 100)
@@ -158,7 +159,7 @@ export function ReviewForm({
             <div className="bg-white rounded-full p-1 shadow-sm">
               <div className="flex items-center gap-2">
                 <div className="relative w-24 h-3 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
                     style={{ width: `${completionPercentage}%` }}
                   ></div>
@@ -176,7 +177,7 @@ export function ReviewForm({
             <TabsTrigger value="content">Review Content</TabsTrigger>
             <TabsTrigger value="media">Media & Extras</TabsTrigger>
           </TabsList>
-          
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <TabsContent value="details" className="space-y-6 mt-0">
@@ -279,8 +280,8 @@ export function ReviewForm({
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    type="button" 
+                  <Button
+                    type="button"
                     onClick={() => setActiveTab("content")}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
@@ -380,8 +381,8 @@ export function ReviewForm({
                   >
                     Back
                   </Button>
-                  <Button 
-                    type="button" 
+                  <Button
+                    type="button"
                     onClick={() => setActiveTab("media")}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
@@ -398,28 +399,28 @@ export function ReviewForm({
                     <p className="text-gray-500 text-sm mb-4">
                       Upload photos of the product to enhance your review
                     </p>
-                    
+
                     <div className="flex justify-center mb-4">
                       <label className="cursor-pointer">
                         <div className="bg-white border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 transition flex items-center gap-2">
                           <Upload className="h-4 w-4 text-gray-500" />
                           <span className="text-sm font-medium text-gray-700">Upload Images</span>
                         </div>
-                        <input 
-                          type="file" 
-                          accept="image/*" 
-                          className="hidden" 
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
                           onChange={handleImageUpload}
                         />
                       </label>
                     </div>
-                    
+
                     {imagePreview && (
                       <div className="mt-4">
                         <div className="relative w-32 h-32 mx-auto">
-                          <img 
-                            src={imagePreview || "/placeholder.svg"} 
-                            alt="Preview" 
+                          <img
+                            src={imagePreview || "/placeholder.svg"}
+                            alt="Preview"
                             className="w-full h-full object-cover rounded-md border border-gray-200"
                           />
                           <button
@@ -462,8 +463,8 @@ export function ReviewForm({
                   >
                     Back
                   </Button>
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     disabled={isSubmitting}
                     className="bg-blue-600 hover:bg-blue-700"
                   >

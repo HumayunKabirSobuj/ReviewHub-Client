@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -44,8 +45,9 @@ export function LoginForm() {
 			} else {
 				toast.success(result?.message, { duration: 2000 });
 			}
-		} catch (err) {
+		} catch (err:any) {
 			toast.error('Something went wrong', { duration: 2000 });
+			console.log(err);
 		}
 	};
 

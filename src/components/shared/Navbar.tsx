@@ -1,13 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import type React from 'react';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useTheme } from 'next-themes';
-import { Star, ShoppingBag, Home, Bell, Menu, X, ChevronDown, LogOut, User, MailQuestion } from 'lucide-react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -15,10 +12,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { useUser } from '../context/UserContext';
 import { logout } from '@/services/AuthServices';
+import { ChevronDown, Home, LogOut, MailQuestion, Menu, Star, User, X } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useUser } from '../context/UserContext';
 
 type NavItem = {
 	title: string;
@@ -52,7 +53,7 @@ export function Navbar() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const { user, setIsLoading, isLoading } = useUser();
-	console.log({user});
+	console.log({ user });
 
 	const { setTheme } = useTheme();
 
@@ -108,7 +109,7 @@ export function Navbar() {
 					{/* Right side items */}
 					<div className="flex items-center">
 						{/* Notifications */}
-						
+
 
 						{/* User dropdown or Login button */}
 						{user ? (

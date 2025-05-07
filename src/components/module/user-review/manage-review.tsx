@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
-import { CircleX, Edit, Eye, Loader, Trash2 } from 'lucide-react';
+import { CircleX, Edit, Eye, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import CreateReviewComponent from './create-review';
 import ViewReviewComponent from './sub-component/view-review';
-import { toast } from 'sonner';
 
 export default function UserReviewManagement({ reviews }: { reviews: reviewDtlType[] }) {
 	// const [allReviews, setAllReviews] = useState<reviewDtlType[]>([]);
@@ -43,7 +43,7 @@ export default function UserReviewManagement({ reviews }: { reviews: reviewDtlTy
 
 	const deleteUserReview = async (review: reviewDtlType) => {
 		try {
-			let toastId = toast.loading('...Deleting', { id: 1 });
+			const toastId = toast.loading('...Deleting', { id: 1 });
 			const res = await deleteUserReviewApi(review.id);
 			if (res?.success) {
 				toast.success(res.message, { id: toastId });
@@ -130,9 +130,8 @@ export default function UserReviewManagement({ reviews }: { reviews: reviewDtlTy
 									{reviews.map((review, index) => (
 										<tr
 											key={index}
-											className={`hover:bg-gray-50 ${
-												reviewDtl.id === review.id ? 'bg-gray-200' : ''
-											}`}
+											className={`hover:bg-gray-50 ${reviewDtl.id === review.id ? 'bg-gray-200' : ''
+												}`}
 										>
 											<td className="px-4 py-3 text-sm font-medium">
 												<div className="flex flex-col">

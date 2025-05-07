@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -12,7 +13,7 @@ import PaywallModal from "./PayWallModal"
 import { useUser } from "@/components/context/UserContext"
 import Link from "next/link"
 import { toast } from "sonner"
-import { Image } from "@/components/ui/image"
+
 
 interface Review {
   id: string
@@ -177,12 +178,12 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
 
           {review.imageUrls && review.imageUrls.length > 0 && (
             <div className="mt-3 mb-3 relative aspect-video rounded-md overflow-hidden">
-              <Image
+              {/* <Image
                 src={review.imageUrls[0] || "/placeholder.svg"}
                 alt={review.title}
                 className="w-full h-full"
                 fallbackSrc="/placeholder.svg?height=200&width=300"
-              />
+              /> */}
             </div>
           )}
 

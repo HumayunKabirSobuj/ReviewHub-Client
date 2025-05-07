@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // "use client"
 
 // import { Button } from "@/components/ui/button"
@@ -487,35 +488,7 @@ const revenueData = [
   { month: "Dec", revenue: 48000 },
 ];
 
-const productData = [
-  {
-    id: 1,
-    brand: "Big King",
-    name: "Big King",
-    price: "$100",
-    brandName: "Pepsi Cola",
-    quantity: "100",
-    srName: "John Smith",
-  },
-  {
-    id: 2,
-    brand: "Big King",
-    name: "Big King",
-    price: "$100",
-    brandName: "Pepsi Cola",
-    quantity: "100",
-    srName: "John Smith",
-  },
-  {
-    id: 3,
-    brand: "Big King",
-    name: "Big King",
-    price: "$100",
-    brandName: "Pepsi Cola",
-    quantity: "100",
-    srName: "John Smith",
-  },
-];
+
 type AdminDashboardPageProps = {
   data: any;
   tableData: any;
