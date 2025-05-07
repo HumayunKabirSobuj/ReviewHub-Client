@@ -323,42 +323,42 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 
 	return (
 		<div className="container mx-auto p-4">
-			{/* Summary Cards */}
+			{/* Summary Cards */} <h1 className="text-2xl font-bold mb-6">Manage Reviews</h1>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 				<SummaryCard
 					title="All Reviews"
 					count={summaries.all}
 					icon={<Calendar className="h-5 w-5" />}
 					color="bg-blue-100 text-blue-700"
-					isActive={activeTab === "all"}
-					onClick={() => handleTabChange("all")}
+				// isActive={activeTab === "all"}
+				// onClick={() => handleTabChange("all")}
 				/>
 				<SummaryCard
 					title="Published"
 					count={summaries.published}
 					icon={<Check className="h-5 w-5" />}
 					color="bg-green-100 text-green-700"
-					isActive={activeTab === "published"}
-					onClick={() => handleTabChange("published")}
+				// isActive={activeTab === "published"}
+				// onClick={() => handleTabChange("published")}
 				/>
 				<SummaryCard
 					title="Unpublished"
 					count={summaries.unpublished}
 					icon={<X className="h-5 w-5" />}
 					color="bg-red-100 text-red-700"
-					isActive={activeTab === "unpublished"}
-					onClick={() => handleTabChange("unpublished")}
+				// isActive={activeTab === "unpublished"}
+				// onClick={() => handleTabChange("unpublished")}
 				/>
 				<SummaryCard
 					title="Premium"
 					count={summaries.premium}
 					icon={<DollarSign className="h-5 w-5" />}
 					color="bg-purple-100 text-purple-700"
-					isActive={selectedPremium === true}
-					onClick={() => {
-						setSelectedPremium((prev) => (prev === true ? undefined : true))
-						setCurrentPage(1)
-					}}
+				// isActive={selectedPremium === true}
+				// onClick={() => {
+				// 	setSelectedPremium((prev) => (prev === true ? undefined : true))
+				// 	setCurrentPage(1)
+				// }}
 				/>
 			</div>
 
