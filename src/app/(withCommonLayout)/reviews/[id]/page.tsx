@@ -1,5 +1,6 @@
 import ReviewComments from "@/components/modules/Review/ReviewComments";
 import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
+// import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
 import ReviewVoting from "@/components/modules/Review/ReviewVoting";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -68,7 +69,10 @@ export default async function ReviewDetailPage({ params }: IProps) {
   const reveiwId = (await params)?.id;
   const { data: review, error } = await getReviewById(reveiwId);
 
-  // console.log("review", review);
+  // console.log("rev
+  // 
+  // 
+  // iew", review);
   // Handle error state
   if (error) {
     return (
