@@ -1,8 +1,14 @@
-import Link from "next/link"
-import { XCircle, AlertTriangle, RefreshCw, HelpCircle } from "lucide-react"
+import Link from "next/link";
+import { XCircle, AlertTriangle, RefreshCw, HelpCircle } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function PaymentFailedPage() {
   return (
@@ -18,34 +24,17 @@ export default function PaymentFailedPage() {
           </div>
 
           <CardHeader className="pt-24 pb-4 text-center relative z-0">
-            <CardTitle className="text-2xl font-bold text-gray-800">Payment Failed</CardTitle>
+            <CardTitle className="text-2xl font-bold text-gray-800">
+              Payment Failed
+            </CardTitle>
           </CardHeader>
 
           <CardContent className="text-center space-y-4 pb-6 px-6">
-            <p className="text-gray-600">Your payment could not be processed at this time</p>
-
-            {/* Error details card */}
-            <div className="bg-red-50 rounded-xl p-5 mt-2 shadow-inner border border-red-100">
-              <div className="flex items-start gap-3 mb-3">
-                <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-gray-700">Possible reasons:</p>
-                  <ul className="text-sm text-gray-600 list-disc pl-5 mt-1 space-y-1">
-                    <li>Insufficient funds</li>
-                    <li>Card information is incorrect</li>
-                    <li>Transaction was declined by your bank</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-4 pt-3 border-t border-red-200">
-                <span className="text-sm font-medium text-gray-600">Order Reference:</span>
-                <span className="text-sm font-bold text-gray-800">#ORD-2023-1234</span>
-              </div>
-            </div>
+            <p className="text-gray-600">
+              Your payment could not be processed at this time
+            </p>
 
             {/* Additional info */}
-            <div className="text-sm text-gray-500 mt-2">No charges have been made to your account</div>
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3 pb-8 px-6">
@@ -53,20 +42,12 @@ export default function PaymentFailedPage() {
               className="w-full bg-red-600 hover:bg-red-700 text-white py-6 rounded-lg shadow-md transition-colors"
               asChild
             >
-              <Link href="/checkout" className="flex items-center justify-center">
+              <Link
+                href="/reviews"
+                className="flex items-center justify-center"
+              >
                 <RefreshCw className="mr-2 h-4 w-4" />
-                Try Again
-              </Link>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="w-full border-red-200 text-red-700 hover:bg-red-50 py-5 rounded-lg transition-colors"
-              asChild
-            >
-              <Link href="/contact-support" className="flex items-center justify-center">
-                <HelpCircle className="mr-2 h-4 w-4" />
-                Contact Support
+                Go All Reviews Page
               </Link>
             </Button>
           </CardFooter>
@@ -80,5 +61,5 @@ export default function PaymentFailedPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
