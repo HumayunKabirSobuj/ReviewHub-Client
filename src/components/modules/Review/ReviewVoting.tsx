@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ThumbsDown, ThumbsUp, MessageSquare } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { createVote } from "@/services/Reviews"
+import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react"
+import { useState } from "react"
 import { toast } from "sonner"
 
 interface VotingProps {
@@ -22,14 +22,11 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleVote = async (type: "up" | "down") => {
-    // Prevent multiple submissions
     if (isSubmitting) return
 
-    // Optimistic UI update
     const previousVote = userVote
     const newVote = userVote === type ? null : type
 
-    // Update local state immediately for responsive UI
     setUserVote(newVote)
     setVotes((prev) => {
       const newVotes = { ...prev }
@@ -45,7 +42,6 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
       return newVotes
     })
 
-    // Call API to update vote
     try {
       setIsSubmitting(true)
 
@@ -56,24 +52,27 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
           throw new Error(response.error || "Failed to update vote")
         }
 
-        toast.success(`Vote submitted`, {
-          description: `Your ${newVote === "up" ? "upvote" : "downvote"} has been recorded.`,
-        })
+        if (previousVote === null) {
+          toast.success(`Vote recorded`, {
+            description: `You ${newVote === "up" ? "upvoted" : "downvoted"} this review.`,
+          })
+        } else {
+          toast.success(`Vote changed`, {
+            description: `Changed from ${previousVote === "up" ? "upvote" : "downvote"} to ${newVote === "up" ? "upvote" : "downvote"}.`,
+          })
+        }
       } else {
-        // For removing votes, we'd need a separate API endpoint
-        // For now, just show a message
         toast.info(`Vote removed`, {
-          description: "Your vote has been removed.",
+          description: `Your ${previousVote === "up" ? "upvote" : "downvote"} has been removed.`,
         })
       }
     } catch (error) {
-      // Revert on error
       console.error("Error submitting vote:", error)
       setUserVote(previousVote)
       setVotes(initialVotes)
 
-      toast.error(`Error`, {
-        description: error instanceof Error ? error.message : "Failed to update vote. Please try again.",
+      toast.error(`Voting failed`, {
+        description: error instanceof Error ? error.message : "Unable to process your vote. Please try again.",
       })
     } finally {
       setIsSubmitting(false)
@@ -81,32 +80,44 @@ export default function ReviewVoting({ reviewId, initialVotes, commentsCount = 0
   }
 
   return (
-    <div className="flex items-center justify-between py-4 border-t border-b">
+    <div className="flex items-center justify-between py-4 border-t border-b">F
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
           size="sm"
-          className={cn(userVote === "up" && "bg-primary/10", isSubmitting && "opacity-70 cursor-not-allowed")}
+          className={cn(
+            "transition-all",
+            userVote === "up" && "bg-primary/10 border-primary",
+            isSubmitting && "opacity-70 cursor-not-allowed",
+          )}
           onClick={() => handleVote("up")}
           disabled={isSubmitting}
+          aria-label="Upvote"
+          title="Upvote this review"
         >
-          <ThumbsUp className={cn("w-4 h-4 mr-1", userVote === "up" && "text-primary")} />
-          <span className={cn(userVote === "up" && "text-primary")}>{votes.upvotes}</span>
+          <ChevronUp className={cn("w-4 h-4 mr-1", userVote === "up" && "text-primary fill-primary")} />
+          <span className={cn(userVote === "up" && "text-primary font-medium")}>{votes.upvotes}</span>
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className={cn(userVote === "down" && "bg-primary/10", isSubmitting && "opacity-70 cursor-not-allowed")}
+          className={cn(
+            "transition-all",
+            userVote === "down" && "bg-primary/10 border-primary",
+            isSubmitting && "opacity-70 cursor-not-allowed",
+          )}
           onClick={() => handleVote("down")}
           disabled={isSubmitting}
+          aria-label="Downvote"
+          title="Downvote this review"
         >
-          <ThumbsDown className={cn("w-4 h-4 mr-1", userVote === "down" && "text-primary")} />
-          <span className={cn(userVote === "down" && "text-primary")}>{votes.downvotes}</span>
+          <ChevronDown className={cn("w-4 h-4 mr-1", userVote === "down" && "text-primary fill-primary")} />
+          <span className={cn(userVote === "down" && "text-primary font-medium")}>{votes.downvotes}</span>
         </Button>
       </div>
       <div className="text-sm text-muted-foreground flex items-center gap-1">
         <MessageSquare className="w-4 h-4" />
-        {commentsCount} comments
+        {commentsCount} {commentsCount === 1 ? "comment" : "comments"}
       </div>
     </div>
   )
