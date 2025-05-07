@@ -1,10 +1,10 @@
 import UserReviewManagement from '@/components/module/user-review/manage-review';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getAllReviewsApi } from '@/services/UserDashboard/ReviewServices';
+import { getMyReviewsApi } from '@/services/UserDashboard/ReviewServices';
 import { Suspense } from 'react';
 
 const ManageReviewsForUser = async () => {
-	const reviews = (await getAllReviewsApi()).data;
+	const reviews = (await getMyReviewsApi()).data;
 	// Loading component for Suspense fallback
 	function ReviewsLoading() {
 		return (

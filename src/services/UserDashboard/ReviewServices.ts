@@ -99,3 +99,21 @@ export const getAllReviewsApi = async () => {
 		console.log(error);
 	}
 };
+
+export const getMyReviewsApi = async () => {
+	const accessToken = (await cookies()).get('accessToken')?.value;
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/review/my-reviews`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${accessToken}`,
+			},
+		});
+		const result = await res.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};

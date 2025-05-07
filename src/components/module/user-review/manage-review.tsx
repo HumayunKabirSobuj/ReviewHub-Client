@@ -62,8 +62,11 @@ export default function UserReviewManagement({ reviews }: { reviews: reviewDtlTy
 	return (
 		<Card className="w-full ">
 			{!reviews.length && (
-				<div className="w-full h-[100vh] flex items-center justify-center">
-					<Loader className="w-[80px] h-12 animate-spin" />
+				// <div className="w-full h-[100vh] flex items-center justify-center">
+				// 	<Loader className="w-[80px] h-12 animate-spin" />
+				// </div>
+				<div className="w-2/3 mx-auto border-2 p-[25px] border-red-500 bg-red-300 lg:h-[150px] rounded-4xl flex items-center justify-center">
+					<h1 className="lg:text-3xl">No Reviews to display!</h1>
 				</div>
 			)}
 			{reviews.length > 0 && (
