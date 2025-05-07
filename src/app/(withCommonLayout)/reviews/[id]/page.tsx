@@ -1,19 +1,31 @@
-
-import ReviewComments from "@/components/modules/Review/ReviewComments"
-import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery"
-import ReviewVoting from "@/components/modules/Review/ReviewVoting"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
-import { getReviewById } from "@/services/Reviews"
-import { Calendar, CheckCircle2, Clock, ExternalLink, MessageSquare, ShoppingBag, Tag } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { Suspense } from "react"
+import ReviewComments from "@/components/modules/Review/ReviewComments";
+import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
+import ReviewVoting from "@/components/modules/Review/ReviewVoting";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { getReviewById } from "@/services/Reviews";
+import {
+  Calendar,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  MessageSquare,
+  ShoppingBag,
+  Tag,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
 
 // Loading component
 function ReviewDetailSkeleton() {
@@ -43,12 +55,18 @@ function ReviewDetailSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+interface IProps {
+  params: Promise<{
+    id: string;
+  }>;
 }
 
-export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
+export default async function ReviewDetailPage({ params }: IProps) {
   // Fetch review data
-  const { data: review, error } = await getReviewById(params?.id)
+  const reveiwId = (await params)?.id;
+  const { data: review, error } = await getReviewById(reveiwId);
 
   // console.log("review", review);
   // Handle error state
@@ -63,7 +81,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
           <Link href="/reviews">Back to Reviews</Link>
         </Button>
       </div>
-    )
+    );
   }
 
   // If no review found
@@ -72,34 +90,36 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
         <Alert className="mb-6">
           <AlertTitle>Not Found</AlertTitle>
-          <AlertDescription>The review you're looking for doesn't exist.</AlertDescription>
+          <AlertDescription>
+            The review you're looking for doesn't exist.
+          </AlertDescription>
         </Alert>
         <Button asChild>
           <Link href="/reviews">Back to Reviews</Link>
         </Button>
       </div>
-    )
+    );
   }
   // For demo purposes, using mock data for premium status
   // In a real app, this would come from the database or user session
-  const isPremiumUnlocked = review.Payment && review.Payment.length > 0
+  const isPremiumUnlocked = review.Payment && review.Payment.length > 0;
   const purchaseInfo =
     isPremiumUnlocked && review.Payment.length > 0
       ? {
-        date: new Date(review.Payment[0].createdAt).toLocaleDateString(),
-        transactionId: review.Payment[0].id,
-        price: review.price,
-      }
+          date: new Date(review.Payment[0].createdAt).toLocaleDateString(),
+          transactionId: review.Payment[0].id,
+          price: review.price,
+        }
       : {
-        date: "N/A",
-        transactionId: "N/A",
-        price: review.price || 0,
-      }
+          date: "N/A",
+          transactionId: "N/A",
+          price: review.price || 0,
+        };
 
   // Split content to separate regular and premium sections
-  const contentParts = review.description.split("PREMIUM CONTENT SECTION:")
-  const regularContent = contentParts[0]
-  const premiumContent = contentParts.length > 1 ? contentParts[1] : ""
+  const contentParts = review.description.split("PREMIUM CONTENT SECTION:");
+  const regularContent = contentParts[0];
+  const premiumContent = contentParts.length > 1 ? contentParts[1] : "";
 
   // Mock related reviews
   const relatedReviews = [
@@ -123,28 +143,34 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
       votes: 156,
       isPremium: false,
     },
-  ]
+  ];
 
   // Format comments from API response
   const formattedComments =
-    review.comments?.map((comment:any) => ({
+    review.comments?.map((comment: any) => ({
       id: comment.id,
       author: {
         id: comment.author.id,
         name: comment.author.name,
-        avatar: comment.author.profileUrl || "/placeholder.svg?height=40&width=40",
+        avatar:
+          comment.author.profileUrl || "/placeholder.svg?height=40&width=40",
       },
       content: comment.content,
-      date: new Date(comment.createdAt || Date.now()).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    })) || []
+      date: new Date(comment.createdAt || Date.now()).toLocaleDateString(
+        "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      ),
+    })) || [];
 
   // Use actual image URLs or placeholders
   const images =
-    review.imageUrls && review.imageUrls.length > 0 ? review.imageUrls : ["/placeholder.svg?height=400&width=600"]
+    review.imageUrls && review.imageUrls.length > 0
+      ? review.imageUrls
+      : ["/placeholder.svg?height=400&width=600"];
 
   return (
     <Suspense fallback={<ReviewDetailSkeleton />}>
@@ -153,9 +179,12 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
         {isPremiumUnlocked && review.isPremium && (
           <Alert className="mb-6 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-900">
             <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
-            <AlertTitle className="text-green-800 dark:text-green-300">Premium Content Unlocked</AlertTitle>
+            <AlertTitle className="text-green-800 dark:text-green-300">
+              Premium Content Unlocked
+            </AlertTitle>
             <AlertDescription className="text-green-700 dark:text-green-400">
-              You have successfully unlocked this premium review. Transaction ID: {purchaseInfo.transactionId}
+              You have successfully unlocked this premium review. Transaction
+              ID: {purchaseInfo.transactionId}
             </AlertDescription>
           </Alert>
         )}
@@ -175,11 +204,16 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
 
               {isPremiumUnlocked && review.isPremium && (
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                  <Badge
+                    variant="secondary"
+                    className="bg-primary/10 text-primary border-primary/20"
+                  >
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
                     Premium Unlocked
                   </Badge>
-                  <span className="text-sm text-muted-foreground">Purchased on {purchaseInfo.date}</span>
+                  <span className="text-sm text-muted-foreground">
+                    Purchased on {purchaseInfo.date}
+                  </span>
                 </div>
               )}
 
@@ -189,12 +223,19 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src={review.author?.profileUrl || "/placeholder.svg?height=40&width=40"}
+                      src={
+                        review.author?.profileUrl ||
+                        "/placeholder.svg?height=40&width=40"
+                      }
                       alt={review.author?.name || ""}
                     />
-                    <AvatarFallback>{(review.author?.name || "A")[0]}</AvatarFallback>
+                    <AvatarFallback>
+                      {(review.author?.name || "A")[0]}
+                    </AvatarFallback>
                   </Avatar>
-                  <span className="font-medium">{review.author?.name || "Anonymous"}</span>
+                  <span className="font-medium">
+                    {review.author?.name || "Anonymous"}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-2 text-muted-foreground">
@@ -220,8 +261,8 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                           star <= Math.floor(review.rating)
                             ? "text-yellow-400 fill-yellow-400"
                             : star - 0.5 <= review.rating
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-gray-300 fill-gray-300",
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300 fill-gray-300"
                         )}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -230,7 +271,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                       </svg>
                     ))}
                   </div>
-                  <span className="ml-2 font-medium">{review.rating.toFixed(1)}</span>
+                  <span className="ml-2 font-medium">
+                    {review.rating.toFixed(1)}
+                  </span>
                 </div>
 
                 {review.purchaseSource && (
@@ -255,7 +298,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
             </div>
 
             {/* Review Images */}
-            {images && images.length > 0 && <ReviewImageGallery images={images} title={review.title} />}
+            {images && images.length > 0 && (
+              <ReviewImageGallery images={images} title={review.title} />
+            )}
 
             {/* Review Content */}
             <div className="space-y-6">
@@ -269,7 +314,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                 <div className="relative">
                   <div className="absolute inset-0 w-1 bg-primary rounded-full -left-4 hidden md:block" />
                   <div className="bg-primary/5 border border-primary/10 rounded-lg p-6 relative">
-                    <Badge className="absolute -top-3 left-4 bg-primary text-primary-foreground">Premium Content</Badge>
+                    <Badge className="absolute -top-3 left-4 bg-primary text-primary-foreground">
+                      Premium Content
+                    </Badge>
                     <div className="prose max-w-none mt-2">
                       <p>{premiumContent}</p>
                     </div>
@@ -280,13 +327,20 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
               {/* Premium Content Locked */}
               {review.isPremium && !isPremiumUnlocked && (
                 <div className="bg-muted/30 border rounded-lg p-6 relative">
-                  <Badge className="absolute -top-3 left-4">Premium Content</Badge>
+                  <Badge className="absolute -top-3 left-4">
+                    Premium Content
+                  </Badge>
                   <div className="text-center py-6">
-                    <h3 className="text-lg font-medium mb-2">Premium Content Locked</h3>
+                    <h3 className="text-lg font-medium mb-2">
+                      Premium Content Locked
+                    </h3>
                     <p className="text-muted-foreground mb-4">
-                      Unlock this premium review to access exclusive insights and detailed comparisons.
+                      Unlock this premium review to access exclusive insights
+                      and detailed comparisons.
                     </p>
-                    <Button>Unlock for ${review.price?.toFixed(2) || "2.99"}</Button>
+                    <Button>
+                      Unlock for ${review.price?.toFixed(2) || "2.99"}
+                    </Button>
                   </div>
                 </div>
               )}
@@ -303,7 +357,10 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
             />
 
             {/* Comments Section */}
-            <ReviewComments reviewId={review.id} initialComments={formattedComments} />
+            <ReviewComments
+              reviewId={review.id}
+              initialComments={formattedComments}
+            />
           </div>
 
           {/* Sidebar */}
@@ -312,21 +369,33 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
             {isPremiumUnlocked && review.isPremium && (
               <Card>
                 <CardHeader className="pb-3">
-                  <h3 className="text-lg font-semibold">Purchase Information</h3>
+                  <h3 className="text-lg font-semibold">
+                    Purchase Information
+                  </h3>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Purchase Date:</span>
+                      <span className="text-muted-foreground">
+                        Purchase Date:
+                      </span>
                       <span className="font-medium">{purchaseInfo.date}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Transaction ID:</span>
-                      <span className="font-medium">{purchaseInfo.transactionId}</span>
+                      <span className="text-muted-foreground">
+                        Transaction ID:
+                      </span>
+                      <span className="font-medium">
+                        {purchaseInfo.transactionId}
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Amount Paid:</span>
-                      <span className="font-medium">${purchaseInfo.price.toFixed(2)}</span>
+                      <span className="text-muted-foreground">
+                        Amount Paid:
+                      </span>
+                      <span className="font-medium">
+                        ${purchaseInfo.price.toFixed(2)}
+                      </span>
                     </div>
                     <Separator className="my-2" />
                     <div className="flex justify-between text-sm">
@@ -352,20 +421,29 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
                     <AvatarImage
-                      src={review.author?.profileUrl || "/placeholder.svg?height=40&width=40"}
+                      src={
+                        review.author?.profileUrl ||
+                        "/placeholder.svg?height=40&width=40"
+                      }
                       alt={review.author?.name || ""}
                     />
-                    <AvatarFallback>{(review.author?.name || "A")[0]}</AvatarFallback>
+                    <AvatarFallback>
+                      {(review.author?.name || "A")[0]}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h4 className="font-medium">{review.author?.name || "Anonymous"}</h4>
-                    <p className="text-sm text-muted-foreground">Product Reviewer</p>
+                    <h4 className="font-medium">
+                      {review.author?.name || "Anonymous"}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      Product Reviewer
+                    </p>
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
                   <p>
-                    Passionate about technology and gadgets. Sharing honest reviews to help others make informed
-                    decisions.
+                    Passionate about technology and gadgets. Sharing honest
+                    reviews to help others make informed decisions.
                   </p>
                 </div>
                 {/* <Button variant="outline" className="w-full" asChild>
@@ -398,8 +476,13 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <Link href={`/reviews/${relatedReview.id}`} className="hover:underline">
-                          <h4 className="font-medium text-sm truncate">{relatedReview.title}</h4>
+                        <Link
+                          href={`/reviews/${relatedReview.id}`}
+                          className="hover:underline"
+                        >
+                          <h4 className="font-medium text-sm truncate">
+                            {relatedReview.title}
+                          </h4>
                         </Link>
                         <div className="flex items-center gap-1 mt-1">
                           <div className="flex">
@@ -410,7 +493,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                                   "w-3 h-3",
                                   star <= Math.floor(relatedReview.rating)
                                     ? "text-yellow-400 fill-yellow-400"
-                                    : "text-gray-300 fill-gray-300",
+                                    : "text-gray-300 fill-gray-300"
                                 )}
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
@@ -419,7 +502,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                               </svg>
                             ))}
                           </div>
-                          <span className="text-xs text-muted-foreground">{relatedReview.rating.toFixed(1)}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {relatedReview.rating.toFixed(1)}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                           <span>{relatedReview.author}</span>
@@ -435,7 +520,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
               </CardContent>
               <CardFooter>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/reviews?isPremium=true">Browse Premium Reviews</Link>
+                  <Link href="/reviews?isPremium=true">
+                    Browse Premium Reviews
+                  </Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -448,19 +535,28 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
               <CardContent className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link href="/reviews/2" className="text-sm truncate hover:underline">
+                  <Link
+                    href="/reviews/2"
+                    className="text-sm truncate hover:underline"
+                  >
                     Bose QuietComfort 45 Headphones Review
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link href="/reviews/3" className="text-sm truncate hover:underline">
+                  <Link
+                    href="/reviews/3"
+                    className="text-sm truncate hover:underline"
+                  >
                     Apple AirPods Pro 2 - Worth The Upgrade?
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link href="/reviews/4" className="text-sm truncate hover:underline">
+                  <Link
+                    href="/reviews/4"
+                    className="text-sm truncate hover:underline"
+                  >
                     Best Noise Cancelling Headphones 2024
                   </Link>
                 </div>
@@ -470,5 +566,5 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
         </div>
       </div>
     </Suspense>
-  )
+  );
 }
