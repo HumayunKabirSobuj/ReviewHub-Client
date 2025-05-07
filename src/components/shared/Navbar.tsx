@@ -52,6 +52,7 @@ export function Navbar() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const { user, setIsLoading, isLoading } = useUser();
+	console.log({user});
 
 	const { setTheme } = useTheme();
 
@@ -72,8 +73,7 @@ export function Navbar() {
 						<div className="flex-shrink-0">
 							<Link href="/" className="flex items-center">
 								<Star className="mr-2 h-6 w-6 text-yellow-500" />
-								<span className="text-xl font-bold text-blue-600">Review</span>
-								<span className="text-xl font-semibold text-gray-900">Portal</span>
+								<span className="text-xl font-semibold text-gray-900">Review Portal</span>
 							</Link>
 						</div>
 
@@ -108,9 +108,7 @@ export function Navbar() {
 					{/* Right side items */}
 					<div className="flex items-center">
 						{/* Notifications */}
-						<Button variant="ghost" size="icon" className="mr-2 text-gray-600">
-							<Bell className="h-5 w-5" />
-						</Button>
+						
 
 						{/* User dropdown or Login button */}
 						{user ? (
@@ -118,7 +116,7 @@ export function Navbar() {
 								<DropdownMenuTrigger asChild>
 									<Button variant="ghost" className="flex items-center space-x-2">
 										<Avatar className="h-8 w-8">
-											<AvatarImage src="/avatars/user.png" alt="User" />
+											<AvatarImage src={user?.profileUrl} alt="User" />
 											<AvatarFallback>USER</AvatarFallback>
 										</Avatar>
 										<span className="hidden text-sm font-medium text-gray-700 md:inline-block">
@@ -163,7 +161,7 @@ export function Navbar() {
 								</DropdownMenuContent>
 							</DropdownMenu>
 						) : (
-							<Button variant="default" className="bg-blue-600 hover:bg-blue-700">
+							<Button variant="default" className="bg-purple-600 ">
 								<Link href={'/login'}> Login</Link>
 							</Button>
 						)}
