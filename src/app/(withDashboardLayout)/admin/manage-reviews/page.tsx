@@ -10,13 +10,14 @@ interface IProps {
 }
 
 const ManageReviewPage = async ({ searchParams }: { searchParams: IProps }) => {
+	const resolvedParams = await searchParams;
+
 	// Use the safe query string creator
-	const queryString = createSafeQueryString(searchParams);
+	const queryString = createSafeQueryString(resolvedParams);
 
 	// Fetch data based on the query parameters
 	const { data, error } = await getAllReviews(queryString);
 	const { data: category } = await getAllCategories();
-
 	if (error) {
 		return <div className="p-4 text-red-500">Error loading reviews: {error}</div>;
 	}

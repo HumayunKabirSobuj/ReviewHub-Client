@@ -172,13 +172,7 @@ export default function ReviewComments({
                     {comment.author.id === currentUser.id && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 px-2 text-muted-foreground hover:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
