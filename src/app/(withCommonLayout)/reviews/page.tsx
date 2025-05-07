@@ -59,15 +59,16 @@ export const metadata = {
   description: "Browse and filter product reviews from our community",
 }
 
-const makePayment = async(reviewId:string)=>{
-  // console.log('Root page....');
-}
+
 
 // Main page component
 export default async function Reviews({ searchParams }: ReviewsPageProps) {
   try {
+
+    const resolvedParams = await searchParams;
+
     // Use the safe query string creator
-    const queryString = createSafeQueryString(searchParams)
+    const queryString = createSafeQueryString(resolvedParams)
 
     // Fetch data in parallel for better performance
     const [reviewsResponse, categoriesResponse] = await Promise.all([getAllReviews(queryString), getAllCategories()])

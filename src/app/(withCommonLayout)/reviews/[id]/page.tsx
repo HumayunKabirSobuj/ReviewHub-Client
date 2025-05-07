@@ -369,52 +369,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Purchase Information (if premium is unlocked) */}
-            {isPremiumUnlocked && review.isPremium && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <h3 className="text-lg font-semibold">
-                    Purchase Information
-                  </h3>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        Purchase Date:
-                      </span>
-                      <span className="font-medium">{purchaseInfo.date}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        Transaction ID:
-                      </span>
-                      <span className="font-medium">
-                        {purchaseInfo.transactionId}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        Amount Paid:
-                      </span>
-                      <span className="font-medium">
-                        ${purchaseInfo.price.toFixed(2)}
-                      </span>
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Status:</span>
-                      <span className="font-medium text-green-600 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Completed
-                      </span>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full" size="sm">
-                    View Receipt
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+        
 
             {/* Author Card */}
             <Card>

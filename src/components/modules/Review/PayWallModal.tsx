@@ -82,7 +82,7 @@ export default function PaywallModal({
               Premium Content
             </Badge>
             <Badge variant="outline" className="text-muted-foreground">
-              ${price.toFixed(2)}
+              {price.toFixed(2)} BDT
             </Badge>
           </div>
           <DialogTitle className="text-xl mt-2">{title}</DialogTitle>
