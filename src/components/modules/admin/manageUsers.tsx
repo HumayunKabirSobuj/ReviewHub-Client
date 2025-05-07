@@ -237,10 +237,8 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* All Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
-            activeTab === "all" ? "ring-2 ring-primary" : ""
-          }`}
-          onClick={() => handleTabChange("all")}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md `}
+          // onClick={() => handleTabChange("all")}
         >
           <div>
             <p className="text-sm text-muted-foreground">All Users</p>
@@ -253,10 +251,8 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 
         {/* Active Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
-            activeTab === "ACTIVE" ? "ring-2 ring-primary" : ""
-          }`}
-          onClick={() => handleTabChange("ACTIVE")}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md $`}
+          // onClick={() => handleTabChange("ACTIVE")}
         >
           <div>
             <p className="text-sm text-muted-foreground">Active</p>
@@ -269,10 +265,8 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 
         {/* Blocked Users */}
         <Card
-          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md ${
-            activeTab === "BLOCKED" ? "ring-2 ring-primary" : ""
-          }`}
-          onClick={() => handleTabChange("BLOCKED")}
+          className={`p-4 border rounded-lg flex justify-between items-center cursor-pointer hover:shadow-md `}
+          // onClick={() => handleTabChange("BLOCKED")}
         >
           <div>
             <p className="text-sm text-muted-foreground">Blocked</p>
