@@ -336,7 +336,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 					title="All Reviews"
 					count={summaries.all}
 					icon={<Calendar className="h-5 w-5" />}
-					color="bg-blue-100 text-blue-700"
+					color="light:bg-blue-100 text-blue-700"
 					// isActive={activeTab === "all"}
 					// onClick={() => handleTabChange("all")}
 				/>
@@ -344,7 +344,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 					title="Published"
 					count={summaries.published}
 					icon={<Check className="h-5 w-5" />}
-					color="bg-green-100 text-green-700"
+					color="light:bg-green-100 text-green-700"
 					// isActive={activeTab === "published"}
 					// onClick={() => handleTabChange("published")}
 				/>
@@ -352,7 +352,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 					title="Unpublished"
 					count={summaries.unpublished}
 					icon={<X className="h-5 w-5" />}
-					color="bg-red-100 text-red-700"
+					color="light:bg-red-100 text-red-700"
 					// isActive={activeTab === "unpublished"}
 					// onClick={() => handleTabChange("unpublished")}
 				/>
@@ -360,7 +360,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 					title="Premium"
 					count={summaries.premium}
 					icon={<DollarSign className="h-5 w-5" />}
-					color="bg-purple-100 text-purple-700"
+					color="light:bg-purple-100 text-purple-700"
 					// isActive={selectedPremium === true}
 					// onClick={() => {
 					// 	setSelectedPremium((prev) => (prev === true ? undefined : true))
@@ -437,7 +437,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 				</DrawerContent>
 			</Drawer>
 			{/* Filters and Tabs */}
-			<div className="bg-white rounded-lg shadow p-4 mb-6">
+			<div className="light:bg-white rounded-lg shadow p-4 mb-6">
 				<div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
 					<div className="flex flex-wrap gap-2">
 						{/* Search Input */}
@@ -460,7 +460,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 								<Button
 									variant={selectedCategory ? 'default' : 'outline'}
 									className={`cursor-pointer ${
-										selectedCategory ? 'bg-primary text-primary-foreground' : ''
+										selectedCategory ? 'light:bg-primary text-primary-foreground' : ''
 									}`}
 								>
 									{selectedCategory
@@ -499,7 +499,7 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 								<Button
 									variant={selectedPremium !== undefined ? 'default' : 'outline'}
 									className={`cursor-pointer ${
-										selectedPremium !== undefined ? 'bg-primary text-primary-foreground' : ''
+										selectedPremium !== undefined ? 'light:bg-primary text-primary-foreground' : ''
 									}`}
 								>
 									{selectedPremium === undefined
@@ -557,10 +557,13 @@ export default function ManageReviews({ initialData = [], category = [] }: Manag
 						{/* <TabsTrigger value="all" className="cursor-pointer">
 							All Reviews
 						</TabsTrigger> */}
-						<TabsTrigger value="published" className="cursor-pointer bg-green-500 text-white">
+						<TabsTrigger value="published" className="cursor-pointer light:light:bg-green-500 text-white">
 							Published
 						</TabsTrigger>
-						<TabsTrigger value="unpublished" className="cursor-pointer bg-purple-500 text-white">
+						<TabsTrigger
+							value="unpublished"
+							className="cursor-pointer light:light:bg-purple-500 text-white"
+						>
 							Unpublished
 						</TabsTrigger>
 					</TabsList>
@@ -901,7 +904,9 @@ function ReviewsTable({
 							</TableCell>
 							<TableCell>
 								{review.isPublished ? (
-									<Badge className="bg-green-100 text-green-800 hover:bg-green-100">Published</Badge>
+									<Badge className="light:bg-green-100 text-green-800 hover:light:bg-green-100">
+										Published
+									</Badge>
 								) : (
 									<Badge variant="outline" className="text-red-800">
 										Unpublished
@@ -910,7 +915,7 @@ function ReviewsTable({
 							</TableCell>
 							<TableCell>
 								{review.isPremium ? (
-									<Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">
+									<Badge className="light:bg-purple-100 text-purple-800 hover:light:bg-purple-100">
 										${review.price.toFixed(2)}
 									</Badge>
 								) : (

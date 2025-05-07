@@ -1,10 +1,14 @@
-"use client";
+'use client';
 
-import UserProvider from "../context/UserContext";
-
+import UserProvider from '../context/UserContext';
+import { ThemeProvider } from '../theme-provider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <UserProvider>{children}</UserProvider>;
+	return (
+		<ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+			<UserProvider>{children}</UserProvider>
+		</ThemeProvider>
+	);
 };
 
 export default Providers;

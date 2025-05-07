@@ -7,7 +7,20 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
-import { Star, ShoppingBag, Home, Bell, Menu, X, ChevronDown, LogOut, User, MailQuestion } from 'lucide-react';
+import {
+	Star,
+	ShoppingBag,
+	Home,
+	Bell,
+	Menu,
+	X,
+	ChevronDown,
+	LogOut,
+	User,
+	MailQuestion,
+	Sun,
+	Moon,
+} from 'lucide-react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -52,7 +65,7 @@ export function Navbar() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const { user, setIsLoading, isLoading } = useUser();
-	console.log({user});
+	console.log({ user });
 
 	const { setTheme } = useTheme();
 
@@ -65,7 +78,7 @@ export function Navbar() {
 	};
 
 	return (
-		<nav className="border-b bg-white shadow-sm">
+		<nav className="border-b light:bg-white shadow-sm">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
 					{/* Logo and desktop navigation */}
@@ -73,7 +86,7 @@ export function Navbar() {
 						<div className="flex-shrink-0">
 							<Link href="/" className="flex items-center">
 								<Star className="mr-2 h-6 w-6 text-yellow-500" />
-								<span className="text-xl font-semibold text-gray-900">Review Portal</span>
+								<span className="text-xl font-semibold light:text-gray-900">Review Portal</span>
 							</Link>
 						</div>
 
@@ -92,8 +105,8 @@ export function Navbar() {
 											className={cn(
 												'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
 												isActive
-													? 'bg-blue-50 text-blue-600'
-													: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+													? 'bg-blue-50 dark:bg-purple-500 dark:text-white text-blue-600'
+													: 'light:text-gray-600 dark:hover:bg-purple-500 dark:hover:text-white hover:bg-gray-50 hover:text-gray-900',
 											)}
 										>
 											<Icon className="mr-2 h-4 w-4" />
@@ -108,8 +121,20 @@ export function Navbar() {
 					{/* Right side items */}
 					<div className="flex items-center">
 						{/* Notifications */}
-						
 
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="outline" size="icon">
+									<Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+									<Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+									<span className="sr-only">Toggle theme</span>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 						{/* User dropdown or Login button */}
 						{user ? (
 							<DropdownMenu>
@@ -119,7 +144,7 @@ export function Navbar() {
 											<AvatarImage src={user?.profileUrl} alt="User" />
 											<AvatarFallback>USER</AvatarFallback>
 										</Avatar>
-										<span className="hidden text-sm font-medium text-gray-700 md:inline-block">
+										<span className="hidden text-sm font-medium light:text-gray-700 md:inline-block">
 											{user?.name}
 										</span>
 										<ChevronDown className="h-4 w-4 text-gray-500" />
@@ -165,7 +190,6 @@ export function Navbar() {
 								<Link href={'/login'}> Login</Link>
 							</Button>
 						)}
-
 						{/* Mobile menu button */}
 						<div className="ml-2 flex md:hidden">
 							<Button

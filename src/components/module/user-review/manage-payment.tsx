@@ -82,7 +82,7 @@ export default function ManagePaymentClient({ payments }: { payments: paymentTyp
 				<CardContent>
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-200">
-							<thead className="bg-gray-50">
+							<thead className="light:bg-gray-50">
 								<tr>
 									<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 										Review Title
@@ -100,9 +100,9 @@ export default function ManagePaymentClient({ payments }: { payments: paymentTyp
 								</tr>
 							</thead>
 							{/* bg-gray-200 */}
-							<tbody className="bg-white divide-y divide-gray-200">
+							<tbody className="light:bg-white divide-y divide-gray-200">
 								{payments.map((payment, index) => (
-									<tr key={index} className={`hover:bg-gray-50 `}>
+									<tr key={index} className={`hover:light:bg-gray-50 `}>
 										<td className="px-4 py-3 text-sm font-medium">
 											<div className="flex flex-col">
 												<span className="truncate max-w-[200px]">{payment.review.title}</span>

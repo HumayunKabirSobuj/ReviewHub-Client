@@ -110,7 +110,7 @@ export function LoginForm() {
 				</div>
 				<Button
 					type="submit"
-					className="w-full bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium sm:h-11 sm:text-base"
+					className="w-full light:bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium sm:h-11 sm:text-base"
 				>
 					LOGIN
 				</Button>

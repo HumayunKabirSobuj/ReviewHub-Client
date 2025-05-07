@@ -257,7 +257,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 						<p className="text-sm text-muted-foreground">All Users</p>
 						<p className="text-3xl font-bold">{summaries.all}</p>
 					</div>
-					<div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+					<div className="w-10 h-10 rounded-full light:light:bg-blue-100 flex items-center justify-center">
 						<User className="h-5 w-5 text-blue-700" />
 					</div>
 				</Card>
@@ -271,7 +271,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 						<p className="text-sm text-muted-foreground">Active</p>
 						<p className="text-3xl font-bold">{summaries.active}</p>
 					</div>
-					<div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+					<div className="w-10 h-10 rounded-full light:light:bg-green-100 flex items-center justify-center">
 						<Shield className="h-5 w-5 text-green-700" />
 					</div>
 				</Card>
@@ -285,7 +285,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 						<p className="text-sm text-muted-foreground">Blocked</p>
 						<p className="text-3xl font-bold">{summaries.blocked}</p>
 					</div>
-					<div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+					<div className="w-10 h-10 rounded-full light:light:bg-red-100 flex items-center justify-center">
 						<UserX className="h-5 w-5 text-red-700" />
 					</div>
 				</Card>
@@ -367,8 +367,8 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 													<span
 														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
 															user.role === 'ADMIN'
-																? 'bg-purple-100 text-purple-800'
-																: 'bg-blue-100 text-blue-800'
+																? 'light:bg-purple-100 text-purple-800'
+																: 'light:bg-blue-100 text-blue-800'
 														}`}
 													>
 														{user.role}
@@ -378,8 +378,8 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 													<span
 														className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
 															user.status === 'ACTIVE'
-																? 'bg-green-100 text-green-800'
-																: 'bg-red-100 text-red-800'
+																? 'light:bg-green-100 text-green-800'
+																: 'light:bg-red-100 text-red-800'
 														}`}
 													>
 														{user.status}
@@ -450,7 +450,7 @@ export default function ManageUsersForAdmin({ users = [] }: ManageUsersProps) {
 														{/* <Button
                               size="sm"
                               variant="ghost"
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                              className="text-red-500 hover:text-red-700 hover:light:bg-red-50 h-8 w-8 p-0"
                               onClick={() => openActionDialog(user, "delete")}
                               disabled={!!actionLoading}
                             >

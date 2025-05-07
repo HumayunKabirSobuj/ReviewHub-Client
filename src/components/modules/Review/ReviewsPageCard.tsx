@@ -387,7 +387,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 						className={cn(
 							'text-sm px-2 py-1 rounded-md w-full text-left transition-colors',
 							selectedCategory === ''
-								? 'font-medium text-primary bg-primary/10'
+								? 'font-medium text-primary light:bg-primary/10'
 								: 'text-muted-foreground hover:bg-muted',
 						)}
 						onClick={() => handleCategoryChange('')}
@@ -401,7 +401,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 							className={cn(
 								'text-sm px-2 py-1 rounded-md w-full text-left transition-colors',
 								selectedCategory === cat.id
-									? 'font-medium text-primary bg-primary/10'
+									? 'font-medium text-primary light:bg-primary/10'
 									: 'text-muted-foreground hover:bg-muted',
 							)}
 							onClick={() => handleCategoryChange(cat.id)}
@@ -485,7 +485,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 
 		if (filteredReviews.length === 0) {
 			return (
-				<div className="col-span-full text-center py-12 bg-card rounded-lg border shadow-sm">
+				<div className="col-span-full text-center py-12 light:bg-card rounded-lg border shadow-sm">
 					<h3 className="text-lg font-medium mb-2">No reviews found</h3>
 					<p className="text-muted-foreground mb-4">Try adjusting your filters or search criteria</p>
 					<Button variant="outline" onClick={resetFilters} className="hover:bg-muted/80 transition-colors">
@@ -519,7 +519,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 								<Filter className="w-4 h-4" />
 								<span className="hidden sm:inline">Filters</span>
 								{activeFiltersCount > 0 && (
-									<span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+									<span className="absolute -top-2 -right-2 light:bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
 										{activeFiltersCount}
 									</span>
 								)}
@@ -668,7 +668,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 											className={cn(
 												'text-sm px-2 py-1.5 rounded-md text-left transition-colors',
 												premiumFilter === null
-													? 'font-medium text-primary bg-primary/10'
+													? 'font-medium text-primary light:bg-primary/10'
 													: 'text-muted-foreground hover:bg-muted',
 											)}
 											onClick={() => handlePremiumFilterChange(null)}
@@ -679,13 +679,16 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 											className={cn(
 												'text-sm px-2 py-1.5 rounded-md text-left transition-colors flex items-center',
 												premiumFilter === 'premium'
-													? 'font-medium text-primary bg-primary/10'
+													? 'font-medium text-primary light:bg-primary/10'
 													: 'text-muted-foreground hover:bg-muted',
 											)}
 											onClick={() => handlePremiumFilterChange('premium')}
 										>
 											Premium Only
-											<Badge variant="default" className="ml-2 bg-primary hover:bg-primary/90">
+											<Badge
+												variant="default"
+												className="ml-2 light:bg-primary hover:bg-primary/90"
+											>
 												PRO
 											</Badge>
 										</button>
@@ -693,7 +696,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({ initialData, category
 											className={cn(
 												'text-sm px-2 py-1.5 rounded-md text-left transition-colors',
 												premiumFilter === 'free'
-													? 'font-medium text-primary bg-primary/10'
+													? 'font-medium text-primary light:bg-primary/10'
 													: 'text-muted-foreground hover:bg-muted',
 											)}
 											onClick={() => handlePremiumFilterChange('free')}

@@ -47,7 +47,7 @@ export default function UserDashboardSection({ voteCount, commentCount }: { comm
 						<Card>
 							<CardHeader className="flex flex-row items-center justify-between pb-2">
 								<CardTitle className="text-2xl font-medium">Total Reviews</CardTitle>
-								<div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
+								<div className="h-8 w-8 rounded-full light:bg-red-100 flex items-center justify-center">
 									<SquareKanban className="h-4 w-4 text-red-500" />
 								</div>
 							</CardHeader>
@@ -58,7 +58,7 @@ export default function UserDashboardSection({ voteCount, commentCount }: { comm
 						<Card>
 							<CardHeader className="flex flex-row items-center justify-between pb-2">
 								<CardTitle className="text-2xl font-medium">Total Votes</CardTitle>
-								<div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
+								<div className="h-8 w-8 rounded-full light:bg-red-100 flex items-center justify-center">
 									<Vote className="h-4 w-4 text-red-500" />
 								</div>
 							</CardHeader>
