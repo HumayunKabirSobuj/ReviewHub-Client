@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 // Define proper types for the page props
 interface ReviewsPageProps {
-  searchParams: { [key: string]: string | string[] }
+  searchParams: Promise<{ [key: string]: string | string[] }>
 }
 
 // Loading component for Suspense fallback
