@@ -18,7 +18,7 @@ export function LoginForm() {
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
 	const router = useRouter();
-	const { setIsLoading } = useUser();
+	const { handleUser } = useUser();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -37,9 +37,9 @@ export function LoginForm() {
 			// console.log(result);
 
 			if (result?.success) {
-				console.log(result);
 				toast.success(result?.message);
-				setIsLoading(true);
+
+				handleUser();
 				router.push('/');
 			} else {
 				toast.success(result?.message, { duration: 2000 });
