@@ -1,5 +1,5 @@
-import CreateReviewComponent from '@/components/module/user-review/create-review';
+import CreateReviewManagement from '@/components/module/user-review/create-review-management';
 
 export default function AddReviews() {
-	return <CreateReviewComponent review={null} mode="create" setOpen={() => console.log('create')} />;
+	return <CreateReviewManagement />;
 }
