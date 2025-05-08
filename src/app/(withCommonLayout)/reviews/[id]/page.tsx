@@ -71,8 +71,8 @@ export default async function ReviewDetailPage({ params }: IProps) {
   const { data: review, error } = await getReviewById(reveiwId);
 
   // console.log("rev
-  // 
-  // 
+  //
+  //
   // iew", review);
   // Handle error state
   if (error) {
@@ -167,7 +167,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
           year: "numeric",
           month: "long",
           day: "numeric",
-        }
+        },
       ),
     })) || [];
 
@@ -266,8 +266,8 @@ export default async function ReviewDetailPage({ params }: IProps) {
                           star <= Math.floor(review.rating)
                             ? "text-yellow-400 fill-yellow-400"
                             : star - 0.5 <= review.rating
-                            ? "text-yellow-400 fill-yellow-400"
-                            : "text-gray-300 fill-gray-300"
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-gray-300 fill-gray-300",
                         )}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -370,8 +370,6 @@ export default async function ReviewDetailPage({ params }: IProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
-        
-
             {/* Author Card */}
             <Card>
               <CardHeader className="pb-3">
@@ -453,7 +451,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
                                   "w-3 h-3",
                                   star <= Math.floor(relatedReview.rating)
                                     ? "text-yellow-400 fill-yellow-400"
-                                    : "text-gray-300 fill-gray-300"
+                                    : "text-gray-300 fill-gray-300",
                                 )}
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"

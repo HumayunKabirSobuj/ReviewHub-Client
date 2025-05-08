@@ -83,7 +83,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                   href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Review Guidelines
@@ -91,7 +91,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                 href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Terms & Conditions
@@ -107,7 +107,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                 href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Content Policy
@@ -122,7 +122,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                 href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Categories
@@ -130,7 +130,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Premium Reviews
@@ -146,7 +146,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-           href="/"
+                  href="/"
                   className="text-black text-sm hover:text-primary"
                 >
                   Contact Support
@@ -160,8 +160,10 @@ export default function Footer() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <Star className="mr-2 h-6 w-6 text-primary" />
-                
-                <span className="text-xl font-semibold text-black">Review Portal</span>
+
+                <span className="text-xl font-semibold text-black">
+                  Review Portal
+                </span>
               </Link>
               <p className="text-black text-xs mt-2 max-w-[200px]">
                 Your trusted source for honest and reliable product reviews

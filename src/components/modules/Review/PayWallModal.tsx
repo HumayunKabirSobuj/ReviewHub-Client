@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -11,21 +11,21 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Lock } from 'lucide-react'
-import { makePayment } from "@/services/Payments"
-import { toast } from "sonner"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Lock } from "lucide-react";
+import { makePayment } from "@/services/Payments";
+import { toast } from "sonner";
 
 interface PaywallModalProps {
-  isOpen: boolean
-  onClose: () => void
-  reviewId: string
-  title: string
-  excerpt: string
-  price: number
-  author: string
+  isOpen: boolean;
+  onClose: () => void;
+  reviewId: string;
+  title: string;
+  excerpt: string;
+  price: number;
+  author: string;
 }
 
 export default function PaywallModal({
@@ -37,50 +37,47 @@ export default function PaywallModal({
   price,
   author,
 }: PaywallModalProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePayment = async (reviewIdHere: string) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       toast.loading("Processing your payment...", {
         id: "payment-toast",
-      })
-      
-      const result = await makePayment(reviewIdHere)
-      
+      });
+
+      const result = await makePayment(reviewIdHere);
+
       if (result.url) {
         toast.success("Payment initiated successfully!", {
           id: "payment-toast",
           description: "Redirecting you to the payment page...",
-        })
-        window.location.replace(result.url)
+        });
+        window.location.replace(result.url);
       } else {
         toast.error("Payment initiation failed", {
           id: "payment-toast",
           description: "Please try again later",
-        })
-        setIsLoading(false)
+        });
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Payment error:", error)
+      console.error("Payment error:", error);
       toast.error("Payment processing failed", {
         id: "payment-toast",
         description: "Please try again later",
-      })
-      setIsLoading(false)
+      });
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <Badge
-              variant="default"
-              className="bg-primary hover:bg-primary/90"
-            >
+            <Badge variant="default" className="bg-primary hover:bg-primary/90">
               Premium Content
             </Badge>
             <Badge variant="outline" className="text-muted-foreground">
@@ -131,5 +128,5 @@ export default function PaywallModal({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

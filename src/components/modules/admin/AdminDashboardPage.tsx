@@ -488,7 +488,6 @@ const revenueData = [
   { month: "Dec", revenue: 48000 },
 ];
 
-
 type AdminDashboardPageProps = {
   data: any;
   tableData: any;
@@ -827,7 +826,7 @@ export default function AdminDashboardPage({
                                 <TableCell>
                                   {" "}
                                   {new Date(
-                                    table?.createdAt
+                                    table?.createdAt,
                                   ).toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "long",

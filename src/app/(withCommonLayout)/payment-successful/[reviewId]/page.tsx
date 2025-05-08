@@ -1,9 +1,5 @@
 import Link from "next/link";
-import {
-  CheckCircle2,
-  ArrowRight,
-  LayoutDashboardIcon,
-} from "lucide-react";
+import { CheckCircle2, ArrowRight, LayoutDashboardIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -54,7 +50,10 @@ export default async function PaymentSuccessPage({ params }: IProps) {
               className="w-full bg-green-600 hover:bg-green-700 text-white py-6 rounded-lg shadow-md transition-colors"
               asChild
             >
-              <Link href={`/reviews/${reveiwId}`} className="flex items-center justify-center">
+              <Link
+                href={`/reviews/${reveiwId}`}
+                className="flex items-center justify-center"
+              >
                 View Review Details
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

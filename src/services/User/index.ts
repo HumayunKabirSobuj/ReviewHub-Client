@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 // // Get all users
-export const getAllUsers = async (queryString: string) => {
+export const getAllUsers = async (queryString: Promise<string>) => {
   // console.log("queryString", { queryString });
   try {
     const res = await fetch(
@@ -14,7 +14,7 @@ export const getAllUsers = async (queryString: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     return await res.json();
@@ -33,13 +33,13 @@ export const makeAdmin = async (userId: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to make user admin: ${res.status}`
+        errorData.message || `Failed to make user admin: ${res.status}`,
       );
     }
 
@@ -61,13 +61,13 @@ export const makeUser = async (userId: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to make admin a user: ${res.status}`
+        errorData.message || `Failed to make admin a user: ${res.status}`,
       );
     }
 
@@ -89,13 +89,13 @@ export const blockUser = async (userId: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to block user: ${res.status}`
+        errorData.message || `Failed to block user: ${res.status}`,
       );
     }
 
@@ -117,13 +117,13 @@ export const unblockUser = async (userId: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to unblock user: ${res.status}`
+        errorData.message || `Failed to unblock user: ${res.status}`,
       );
     }
 
@@ -145,13 +145,13 @@ export const deleteUser = async (userId: string) => {
         headers: {
           Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to delete user: ${res.status}`
+        errorData.message || `Failed to delete user: ${res.status}`,
       );
     }
 

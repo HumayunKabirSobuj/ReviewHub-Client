@@ -315,7 +315,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <div
           className={cn(
             "fixed inset-y-0 left-0 z-50 w-64 transform bg-white h-screen transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:z-0",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full "
+            sidebarOpen ? "translate-x-0" : "-translate-x-full ",
           )}
         >
           <div className="flex h-16 items-center justify-between px-4  border-b">

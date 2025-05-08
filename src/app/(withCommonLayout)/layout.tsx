@@ -7,11 +7,7 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Navbar />
       <div className="">
-        <main className="min-h-screen">
-          
-          {children}
-          
-          </main>
+        <main className="min-h-screen">{children}</main>
         <Toaster richColors position="top-center" />
       </div>
       <Footer />

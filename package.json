@@ -3,10 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"format": "prettier --write .",
+		"postinstall": "npm install eslint-plugin-prettier"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.0.1",
@@ -31,6 +33,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
+		"eslint-plugin-prettier": "^5.4.0",
 		"js-cookie": "^3.0.5",
 		"jwt-decode": "^4.0.0",
 		"lucide-react": "^0.506.0",

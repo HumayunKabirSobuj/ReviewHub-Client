@@ -172,9 +172,7 @@ export default function ReviewComments({
                     </div>
                     {comment.author.id === currentUser.id && (
                       <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                        
-                        </AlertDialogTrigger>
+                        <AlertDialogTrigger asChild></AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Comment</AlertDialogTitle>

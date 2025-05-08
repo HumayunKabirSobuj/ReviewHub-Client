@@ -19,7 +19,7 @@ export const makePayment = async (reviewId: string) => {
         headers: {
           Authorization: `${accessToken}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {

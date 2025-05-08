@@ -1,5 +1,5 @@
-import { LoginForm } from "@/components/module/login/LoginFrom"
-import Image from "next/image"
+import { LoginForm } from "@/components/module/login/LoginFrom";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -25,5 +25,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  )
+  );
 }

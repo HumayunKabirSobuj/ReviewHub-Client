@@ -141,7 +141,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               "w-4 h-4",
               i < review.rating
                 ? "text-yellow-500 fill-yellow-500"
-                : "text-gray-300 fill-gray-300"
+                : "text-gray-300 fill-gray-300",
             )}
           />
         ))}
@@ -157,7 +157,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
       <Card
         className={cn(
           "h-full flex flex-col max-w-md transition-all duration-200 cursor-pointer",
-          isHovered ? "shadow-md translate-y-[-2px]" : "hover:shadow-sm"
+          isHovered ? "shadow-md translate-y-[-2px]" : "hover:shadow-sm",
         )}
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -169,7 +169,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               <h3
                 className={cn(
                   "font-semibold text-lg line-clamp-2 transition-colors",
-                  isHovered ? "text-primary" : ""
+                  isHovered ? "text-primary" : "",
                 )}
               >
                 {review.title}

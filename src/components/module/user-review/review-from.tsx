@@ -149,10 +149,10 @@ export function ReviewForm({
     "categoryId",
   ];
   const completedFields = requiredFields.filter(
-    (field) => formValues[field as keyof ReviewFormValues]
+    (field) => formValues[field as keyof ReviewFormValues],
   );
   const completionPercentage = Math.round(
-    (completedFields.length / requiredFields.length) * 100
+    (completedFields.length / requiredFields.length) * 100,
   );
 
   return (

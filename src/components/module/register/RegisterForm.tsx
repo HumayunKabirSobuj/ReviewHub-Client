@@ -80,11 +80,11 @@ export default function RegistrationForm() {
 
     formData.append(
       "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!
+      process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME!,
     );
     formData.append(
       "cloud_name",
-      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
     );
 
     try {
@@ -96,11 +96,11 @@ export default function RegistrationForm() {
             {
               method: "POST",
               body: formData,
-            }
+            },
           );
           const resp = await res.json();
           setImgLink(resp.secure_url);
-        })
+        }),
       );
       setDisableSubmit(false);
     } catch (err) {
