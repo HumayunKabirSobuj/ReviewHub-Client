@@ -100,7 +100,7 @@ interface ManageReviewsProps {
 	category: Category[];
 }
 
-export default function ManageReviews({ initialData = [], category = [] }: ManageReviewsProps) {
+export default function ManageReviews({ initialData, category }: ManageReviewsProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [open, setOpen] = useState<boolean>(false);

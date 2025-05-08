@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Helper function to safely create a query string
 export function createSafeQueryString(params: Record<string, any>): string {
