@@ -53,7 +53,6 @@ export function Navbar() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const { user, setIsLoading, isLoading } = useUser();
-	console.log({user});
 
 	const { setTheme } = useTheme();
 
@@ -109,7 +108,6 @@ export function Navbar() {
 					{/* Right side items */}
 					<div className="flex items-center">
 						{/* Notifications */}
-						
 
 						{/* User dropdown or Login button */}
 						{user ? (

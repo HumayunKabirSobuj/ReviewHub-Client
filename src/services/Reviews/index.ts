@@ -3,7 +3,7 @@
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export const getAllReviews = async (queryString: string) => {
+export const getAllReviews = async (queryString: Promise<string>) => {
 	// console.log("queryString", { queryString });
 	try {
 		const res = await fetch(

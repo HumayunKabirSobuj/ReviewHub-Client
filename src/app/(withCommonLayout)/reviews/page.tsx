@@ -1,14 +1,11 @@
 import { Suspense } from 'react';
 import ReviewsPageCard from '@/components/modules/Review/ReviewsPageCard';
-import { createSafeQueryString } from '@/helpers';
+import { createQueryString } from '@/helpers';
 import { getAllCategories } from '@/services/Categories';
 import { getAllReviews } from '@/services/Reviews';
 import { Skeleton } from '@/components/ui/skeleton';
 
 // Define proper types for the page props
-// interface ReviewsPageProps {
-//   searchParams: Promise<{ [key: string]: string | string[] }>
-// }
 
 // Loading component for Suspense fallback
 function ReviewsLoading() {
@@ -59,10 +56,18 @@ export const metadata = {
 	description: 'Browse and filter product reviews from our community',
 };
 
+type StrictSearchParams = {
+	[key: string]: string | string[] | undefined;
+};
+interface CustomPageProps {
+	searchParams?: StrictSearchParams;
+	params?: Record<string, string>;
+}
+
 // Main page component
-export default async function Reviews({ searchParams }: { searchParams: Record<string, string | boolean | string[]> }) {
+export default async function Reviews({ searchParams }: { searchParams: CustomPageProps }) {
 	try {
-		const queryString = createSafeQueryString(searchParams);
+		const queryString = createQueryString(searchParams);
 
 		// Fetch data in parallel for better performance
 		const [reviewsResponse, categoriesResponse] = await Promise.all([

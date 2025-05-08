@@ -43,11 +43,11 @@ import { getAllReviews } from '@/services/Reviews';
 import { Loader } from 'lucide-react';
 import { Suspense } from 'react';
 
-// type PageProps = {
-// 	searchParams:any;
-// };
-
-const ManageReviewPage = async ({ searchParams }: { searchParams: Record<string, string | boolean | string[]> }) => {
+const ManageReviewPage = async ({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] | undefined };
+}) => {
 	const queryString = createSafeQueryString(searchParams);
 
 	const { data, error } = await getAllReviews(queryString);
