@@ -1,44 +1,45 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import ManageUsersForAdmin from "@/components/modules/admin/manageUsers";
-import { createSafeQueryString } from "@/helpers";
-import { getAllUsers } from "@/services/User";
-import { Loader } from "lucide-react";
-import { Suspense } from "react";
+import ManageUsersForAdmin from '@/components/modules/admin/manageUsers';
+import { createSafeQueryString } from '@/helpers';
+import { getAllUsers } from '@/services/User';
+import { Loader } from 'lucide-react';
+import { Suspense } from 'react';
 
+export default async function ManageUsersPage({
+	searchParams,
+}: {
+	searchParams: Record<string, string | boolean | string[]>;
+}) {
+	// First resolve the Promise
+	const resolvedParams = searchParams;
 
+	// Create a safe query string from the resolved search parameters
+	const queryString = createSafeQueryString(resolvedParams);
 
-export default async function ManageUsersPage({ searchParams }:{searchParams:any}) {
-  // First resolve the Promise
-  const resolvedParams = searchParams;
+	// Fetch data based on the query parameters
+	let users = [];
 
-  // Create a safe query string from the resolved search parameters
-  const queryString = createSafeQueryString(resolvedParams);
+	try {
+		const { data, error } = await getAllUsers(queryString);
+		users = data || [];
 
-  // Fetch data based on the query parameters
-  let users = [];
+		if (error) {
+			console.error('Error fetching users:', error);
+		}
+	} catch (error) {
+		console.error('Error fetching users:', error);
+	}
 
-  try {
-    const { data, error } = await getAllUsers(queryString);
-    users = data || [];
-
-    if (error) {
-      console.error("Error fetching users:", error);
-    }
-  } catch (error) {
-    console.error("Error fetching users:", error);
-  }
-
-  return (
-    <>
-      <Suspense
-        fallback={
-          <div className="w-full h-[100vh] flex items-center justify-center">
-            <Loader className="w-[80px] h-12 animate-spin" />
-          </div>
-        }
-      >
-        <ManageUsersForAdmin users={users} />
-      </Suspense>
-    </>
-  );
+	return (
+		<>
+			<Suspense
+				fallback={
+					<div className="w-full h-[100vh] flex items-center justify-center">
+						<Loader className="w-[80px] h-12 animate-spin" />
+					</div>
+				}
+			>
+				<ManageUsersForAdmin users={users} />
+			</Suspense>
+		</>
+	);
 }
