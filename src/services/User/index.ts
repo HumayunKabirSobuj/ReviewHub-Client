@@ -1,6 +1,6 @@
-"use server";
-import { revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
+'use server';
+import { revalidateTag } from 'next/cache';
+import { cookies } from 'next/headers';
 
 // // Get all users
 export const getAllUsers = async (queryString: string) => {
@@ -9,11 +9,11 @@ export const getAllUsers = async (queryString: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/all-users?${queryString}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     return await res.json();
@@ -28,24 +28,24 @@ export const makeAdmin = async (userId: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/make-admin/${userId}`,
       {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to make user admin: ${res.status}`
+        errorData.message || `Failed to make user admin: ${res.status}`,
       );
     }
 
-    revalidateTag("users");
+    revalidateTag('users');
     return await res.json();
   } catch (error: any) {
-    console.error("Error making user admin:", error);
+    console.error('Error making user admin:', error);
     return { success: false, error: error.message };
   }
 };
@@ -56,24 +56,24 @@ export const makeUser = async (userId: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/make-user/${userId}`,
       {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to make admin a user: ${res.status}`
+        errorData.message || `Failed to make admin a user: ${res.status}`,
       );
     }
 
-    revalidateTag("users");
+    revalidateTag('users');
     return await res.json();
   } catch (error: any) {
-    console.error("Error making admin a user:", error);
+    console.error('Error making admin a user:', error);
     return { success: false, error: error.message };
   }
 };
@@ -84,24 +84,24 @@ export const blockUser = async (userId: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/block-user/${userId}`,
       {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to block user: ${res.status}`
+        errorData.message || `Failed to block user: ${res.status}`,
       );
     }
 
-    revalidateTag("users");
+    revalidateTag('users');
     return await res.json();
   } catch (error: any) {
-    console.error("Error blocking user:", error);
+    console.error('Error blocking user:', error);
     return { success: false, error: error.message };
   }
 };
@@ -112,24 +112,24 @@ export const unblockUser = async (userId: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/make-user-active/${userId}`,
       {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to unblock user: ${res.status}`
+        errorData.message || `Failed to unblock user: ${res.status}`,
       );
     }
 
-    revalidateTag("users");
+    revalidateTag('users');
     return await res.json();
   } catch (error: any) {
-    console.error("Error unblocking user:", error);
+    console.error('Error unblocking user:', error);
     return { success: false, error: error.message };
   }
 };
@@ -140,24 +140,24 @@ export const deleteUser = async (userId: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/delete-user/${userId}`,
       {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          Authorization: ` ${(await cookies()).get("accessToken")!.value}`,
+          Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(
-        errorData.message || `Failed to delete user: ${res.status}`
+        errorData.message || `Failed to delete user: ${res.status}`,
       );
     }
 
-    revalidateTag("users");
+    revalidateTag('users');
     return await res.json();
   } catch (error: any) {
-    console.error("Error deleting user:", error);
+    console.error('Error deleting user:', error);
     return { success: false, error: error.message };
   }
 };

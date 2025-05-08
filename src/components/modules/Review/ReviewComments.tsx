@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useUser } from "@/components/context/UserContext";
+import { useUser } from '@/components/context/UserContext';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,14 +11,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { createComment } from "@/services/Reviews";
-import { Trash2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { createComment } from '@/services/Reviews';
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface Comment {
   id: string;
@@ -41,7 +41,7 @@ export default function ReviewComments({
   initialComments,
 }: ReviewCommentsProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useUser();
   // Mock current user - in a real app, this would come from auth context
@@ -52,7 +52,7 @@ export default function ReviewComments({
   };
 
   const handleComment = async () => {
-    if (commentText.trim() === "") return;
+    if (commentText.trim() === '') return;
 
     setIsSubmitting(true);
 
@@ -60,7 +60,7 @@ export default function ReviewComments({
       const response = await createComment(reviewId, commentText);
 
       if (!response.success) {
-        throw new Error(response.error || "Failed to post comment");
+        throw new Error(response.error || 'Failed to post comment');
       }
 
       // Create a new comment with the response data
@@ -68,26 +68,26 @@ export default function ReviewComments({
         id: response.data.id || `temp-${Date.now()}`,
         author: currentUser,
         content: commentText,
-        date: new Date().toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         }),
       };
 
       setComments([newComment, ...comments]);
-      setCommentText("");
+      setCommentText('');
 
-      toast.success("Comment posted", {
-        description: "Your comment has been posted successfully.",
+      toast.success('Comment posted', {
+        description: 'Your comment has been posted successfully.',
       });
     } catch (error) {
-      console.error("Error posting comment:", error);
-      toast.error("Error", {
+      console.error('Error posting comment:', error);
+      toast.error('Error', {
         description:
           error instanceof Error
             ? error.message
-            : "Failed to post your comment. Please try again.",
+            : 'Failed to post your comment. Please try again.',
       });
     } finally {
       setIsSubmitting(false);
@@ -105,16 +105,16 @@ export default function ReviewComments({
       //   // Remove the comment from the list
       //   setComments(comments.filter((comment) => comment.id !== commentId))
 
-      toast.success("Comment deleted", {
-        description: "Your comment has been deleted successfully.",
+      toast.success('Comment deleted', {
+        description: 'Your comment has been deleted successfully.',
       });
     } catch (error) {
-      console.error("Error deleting comment:", error);
-      toast.error("Error", {
+      console.error('Error deleting comment:', error);
+      toast.error('Error', {
         description:
           error instanceof Error
             ? error.message
-            : "Failed to delete your comment. Please try again.",
+            : 'Failed to delete your comment. Please try again.',
       });
     }
   };
@@ -135,9 +135,9 @@ export default function ReviewComments({
         <div className="flex justify-end">
           <Button
             onClick={handleComment}
-            disabled={commentText.trim() === "" || isSubmitting}
+            disabled={commentText.trim() === '' || isSubmitting}
           >
-            {isSubmitting ? "Posting..." : "Post Comment"}
+            {isSubmitting ? 'Posting...' : 'Post Comment'}
           </Button>
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function ReviewComments({
               <div className="flex gap-3">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
-                    src={comment.author.avatar || "/placeholder.svg"}
+                    src={comment.author.avatar || '/placeholder.svg'}
                     alt={comment.author.name}
                   />
                   <AvatarFallback>
@@ -171,9 +171,7 @@ export default function ReviewComments({
                     </div>
                     {comment.author.id === currentUser.id && (
                       <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                        
-                        </AlertDialogTrigger>
+                        <AlertDialogTrigger asChild></AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Comment</AlertDialogTitle>

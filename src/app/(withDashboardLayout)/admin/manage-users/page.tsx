@@ -1,8 +1,8 @@
-import ManageUsersForAdmin from "@/components/modules/admin/manageUsers";
-import { createSafeQueryString } from "@/helpers";
-import { getAllUsers } from "@/services/User";
-import { Loader } from "lucide-react";
-import { Suspense } from "react";
+import ManageUsersForAdmin from '@/components/modules/admin/manageUsers';
+import { createSafeQueryString } from '@/helpers';
+import { getAllUsers } from '@/services/User';
+import { Loader } from 'lucide-react';
+import { Suspense } from 'react';
 interface IProps {
   searchParams: Promise<{ [key: string]: string | string[] }>;
 }
@@ -25,10 +25,10 @@ export default async function ManageUsersPage({
     users = data || [];
 
     if (error) {
-      console.error("Error fetching users:", error);
+      console.error('Error fetching users:', error);
     }
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error('Error fetching users:', error);
   }
 
   return (

@@ -1,13 +1,13 @@
-import { Suspense } from "react"
-import ReviewsPageCard from "@/components/modules/Review/ReviewsPageCard"
-import { createSafeQueryString } from "@/helpers"
-import { getAllCategories } from "@/services/Categories"
-import { getAllReviews } from "@/services/Reviews"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Suspense } from 'react';
+import ReviewsPageCard from '@/components/modules/Review/ReviewsPageCard';
+import { createSafeQueryString } from '@/helpers';
+import { getAllCategories } from '@/services/Categories';
+import { getAllReviews } from '@/services/Reviews';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Define proper types for the page props
 interface ReviewsPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] }>;
 }
 
 // Loading component for Suspense fallback
@@ -38,7 +38,7 @@ function ReviewsLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Error component for displaying errors
@@ -50,55 +50,66 @@ function ErrorDisplay({ message }: { message: string }) {
         <p>{message}</p>
       </div>
     </div>
-  )
+  );
 }
 
 // Generate metadata for the page
 export const metadata = {
-  title: "Product Reviews | Your Site Name",
-  description: "Browse and filter product reviews from our community",
-}
-
-
+  title: 'Product Reviews | Your Site Name',
+  description: 'Browse and filter product reviews from our community',
+};
 
 // Main page component
 export default async function Reviews({ searchParams }: ReviewsPageProps) {
   try {
-
     const resolvedParams = await searchParams;
 
     // Use the safe query string creator
-    const queryString = createSafeQueryString(resolvedParams)
+    const queryString = createSafeQueryString(resolvedParams);
 
     // Fetch data in parallel for better performance
-    const [reviewsResponse, categoriesResponse] = await Promise.all([getAllReviews(queryString), getAllCategories()])
+    const [reviewsResponse, categoriesResponse] = await Promise.all([
+      getAllReviews(queryString),
+      getAllCategories(),
+    ]);
 
     // Handle errors from either API call
     if (reviewsResponse.error) {
-      return <ErrorDisplay message={`Failed to load reviews: ${reviewsResponse.error}`} />
+      return (
+        <ErrorDisplay
+          message={`Failed to load reviews: ${reviewsResponse.error}`}
+        />
+      );
     }
 
     if (categoriesResponse.error) {
-      return <ErrorDisplay message={`Failed to load categories: ${categoriesResponse.error}`} />
+      return (
+        <ErrorDisplay
+          message={`Failed to load categories: ${categoriesResponse.error}`}
+        />
+      );
     }
 
     // Ensure we have data to display
     if (!reviewsResponse.data || !categoriesResponse.data) {
-      return <ErrorDisplay message="No data available" />
+      return <ErrorDisplay message="No data available" />;
     }
 
     return (
       <Suspense fallback={<ReviewsLoading />}>
-        <ReviewsPageCard initialData={reviewsResponse.data} category={categoriesResponse.data} />
+        <ReviewsPageCard
+          initialData={reviewsResponse.data}
+          category={categoriesResponse.data}
+        />
       </Suspense>
-    )
+    );
   } catch (error) {
     // Catch any unexpected errors
-    console.error("Unexpected error in Reviews page:", error)
+    console.error('Unexpected error in Reviews page:', error);
     return (
       <ErrorDisplay
         message={`An unexpected error occurred: ${error instanceof Error ? error.message : String(error)}`}
       />
-    )
+    );
   }
 }
