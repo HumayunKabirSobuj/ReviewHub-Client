@@ -1,16 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Camera, Loader2, Upload } from 'lucide-react'
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Camera, Loader2, Star, Upload } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -26,18 +25,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+import { Textarea } from "@/components/ui/textarea";
 
 // Define the form schema with validation
 const reviewFormSchema = z.object({
@@ -49,7 +52,10 @@ const reviewFormSchema = z.object({
     .string()
     .min(50, { message: "Description must be at least 50 characters" })
     .max(5000, { message: "Description must not exceed 5000 characters" }),
-  rating: z.coerce.number().min(1, { message: "Please provide a rating" }).max(5),
+  rating: z.coerce
+    .number()
+    .min(1, { message: "Please provide a rating" })
+    .max(5),
   purchaseSource: z.string().optional(),
   excerp: z
     .string()
@@ -58,9 +64,9 @@ const reviewFormSchema = z.object({
   categoryId: z.string({ required_error: "Please select a category" }),
   pros: z.string().optional(),
   cons: z.string().optional(),
-})
+});
 
-type ReviewFormValues = z.infer<typeof reviewFormSchema>
+type ReviewFormValues = z.infer<typeof reviewFormSchema>;
 
 // Mock categories - in a real app, you would fetch these from your API
 const categories = [
@@ -72,21 +78,21 @@ const categories = [
   { id: "6", name: "Sports & Outdoors" },
   { id: "7", name: "Toys & Games" },
   { id: "8", name: "Automotive" },
-]
+];
 
 interface ReviewFormProps {
-  initialData?: ReviewFormValues
-  isEditing?: boolean
+  initialData?: ReviewFormValues;
+  isEditing?: boolean;
 }
 
 export function ReviewForm({
   initialData,
   isEditing = false,
 }: ReviewFormProps) {
-  const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [activeTab, setActiveTab] = useState("details")
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState("details");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Initialize the form with default values or editing values
   const form = useForm<ReviewFormValues>({
@@ -101,47 +107,54 @@ export function ReviewForm({
       pros: "",
       cons: "",
     },
-  })
+  });
 
   // Handle form submission
   async function onSubmit(data: ReviewFormValues) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       // In a real app, you would send this data to your API
-      console.log("Form data:", data)
+      console.log("Form data:", data);
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Show success toast
 
       // Redirect after successful submission
-      router.push("/reviews")
-      router.refresh()
-    } catch (error:any) {
-    }
+      router.push("/reviews");
+      router.refresh();
+    } catch (error) {}
   }
 
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   // Form completion percentage
-  const formValues = form.getValues()
-  const requiredFields = ["title", "description", "rating", "excerp", "categoryId"]
-  const completedFields = requiredFields.filter(field =>
-    formValues[field as keyof ReviewFormValues]
-  )
-  const completionPercentage = Math.round((completedFields.length / requiredFields.length) * 100)
+  const formValues = form.getValues();
+  const requiredFields = [
+    "title",
+    "description",
+    "rating",
+    "excerp",
+    "categoryId",
+  ];
+  const completedFields = requiredFields.filter(
+    (field) => formValues[field as keyof ReviewFormValues]
+  );
+  const completionPercentage = Math.round(
+    (completedFields.length / requiredFields.length) * 100
+  );
 
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-lg border-0">
@@ -164,14 +177,21 @@ export function ReviewForm({
                     style={{ width: `${completionPercentage}%` }}
                   ></div>
                 </div>
-                <span className="text-xs font-medium text-gray-600">{completionPercentage}% complete</span>
+                <span className="text-xs font-medium text-gray-600">
+                  {completionPercentage}% complete
+                </span>
               </div>
             </div>
           </div>
         </div>
       </CardHeader>
       <CardContent className="p-6">
-        <Tabs defaultValue="details" value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs
+          defaultValue="details"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
           <TabsList className="grid grid-cols-3 mb-6">
             <TabsTrigger value="details">Basic Details</TabsTrigger>
             <TabsTrigger value="content">Review Content</TabsTrigger>
@@ -208,7 +228,9 @@ export function ReviewForm({
                     name="categoryId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Category</FormLabel>
+                        <FormLabel className="text-gray-700">
+                          Category
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -256,7 +278,9 @@ export function ReviewForm({
                   name="purchaseSource"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700">Purchase Source (Optional)</FormLabel>
+                      <FormLabel className="text-gray-700">
+                        Purchase Source (Optional)
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Where you purchased the item (store, website, etc.)"
@@ -319,7 +343,9 @@ export function ReviewForm({
                     name="pros"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Pros (Optional)</FormLabel>
+                        <FormLabel className="text-gray-700">
+                          Pros (Optional)
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="What did you like about the product?"
@@ -337,7 +363,9 @@ export function ReviewForm({
                     name="cons"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Cons (Optional)</FormLabel>
+                        <FormLabel className="text-gray-700">
+                          Cons (Optional)
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="What could be improved?"
@@ -356,7 +384,9 @@ export function ReviewForm({
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700">Detailed Review</FormLabel>
+                      <FormLabel className="text-gray-700">
+                        Detailed Review
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe your experience in detail"
@@ -366,7 +396,8 @@ export function ReviewForm({
                         />
                       </FormControl>
                       <FormDescription className="text-gray-500 text-xs">
-                        Include details about quality, usage experience, pros and cons, etc.
+                        Include details about quality, usage experience, pros
+                        and cons, etc.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -395,7 +426,9 @@ export function ReviewForm({
                 <div className="bg-gray-50 p-6 rounded-lg border border-dashed border-gray-300">
                   <div className="text-center">
                     <Camera className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-                    <h3 className="text-gray-700 font-medium mb-1">Add Photos</h3>
+                    <h3 className="text-gray-700 font-medium mb-1">
+                      Add Photos
+                    </h3>
                     <p className="text-gray-500 text-sm mb-4">
                       Upload photos of the product to enhance your review
                     </p>
@@ -404,7 +437,9 @@ export function ReviewForm({
                       <label className="cursor-pointer">
                         <div className="bg-white border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 transition flex items-center gap-2">
                           <Upload className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm font-medium text-gray-700">Upload Images</span>
+                          <span className="text-sm font-medium text-gray-700">
+                            Upload Images
+                          </span>
                         </div>
                         <input
                           type="file"
@@ -418,7 +453,9 @@ export function ReviewForm({
                     {imagePreview && (
                       <div className="mt-4">
                         <div className="relative w-32 h-32 mx-auto">
-                          <img
+                          <Image
+                            height={400}
+                            width={400}
                             src={imagePreview || "/placeholder.svg"}
                             alt="Preview"
                             className="w-full h-full object-cover rounded-md border border-gray-200"
@@ -429,8 +466,17 @@ export function ReviewForm({
                             onClick={() => setImagePreview(null)}
                           >
                             <span className="sr-only">Remove</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -441,14 +487,28 @@ export function ReviewForm({
 
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start gap-3">
                   <div className="bg-blue-100 rounded-full p-1 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-blue-600"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-blue-800">Review Guidelines</h4>
+                    <h4 className="text-sm font-medium text-blue-800">
+                      Review Guidelines
+                    </h4>
                     <p className="text-xs text-blue-600 mt-1">
-                      Please ensure your review is honest, respectful, and helpful. Avoid including personal information or offensive language. Reviews that don't meet our guidelines may not be published.
+                      Please ensure your review is honest, respectful, and
+                      helpful. Avoid including personal information or offensive
+                      language. Reviews that don't meet our guidelines may not
+                      be published.
                     </p>
                   </div>
                 </div>
@@ -480,5 +540,5 @@ export function ReviewForm({
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }

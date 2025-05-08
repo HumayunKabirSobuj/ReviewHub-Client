@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+=======
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-unescaped-entities */
+>>>>>>> 378a683a76d7e8da9e8808607fc7994105607ca8
 import ReviewComments from "@/components/modules/Review/ReviewComments";
 import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";
 // import ReviewImageGallery from "@/components/modules/Review/ReviewImagerGallery";

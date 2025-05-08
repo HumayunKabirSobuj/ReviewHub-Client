@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 
 export default function RatingComponent({

@@ -1,8 +1,17 @@
+<<<<<<< HEAD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { useState } from 'react';
+=======
+/* eslint-disable prefer-const */
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+>>>>>>> 378a683a76d7e8da9e8808607fc7994105607ca8
 
 interface ImageListProps {
 	setImageLinks: React.Dispatch<React.SetStateAction<string[]>>;
@@ -72,10 +81,10 @@ export function UploadMultipleImages({ setImageLinks }: ImageListProps) {
 				<div className="flex gap-2 flex-wrap">
 					{getView.map((src, idx) => (
 						<Image
-						height={200}
-						width={200}
 							key={idx}
 							src={src}
+							height={400}
+							width={400}
 							alt={`Preview ${idx}`}
 							className="w-24 h-24 object-cover rounded-md border"
 						/>

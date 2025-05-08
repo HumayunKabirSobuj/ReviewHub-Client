@@ -1,4 +1,8 @@
 import {
+<<<<<<< HEAD
+=======
+  CheckCircle2,
+>>>>>>> 378a683a76d7e8da9e8808607fc7994105607ca8
   ArrowRight,
   CheckCircle2,
   LayoutDashboardIcon

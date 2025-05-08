@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -364,9 +365,11 @@ export default function RegistrationForm() {
                 {getView.length > 0 && !disableSubmit && (
                   <div className="flex gap-2 flex-wrap">
                     {getView.map((src, idx) => (
-                      <img
+                      <Image
                         key={idx}
                         src={src}
+                        height={400}
+                        width={400}
                         alt={`Preview ${idx}`}
                         className="w-24 h-24 object-cover rounded-md border"
                       />
