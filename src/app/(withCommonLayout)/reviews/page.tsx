@@ -51,21 +51,7 @@ function ErrorDisplay({ message }: { message: string }) {
   );
 }
 
-// Generate metadata for the page
-export const metadata = {
-  title: "Product Reviews | Your Site Name",
-  description: "Browse and filter product reviews from our community",
-};
 
-// type StrictSearchParams = {
-// 	[key: string]: string | string[] | undefined;
-// };
-// interface CustomPageProps {
-// 	searchParams?: StrictSearchParams;
-// 	params?: Record<string, string>;
-// }
-
-// Main page component
 export default async function Reviews({
   searchParams,
 }: {
