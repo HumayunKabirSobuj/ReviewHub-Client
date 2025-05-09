@@ -22,6 +22,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import RatingComponent from '@/components/usefulComponents/ratingComponent';
 
 const formSchemaPartOne = z.object({
 	title: z.string().min(1, {
@@ -60,6 +61,9 @@ export default function CreateReviewComponent({
 	const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
 	const [allCategories, setAllCategories] = useState<categoryList[]>([]);
 	const imgFileInputRef = useRef<HTMLInputElement>(null);
+	const [loader, setLoader] = useState<boolean>(false);
+
+	const [ratingValue, setRatingValue] = useState<number>(0);
 
 	useEffect(() => {
 		getAllCategoriesApiCall();
@@ -78,12 +82,15 @@ export default function CreateReviewComponent({
 		if (review !== null) {
 			setGetView(review.imageUrls);
 			setImageLinks(review.imageUrls);
+			setRatingValue(review.rating);
 		}
 	};
 
 	const getAllCategoriesApiCall = async () => {
 		try {
+			setLoader(true);
 			const res = await getAllCategories();
+			setLoader(false);
 			if (res?.success) {
 				setAllCategories(res.data);
 			}
@@ -167,7 +174,7 @@ export default function CreateReviewComponent({
 				...data,
 				imageUrls: imageLinks,
 				price: Number(data.price),
-				rating: 0,
+				rating: ratingValue,
 			};
 
 			console.log('json data', jsonData);
@@ -192,6 +199,7 @@ export default function CreateReviewComponent({
 				});
 				setGetView([]);
 				setImageLinks([]);
+				setRatingValue(0);
 				if (mode === 'edit') {
 					setOpen(false);
 				}
@@ -207,9 +215,21 @@ export default function CreateReviewComponent({
 	};
 	return (
 		<div className="p-[15px]">
-			{!allCategories.length && (
+			{!allCategories.length && !loader && (
+				<div className="col-span-full text-center py-12 bg-card rounded-lg border shadow-sm">
+					<h3 className="text-lg font-medium mb-2">No category available</h3>
+					<p className="text-muted-foreground mb-4">Try adding some categories first</p>
+				</div>
+			)}
+			{loader === true && (
 				<div className="w-full h-[100vh] flex items-center justify-center">
 					<Loader className="w-[80px] h-12 animate-spin" />
+				</div>
+			)}
+			{!allCategories.length && (
+				<div className="col-span-full text-center py-12 bg-card rounded-lg border shadow-sm">
+					<h3 className="text-lg font-medium mb-2">No category available</h3>
+					<p className="text-muted-foreground mb-4">Try adding some categories first</p>
 				</div>
 			)}
 			{allCategories && allCategories.length > 0 && (
@@ -268,6 +288,15 @@ export default function CreateReviewComponent({
 												<FormMessage />
 											</FormItem>
 										)}
+									/>
+								</div>
+								<div className="space-y-1 mb-4">
+									<Label htmlFor="multi-image">Rating</Label>
+									<RatingComponent
+										max={5}
+										selectable={true}
+										value={ratingValue}
+										setRating={setRatingValue}
 									/>
 								</div>
 								<div className="space-y-1 mb-4">
