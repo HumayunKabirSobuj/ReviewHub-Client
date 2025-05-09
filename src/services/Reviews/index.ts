@@ -21,6 +21,24 @@ export const getAllReviews = async (queryString: Promise<string>) => {
     return Error(error);
   }
 };
+export const getAllPublishedReviews = async (queryString: Promise<string>) => {
+  // console.log("queryString", { queryString });
+  try {
+    const res = await fetch(
+      //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/review?isPublished=true&${queryString}`,
+      {
+        next: {
+          tags: ["ALL-REVIEWS"],
+        },
+      },
+    );
+
+    return await res.json();
+  } catch (error: any) {
+    return Error(error);
+  }
+};
 
 export async function getReviewById(id: string) {
   try {

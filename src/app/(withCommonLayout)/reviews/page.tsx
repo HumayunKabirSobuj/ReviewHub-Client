@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import ReviewsPageCard from "@/components/modules/Review/ReviewsPageCard";
 import { createQueryString } from "@/helpers";
 import { getAllCategories } from "@/services/Categories";
-import { getAllReviews } from "@/services/Reviews";
+import { getAllPublishedReviews} from "@/services/Reviews";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Define proper types for the page props
@@ -76,7 +76,7 @@ export default async function Reviews({
 
     // Fetch data in parallel for better performance
     const [reviewsResponse, categoriesResponse] = await Promise.all([
-      getAllReviews(queryString),
+      getAllPublishedReviews(queryString),
       getAllCategories(),
     ]);
 

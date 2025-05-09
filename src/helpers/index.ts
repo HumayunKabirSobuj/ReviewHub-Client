@@ -35,3 +35,14 @@ export async function createQueryString(params: Promise<any>) {
   });
   return new URLSearchParams(safeParams).toString();
 }
+
+export async function createQueryStringForPublishedReviews(params: Promise<any>) {
+  const newParams = await params;
+  const safeParams: Record<string, string> = {};
+  Object.entries(newParams).forEach(([key, value]) => {
+    // Only include string, number, or boolean values
+    safeParams[key] = String(value);
+    safeParams["isPublished"] = "true";
+  });
+  return new URLSearchParams(safeParams).toString();
+}
