@@ -12,17 +12,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import { Filter, Search } from "lucide-react";
+import {  Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import {
@@ -91,7 +84,6 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
   const [isPending, startTransition] = useTransition();
 
   // Initialize state from URL params to maintain filter state
-  const [isFilterOpen, setFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("searchTerm") || "",
   );
@@ -594,129 +586,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Sheet open={isFilterOpen} onOpenChange={setFilterOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                className="gap-2 hover:bg-muted/80 transition-colors relative"
-              >
-                <Filter className="w-4 h-4" />
-                <span className="hidden sm:inline">Filters</span>
-                {activeFiltersCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {activeFiltersCount}
-                  </span>
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="sm:max-w-md">
-              <SheetHeader className="mb-5">
-                <SheetTitle>Filters</SheetTitle>
-                <SheetDescription>
-                  Apply filters to find the perfect review
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-6 py-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium leading-none">
-                    Category
-                  </label>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={handleCategoryChange}
-                  >
-                    <SelectTrigger className="w-full focus:ring-primary">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {category.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium leading-none">
-                      Minimum Rating
-                    </label>
-                    <span className="text-sm font-medium">{ratingFilter}</span>
-                  </div>
-                  <Slider
-                    defaultValue={[ratingFilter]}
-                    max={5}
-                    step={1}
-                    value={[ratingFilter]}
-                    onValueChange={([value]) => handleRatingChange(value)}
-                    className="py-2"
-                  />
-                  <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-                    {[0, 1, 2, 3, 4, 5].map((num) => (
-                      <span key={num}>{num}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium leading-none">
-                    Premium Content
-                  </label>
-                  <Select
-                    value={premiumFilter || ""}
-                    onValueChange={(value) =>
-                      handlePremiumFilterChange(value === "" ? null : value)
-                    }
-                  >
-                    <SelectTrigger className="w-full focus:ring-primary">
-                      <SelectValue placeholder="All Reviews" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All Reviews</SelectItem>
-                      <SelectItem value="premium">Premium Only</SelectItem>
-                      <SelectItem value="free">Free Only</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium leading-none">
-                    Sort By
-                  </label>
-                  <Select value={sortBy} onValueChange={handleSortChange}>
-                    <SelectTrigger className="w-full focus:ring-primary">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                      <SelectItem value="oldest">Oldest First</SelectItem>
-                      <SelectItem value="highest">Highest Rated</SelectItem>
-                      <SelectItem value="lowest">Lowest Rated</SelectItem>
-                      <SelectItem value="popular">Most Popular</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="flex justify-between mt-6">
-                <Button
-                  variant="outline"
-                  onClick={resetFilters}
-                  className="hover:bg-muted/80 transition-colors"
-                >
-                  Reset
-                </Button>
-                <Button
-                  onClick={() => {
-                    applyFilters();
-                    setFilterOpen(false);
-                  }}
-                  className="transition-colors"
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          
         </div>
       </div>
 

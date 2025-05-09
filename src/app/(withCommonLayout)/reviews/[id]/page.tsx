@@ -19,13 +19,10 @@ import { getReviewById } from "@/services/Reviews";
 import {
   Calendar,
   CheckCircle2,
-  Clock,
   ExternalLink,
-  MessageSquare,
   ShoppingBag,
   Tag,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -108,47 +105,13 @@ export default async function ReviewDetailPage({ params }: IProps) {
   // For demo purposes, using mock data for premium status
   // In a real app, this would come from the database or user session
   const isPremiumUnlocked = review.Payment && review.Payment.length > 0;
-  const purchaseInfo =
-    isPremiumUnlocked && review.Payment.length > 0
-      ? {
-          date: new Date(review.Payment[0].createdAt).toLocaleDateString(),
-          transactionId: review.Payment[0].id,
-          price: review.price,
-        }
-      : {
-          date: "N/A",
-          transactionId: "N/A",
-          price: review.price || 0,
-        };
+ 
 
   // Split content to separate regular and premium sections
   const contentParts = review.description.split("PREMIUM CONTENT SECTION:");
   const regularContent = contentParts[0];
   const premiumContent = contentParts.length > 1 ? contentParts[1] : "";
 
-  // Mock related reviews
-  const relatedReviews = [
-    {
-      id: "2",
-      title: "Bose QuietComfort 45 Headphones Review",
-      author: "Sarah Williams",
-      rating: 4.0,
-      category: "Gadgets",
-      image: "/placeholder.svg?height=200&width=300",
-      votes: 87,
-      isPremium: true,
-    },
-    {
-      id: "3",
-      title: "Apple AirPods Pro 2 - Worth The Upgrade?",
-      author: "Michael Chen",
-      rating: 4.2,
-      category: "Gadgets",
-      image: "/placeholder.svg?height=200&width=300",
-      votes: 156,
-      isPremium: false,
-    },
-  ];
 
   // Format comments from API response
   const formattedComments =
@@ -181,18 +144,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
     <Suspense fallback={<ReviewDetailSkeleton />}>
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
         {/* Purchase Confirmation Alert (if premium is unlocked) */}
-        {isPremiumUnlocked && review.isPremium && (
-          <Alert className="mb-6 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-900">
-            <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
-            <AlertTitle className="text-green-800 dark:text-green-300">
-              Premium Content Unlocked
-            </AlertTitle>
-            <AlertDescription className="text-green-700 dark:text-green-400">
-              You have successfully unlocked this premium review. Transaction
-              ID: {purchaseInfo.transactionId}
-            </AlertDescription>
-          </Alert>
-        )}
+       
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -216,9 +168,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
                     Premium Unlocked
                   </Badge>
-                  <span className="text-sm text-muted-foreground">
-                    Purchased on {purchaseInfo.date}
-                  </span>
+                  
                 </div>
               )}
 
@@ -415,67 +365,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
               <CardHeader className="pb-3">
                 <h3 className="text-lg font-semibold">More Premium Reviews</h3>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {relatedReviews
-                  .filter((review) => review.isPremium)
-                  .map((relatedReview) => (
-                    <div key={relatedReview.id} className="flex gap-3">
-                      <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
-                        <Image
-                          src={relatedReview.image || "/placeholder.svg"}
-                          alt={relatedReview.title}
-                          fill
-                          className="object-cover"
-                        />
-                        {relatedReview.isPremium && (
-                          <div className="absolute top-0 right-0 bg-primary text-[10px] text-primary-foreground px-1 py-0.5 rounded-bl-md">
-                            PRO
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <Link
-                          href={`/reviews/${relatedReview.id}`}
-                          className="hover:underline"
-                        >
-                          <h4 className="font-medium text-sm truncate">
-                            {relatedReview.title}
-                          </h4>
-                        </Link>
-                        <div className="flex items-center gap-1 mt-1">
-                          <div className="flex">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <svg
-                                key={star}
-                                className={cn(
-                                  "w-3 h-3",
-                                  star <= Math.floor(relatedReview.rating)
-                                    ? "text-yellow-400 fill-yellow-400"
-                                    : "text-gray-300 fill-gray-300",
-                                )}
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                              </svg>
-                            ))}
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {relatedReview.rating.toFixed(1)}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                          <span>{relatedReview.author}</span>
-                          <span>•</span>
-                          <div className="flex items-center">
-                            <MessageSquare className="w-3 h-3 mr-1" />
-                            {relatedReview.votes}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </CardContent>
+             
               <CardFooter>
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/reviews?isPremium=true">
@@ -485,41 +375,7 @@ export default async function ReviewDetailPage({ params }: IProps) {
               </CardFooter>
             </Card>
 
-            {/* Recently Viewed */}
-            <Card>
-              <CardHeader className="pb-3">
-                <h3 className="text-lg font-semibold">Recently Viewed</h3>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link
-                    href="/reviews/2"
-                    className="text-sm truncate hover:underline"
-                  >
-                    Bose QuietComfort 45 Headphones Review
-                  </Link>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link
-                    href="/reviews/3"
-                    className="text-sm truncate hover:underline"
-                  >
-                    Apple AirPods Pro 2 - Worth The Upgrade?
-                  </Link>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Link
-                    href="/reviews/4"
-                    className="text-sm truncate hover:underline"
-                  >
-                    Best Noise Cancelling Headphones 2024
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+          
           </div>
         </div>
       </div>

@@ -205,7 +205,8 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
                 src={review.imageUrls[0] || "/placeholder.svg"}
                 alt={review.title}
                 className="w-full h-full"
-                fill
+                width={500}
+                height={400}
               />
             </div>
           )}

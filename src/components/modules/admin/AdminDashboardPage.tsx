@@ -746,7 +746,7 @@ export default function AdminDashboardPage({
                     x="50"
                     y="45"
                     textAnchor="middle"
-                    className="text-3xl font-bold"
+                    className="text-xl font-bold"
                   >
                     80%
                   </text>

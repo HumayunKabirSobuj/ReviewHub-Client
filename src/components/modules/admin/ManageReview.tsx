@@ -714,9 +714,9 @@ export default function ManageReviews({
             <Button
               variant="destructive"
               onClick={() => {
-                console.log(
-                  `Deleted review: ${selectedReview?.id}, Reason: ${moderationReason}`,
-                );
+                // console.log(
+                //   `Deleted review: ${selectedReview?.id}, Reason: ${moderationReason}`,
+                // );
                 setDeleteDialogOpen(false);
                 setSelectedReview(null);
                 setModerationReason("");

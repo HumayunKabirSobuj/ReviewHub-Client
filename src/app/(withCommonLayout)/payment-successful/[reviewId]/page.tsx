@@ -19,7 +19,7 @@ export default async function PaymentSuccessPage({ params }: IProps) {
   // console.log((await params).reviewId);
 
   const reveiwId = (await params)?.reviewId;
-  console.log(reveiwId);
+  // console.log(reveiwId);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 p-4 sm:p-6 md:p-8">
