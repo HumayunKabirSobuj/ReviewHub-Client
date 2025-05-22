@@ -5,12 +5,12 @@ import { Toaster } from "sonner";
 const CommonLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
+      <Navbar />
       <div className="container mx-auto">
-        <Navbar />
         <main className="min-h-screen">{children}</main>
         <Toaster richColors position="top-center" />
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

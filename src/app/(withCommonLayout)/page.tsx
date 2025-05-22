@@ -5,8 +5,8 @@ import ServicesSection from "@/components/modules/HomePage/ServicesSection";
 export default function HomePage() {
   return (
     <div className="relative w-full min-h-screen  overflow-hidden ">
+      {/* <Banner/> */}
       <HeroSection />
-
       <section className="container mx-auto bg-white px-4 md:px-8 lg:px-16 py-8 md:py-12">
         <ServicesSection />
 
