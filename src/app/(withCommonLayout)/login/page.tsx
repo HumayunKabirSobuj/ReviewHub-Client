@@ -1,7 +1,7 @@
 import { LoginForm } from "@/components/module/login/LoginFrom";
 import Image from "next/image";
 
-export default function Home() {
+export default function Login() {
   return (
     <main className="flex min-h-screen flex-col bg-gray-50 md:flex-row">
       {/* Illustration section - full width on mobile, half width on larger screens */}

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import type React from "react";
@@ -6,7 +5,6 @@ import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   InboxIcon as EnvelopeIcon,
   LockOpenIcon as LockClosedIcon,
@@ -20,7 +18,6 @@ import { useUser } from "@/components/context/UserContext";
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
   const { handleUser } = useUser();
 
@@ -50,6 +47,7 @@ export function LoginForm() {
       }
     } catch (err) {
       toast.error("Something went wrong", { duration: 2000 });
+      console.log(err);
     }
   };
 
@@ -63,6 +61,34 @@ export function LoginForm() {
           Welcome back! please enter your detail.
         </p>
       </div>
+
+      <div className="flex gap-2 mt-4">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setEmail("admin123@gmail.com");
+            setPassword("admin123");
+          }}
+          className="flex-1 text-xs sm:text-sm h-9"
+        >
+          Admin Credentials
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setEmail("user@gmail.com");
+            setPassword("user1234");
+          }}
+          className="flex-1 text-xs sm:text-sm h-9"
+        >
+          User Credentials
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
           <div className="relative">
@@ -94,28 +120,7 @@ export function LoginForm() {
             />
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="remember"
-              checked={rememberMe}
-              onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-              className="h-4 w-4 sm:h-5 sm:w-5"
-            />
-            <label
-              htmlFor="remember"
-              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sm:text-sm"
-            >
-              Remember me
-            </label>
-          </div>
-          <Link
-            href="/forgot-password"
-            className="text-xs font-medium text-blue-600 hover:text-blue-500 sm:text-sm"
-          >
-            Forgot Password?
-          </Link>
-        </div>
+
         <Button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium sm:h-11 sm:text-base"
