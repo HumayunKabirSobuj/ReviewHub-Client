@@ -20,7 +20,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 
-interface Review {
+export interface IReview {
   id: string;
   title: string;
   description: string;
@@ -54,7 +54,7 @@ interface Review {
 }
 
 interface ReviewCardProps {
-  review: Review;
+  review: IReview;
 }
 
 // Optimized Review Card component with entire card clickable
@@ -224,11 +224,13 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
             {excerpt}
           </p>
 
+      
+          {/* Unlock Button for Premium Review (USER who didn't pay and not the owner) */}
           {user &&
             review?.isPremium &&
-            user?.role === "USER" &&
-            !hasUserPaid &&
-            review?.userId !== user?.id && (
+            user.role === "USER" &&
+            !review?.Payment?.some((payment) => payment.userId === user.id) &&
+            review.userId !== user.id && (
               <div className="mt-4">
                 <Button
                   variant="outline"
@@ -239,22 +241,36 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
                   Unlock for BDT{review?.price || "0000"}{" "}
                   {review?.Discount && (
                     <div>
-                      <Badge variant="outline">{review.Discount.percent} % Off</Badge>
+                      <Badge variant="outline">
+                        {review.Discount.percent} % Off
+                      </Badge>
                     </div>
                   )}
                 </Button>
               </div>
             )}
 
-          {user && !review?.isPremium && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full text-xs hover:bg-primary/10 transition-colors mt-4"
-            >
-              <Link href={`/reviews/${review.id}`}>Show Details</Link>
-            </Button>
-          )}
+         
+          {user &&
+            ((review?.isPremium &&
+              (user.role === "ADMIN" ||
+                review?.Payment?.some(
+                  (payment) => payment.userId === user.id
+                ) ||
+                review.userId === user.id)) ||
+              !review?.isPremium) && (
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs hover:bg-green-50 transition-colors"
+                >
+                  <Link href={`/reviews/${review.id}`}>Show Details</Link>
+                </Button>
+              </div>
+            )}
+
+          {/* Non-premium & not logged in */}
           {!user && !review?.isPremium && (
             <Button
               variant="outline"
@@ -264,6 +280,8 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               <Link href={`/login`}>Login for details</Link>
             </Button>
           )}
+
+          {/* Premium & not logged in */}
           {!user && review?.isPremium && (
             <Button
               variant="outline"
@@ -273,48 +291,6 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               <Link href={`/login`}>Login for payment</Link>
             </Button>
           )}
-
-          {user && review?.isPremium && user?.role === "ADMIN" && (
-            <div className="mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs hover:bg-primary/10 transition-colors"
-              >
-                <Link href={`/reviews/${review.id}`}>Show Details</Link>
-              </Button>
-            </div>
-          )}
-
-          {user &&
-            review?.isPremium &&
-            user?.role === "USER" &&
-            hasUserPaid && (
-              <div className="mt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-xs hover:bg-green-50 transition-colors"
-                >
-                  <Link href={`/reviews/${review.id}`}>Show Details</Link>
-                </Button>
-              </div>
-            )}
-
-          {user &&
-            review?.isPremium &&
-            user?.role === "USER" &&
-            review?.userId === user?.id && (
-              <div className="mt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-xs hover:bg-green-50 transition-colors"
-                >
-                  <Link href={`/reviews/${review.id}`}>Show Details</Link>
-                </Button>
-              </div>
-            )}
         </CardContent>
         <CardFooter className="pt-3 flex justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-4" onClick={handleInnerClick}>

@@ -1,12 +1,24 @@
+
+"use client";
+
+import { useState } from "react";
+import { useMyReviews } from "@/hooks/useMyReviews";
 import UserReviewManagement from "@/components/module/user-review/manage-review";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getMyReviewsApi } from "@/services/UserDashboard/ReviewServices";
-import { Suspense } from "react";
+import Pagination from "@/components/shared/Pagination";
 
-const ManageReviewsForUser = async () => {
-  const reviews = (await getMyReviewsApi()).data;
-  // Loading component for Suspense fallback
-  function ReviewsLoading() {
+
+const itemsPerPage = 10;
+
+export default function ManageReviewsForUser() {
+  const { reviews, loading } = useMyReviews();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedReviews = reviews.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(reviews.length / itemsPerPage);
+
+  if (loading) {
     return (
       <div className="container py-8">
         <div className="flex justify-between items-center mb-6">
@@ -38,11 +50,15 @@ const ManageReviewsForUser = async () => {
 
   return (
     <div className="p-[15px]">
-      <Suspense fallback={<ReviewsLoading />}>
-        <UserReviewManagement reviews={reviews} />
-      </Suspense>
+      <UserReviewManagement reviews={paginatedReviews} />
+
+      <div className="mt-8">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      </div>
     </div>
   );
-};
-
-export default ManageReviewsForUser;
+}

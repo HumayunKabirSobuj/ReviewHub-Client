@@ -13,9 +13,19 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
+import { Badge } from "@/components/ui/badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import {  Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import {
@@ -26,19 +36,9 @@ import {
   useState,
   useTransition,
 } from "react";
-import ReviewCard from "./ReviewCard";
-import { Badge } from "@/components/ui/badge";
-import ReviewCardSkeleton from "./REviewCardSkeleton";
 import { toast } from "sonner";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import ReviewCard from "./ReviewCard";
+import ReviewCardSkeleton from "./REviewCardSkeleton";
 
 interface Review {
   id: string;
@@ -572,8 +572,8 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
   }, [filteredReviews, isLoading, loadingInitial, resetFilters]);
 
   return (
-    <div className="container py-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container py-8 px-2">
+      <div className="flex justify-between items-center mb-6 pl-4">
         <h2 className="text-2xl font-bold">Reviews</h2>
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -586,7 +586,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
         </div>
       </div>
 

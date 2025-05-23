@@ -8,19 +8,19 @@ const ServicesSection = () => {
             {/* Services section */}
         <div className="container mx-auto px-4 py-16 max-w-6xl">
           {/* Header section */}
-          <div className="text-center mb-12">
+          <div className=" mb-12">
             <p className="text-primary font-medium mb-2">Our Services</p>
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-black">
               Premium Features for Our Community
             </h1>
-            <p className="text-black max-w-3xl mx-auto mb-2">
+            {/* <p className="text-black max-w-3xl  mb-2">
               Our comprehensive suite of features helps you discover, review,
               and connect with products and services that matter to you.
             </p>
-            <p className="text-black max-w-3xl mx-auto">
+            <p className="text-black max-w-3xl ">
               These tools are designed to enhance your experience and help you
               make informed purchasing decisions.
-            </p>
+            </p> */}
           </div>
 
           {/* Services grid */}
