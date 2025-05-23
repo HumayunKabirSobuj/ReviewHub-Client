@@ -1,24 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import ManageUsersForAdmin from "@/components/modules/admin/manageUsers";
-import { createSafeQueryString } from "@/helpers";
+// import { createSafeQueryString } from "@/helpers";
 import { getAllUsers } from "@/services/User";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
-
-
-export default async function ManageUsersPage({ searchParams }:{searchParams:any}) {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+export default async function ManageUsersPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   // First resolve the Promise
-  const resolvedParams = searchParams;
-
+  const resolvedParams = await searchParams;
+  console.log(resolvedParams);
   // Create a safe query string from the resolved search parameters
-  const queryString = createSafeQueryString(resolvedParams);
+  // const queryString = createSafeQueryString(resolvedParams);
+  // const queryString = createSafeQueryString(resolvedParams);
 
   // Fetch data based on the query parameters
   let users = [];
 
   try {
-    const { data, error } = await getAllUsers(queryString);
+    const { data, error } = await getAllUsers();
     users = data || [];
 
     if (error) {

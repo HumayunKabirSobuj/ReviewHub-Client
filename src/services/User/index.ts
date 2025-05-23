@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 // // Get all users
-export const getAllUsers = async (queryString: string) => {
+export const getAllUsers = async (queryString?: string) => {
   // console.log("queryString", { queryString });
   try {
     const res = await fetch(
