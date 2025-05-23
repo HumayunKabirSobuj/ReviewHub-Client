@@ -123,7 +123,7 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 h-10 text-sm font-medium sm:h-11 sm:text-base"
+          className="w-full bg-primary hover:bg-purple-600 h-10 text-sm font-medium sm:h-11 sm:text-base"
         >
           LOGIN
         </Button>
@@ -132,7 +132,7 @@ export function LoginForm() {
           Do not have an account?
           <Link
             href="/register"
-            className="text-blue-600 font-semibold hover:underline ml-2"
+            className="text-purple-600 font-semibold hover:underline ml-2"
           >
             Signup in here
           </Link>

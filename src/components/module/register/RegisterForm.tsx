@@ -383,7 +383,7 @@ export default function RegistrationForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-blue-600 py-5"
+                className="w-full hover:bg-purple-600 cursor-pointer py-5"
                 disabled={
                   isSubmitting ||
                   (!!passwordConfirm && password !== passwordConfirm) ||
@@ -397,7 +397,7 @@ export default function RegistrationForm() {
                 Already have an account?
                 <Link
                   href="/login"
-                  className="text-blue-600 font-semibold hover:underline ml-2"
+                  className="text-purple-600 font-semibold hover:underline ml-2"
                 >
                   Log in here
                 </Link>
