@@ -298,6 +298,11 @@ const navItems: NavItem[] = [
     href: "/about",
     icon: MailQuestion,
   },
+  {
+    title: "Contact Us",
+    href: "/contact-us",
+    icon: MailQuestion,
+  },
 ]
 
 export function Navbar() {
@@ -325,7 +330,7 @@ export function Navbar() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <Star className="mr-2 h-6 w-6 text-yellow-500" />
-                <span className="text-xl font-semibold text-gray-900">Review Portal</span>
+                <span className="text-xl font-semibold">Review Portal</span>
               </Link>
             </div>
 
@@ -342,7 +347,7 @@ export function Navbar() {
                       href={item.href}
                       className={cn(
                         "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                        isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                        isActive ? "text-primary bg-gray-50 " : "text-gray-600 hover:bg-gray-50 hover:text-primary",
                       )}
                     >
                       <Icon className="mr-2 h-4 w-4" />
@@ -416,7 +421,7 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button variant="default" className="bg-purple-600 ">
+              <Button variant="default" className="bg-primary hover:bg-purple-600 ">
                 <Link href={"/login"}> Login</Link>
               </Button>
             )}
