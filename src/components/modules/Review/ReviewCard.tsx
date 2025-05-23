@@ -20,7 +20,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 
-interface Review {
+
+export interface IReview {
   id: string;
   title: string;
   description: string;
@@ -54,7 +55,7 @@ interface Review {
 }
 
 interface ReviewCardProps {
-  review: Review;
+  review: IReview;
 }
 
 // Optimized Review Card component with entire card clickable

@@ -1,12 +1,11 @@
 import { ArrowRight, Star } from "lucide-react";
-import React from "react";
 
 const HeroSection = () => {
   return (
     <div>
       {/* Hero section */}
       <section className="w-full bg-accent ">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-24">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-32">
           {/* Tagline */}
           <p className="text-black mb-4 md:mb-6">Discover, Review, Connect</p>
 
@@ -23,7 +22,7 @@ const HeroSection = () => {
                 best products, share your experiences, and make informed
                 purchasing decisions.
               </p>
-              <button className="flex items-center gap-2 bg-primary hover:bg-purple-600 text-white px-6 py-3 rounded-full transition-all">
+              <button className="flex items-center gap-2 bg-primary hover:bg-purple-600 text-white cursor-pointer px-6 py-3 rounded-full transition-all">
                 <span>Get Started</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
