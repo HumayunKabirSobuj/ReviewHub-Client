@@ -3,16 +3,16 @@
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-export const getAllReviews = async (queryString: string) => {
+export const getAllReviews = async (queryString: Promise<string>) => {
+  // console.log("queryString", { queryString });
   try {
     const res = await fetch(
+      //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
       `${process.env.NEXT_PUBLIC_BASE_API}/review?${queryString}`,
       {
         next: {
           tags: ["ALL-REVIEWS"],
-          revalidate: 60,
         },
-
         cache: "force-cache",
       }
     );
@@ -22,31 +22,23 @@ export const getAllReviews = async (queryString: string) => {
     return Error(error);
   }
 };
-
-export const getAllPublishedReviews = async (queryString: string) => {
+export const getAllPublishedReviews = async (queryString: Promise<string>) => {
+  // console.log("queryString", { queryString });
   try {
     const res = await fetch(
+      //   `${process.env.NEXT_PUBLIC_BASE_API}/review?searchTerm=${searchQuery}&page=3&limit=1`,
       `${process.env.NEXT_PUBLIC_BASE_API}/review?isPublished=true&${queryString}`,
       {
         next: {
           tags: ["ALL-REVIEWS"],
-          revalidate: 60, // ISR: Revalidate every 60 seconds
         },
-        cache: "force-cache", // Optional: allow full caching
+        cache: "force-cache",
       }
     );
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch reviews: ${res.status}`);
-    }
-
     return await res.json();
-  } catch (error: unknown) {
-    console.error("Error fetching published reviews:", error);
-    return {
-      data: null,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
+  } catch (error: any) {
+    return Error(error);
   }
 };
 

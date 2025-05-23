@@ -2,17 +2,14 @@ import HeroSection from "@/components/modules/HomePage/HeroSection";
 import HowItWorksSection from "@/components/modules/HomePage/HowItWorksSection";
 import ReviewsSection from "@/components/modules/HomePage/ReviewsSection";
 import ServicesSection from "@/components/modules/HomePage/ServicesSection";
-import { getAllPublishedReviews } from "@/services/Reviews";
 
 export default async function HomePage() {
-  const queryString = new URLSearchParams({
-    page: '1',
-    limit: '6',
-  }).toString();
-
-  const result = await getAllPublishedReviews(queryString);
-  const reviewsData = result?.data ?? [];
-
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API}/review?isPublished=true&page=1&limit=6`, {
+    next: { revalidate: 60 }, // Revalidate every 60 seconds (ISR)
+    cache: 'force-cache',     // Optional, enables static caching
+  })
+  const { data: reviewsData } = await res.json()
 
   return (
     <div className="relative w-full min-h-screen  overflow-hidden ">
