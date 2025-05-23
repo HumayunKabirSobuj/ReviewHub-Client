@@ -10,7 +10,6 @@ import Pagination from "@/components/shared/Pagination";
 
 const itemsPerPage = 10;
 
-
 export default function ManageReviewsForUser() {
   const { reviews, loading } = useMyReviews();
   const [currentPage, setCurrentPage] = useState(1);
