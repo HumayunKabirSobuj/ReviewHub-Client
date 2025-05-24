@@ -280,29 +280,6 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-<<<<<<< Updated upstream
-  {
-    title: "Home",
-    href: "/",
-    icon: Home,
-  },
-  {
-    title: "Reviews",
-    href: "/reviews",
-    icon: Star,
-  },
-  {
-    title: "About",
-    href: "/about",
-    icon: MailQuestion,
-  },
-  {
-    title: "Contact Us",
-    href: "/contact-us",
-    icon: MailQuestion,
-  },
-]
-=======
 	{
 		title: 'Home',
 		href: '/',
@@ -318,8 +295,12 @@ const navItems: NavItem[] = [
 		href: '/about',
 		icon: MailQuestion,
 	},
+	{
+		title: 'Contact Us',
+		href: '/contact-us',
+		icon: MailQuestion,
+	},
 ];
->>>>>>> Stashed changes
 
 export function Navbar() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -337,20 +318,6 @@ export function Navbar() {
 		router.push('/');
 	};
 
-<<<<<<< Updated upstream
-  return (
-    <nav className="border-b bg-white shadow-sm sticky top-0 z-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo and desktop navigation */}
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Link href="/" className="flex items-center">
-                <Star className="mr-2 h-6 w-6 text-yellow-500" />
-                <span className="text-xl font-semibold">Review Portal</span>
-              </Link>
-            </div>
-=======
 	return (
 		<nav className="border-b bg-white shadow-sm sticky top-0 z-50">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -360,10 +327,9 @@ export function Navbar() {
 						<div className="flex-shrink-0">
 							<Link href="/" className="flex items-center">
 								<Star className="mr-2 h-6 w-6 text-yellow-500" />
-								<span className="text-xl font-semibold text-gray-900">Review Portal</span>
+								<span className="text-xl font-semibold">Review Portal</span>
 							</Link>
 						</div>
->>>>>>> Stashed changes
 
 						{/* Desktop navigation */}
 						<div className="hidden md:ml-10 md:block">
@@ -373,25 +339,6 @@ export function Navbar() {
 									const isActive =
 										pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
 
-<<<<<<< Updated upstream
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                        isActive ? "text-primary bg-gray-50 " : "text-gray-600 hover:bg-gray-50 hover:text-primary",
-                      )}
-                    >
-                      <Icon className="mr-2 h-4 w-4" />
-                      {item.title}
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-=======
 									return (
 										<Link
 											key={item.href}
@@ -399,8 +346,8 @@ export function Navbar() {
 											className={cn(
 												'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
 												isActive
-													? 'bg-blue-50 text-blue-600'
-													: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+													? 'text-primary bg-gray-50 '
+													: 'text-gray-600 hover:bg-gray-50 hover:text-primary',
 											)}
 										>
 											<Icon className="mr-2 h-4 w-4" />
@@ -411,7 +358,6 @@ export function Navbar() {
 							</div>
 						</div>
 					</div>
->>>>>>> Stashed changes
 
 					{/* Right side items */}
 					<div className="flex items-center">
@@ -474,20 +420,6 @@ export function Navbar() {
 										</DropdownMenuItem>
 									)}
 
-<<<<<<< Updated upstream
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600" onClick={() => handleLogout()}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button variant="default" className="bg-primary hover:bg-purple-600 ">
-                <Link href={"/login"}> Login</Link>
-              </Button>
-            )}
-=======
 									<DropdownMenuSeparator />
 									<DropdownMenuItem className="text-red-600" onClick={() => handleLogout()}>
 										<LogOut className="mr-2 h-4 w-4" />
@@ -496,11 +428,10 @@ export function Navbar() {
 								</DropdownMenuContent>
 							</DropdownMenu>
 						) : (
-							<Button variant="default" className="bg-purple-600 ">
+							<Button variant="default" className="bg-primary hover:bg-purple-600 ">
 								<Link href={'/login'}> Login</Link>
 							</Button>
 						)}
->>>>>>> Stashed changes
 
 						{/* Mobile menu button */}
 						<div className="ml-2 flex md:hidden">
