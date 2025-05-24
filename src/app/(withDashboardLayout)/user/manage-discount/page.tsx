@@ -1,10 +1,11 @@
 import UserDiscountManagement from '@/components/module/user-review/discount-management';
+import { reviewDtlType } from '@/components/types/add-review';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getMyReviewsApi } from '@/services/UserDashboard/ReviewServices';
 import { Suspense } from 'react';
 
 const ManageReviewsForUser = async () => {
-	const reviews = (await getMyReviewsApi()).data;
+	const reviews = (await getMyReviewsApi()).data.filter((review: reviewDtlType) => review.isPremium === true);
 	// Loading component for Suspense fallback
 	function ReviewsLoading() {
 		return (

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prefer-const */
+
 'use client';
 
 import { reviewDtlType } from '@/components/types/add-review';
@@ -8,26 +8,44 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
-import { CircleX, Edit, Eye, Loader, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { CircleX, Edit, Eye, Loader, Search, Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
+import Pagination from '@/components/shared/Pagination';
 import { createAndUpdateDiscount, deleteDiscountApi } from '@/services/UserDashboard/DiscountServices';
+import { Slider } from '@/components/ui/slider';
+import { getAllCategories } from '@/services/Categories';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 
 const formSchemaPartOne = z.object({
 	percent: z.string().min(1, {
 		message: 'Discount cannot be empty!.',
 	}),
 });
-
+const itemsPerPage = 10;
+interface Category {
+	id: string;
+	name: string;
+}
 export default function UserDiscountManagement({ reviews }: { reviews: reviewDtlType[] }) {
 	// const [allReviews, setAllReviews] = useState<reviewDtlType[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
 	const [mode, setMode] = useState<string>('view');
+	const [currentPage, setCurrentPage] = useState(1);
+	const [ratingFilter, setRatingFilter] = useState<number>(0);
+	const [paginatedDiscounts, setPaginatedDiscounts] = useState<reviewDtlType[]>([]);
+	const [category, setAllCategories] = useState<Category[]>([]);
+
+	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const [allSelected, setAllSelected] = useState<string>('');
+
+	const [value, setValue] = useState<string>('');
 	const [reviewDtl, setReviewDtl] = useState<reviewDtlType>({
 		id: '',
 		title: '',
@@ -57,26 +75,102 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 		},
 	});
 
-	const deleteUserReview = async (review: reviewDtlType) => {
+	// const startIndex = (currentPage - 1) * itemsPerPage;
+	// const paginatedData = reviews.slice(startIndex, startIndex + itemsPerPage);
+	// setPaginatedDiscounts(paginatedData);
+	// const totalPages = Math.ceil(reviews.length / itemsPerPage);
+	// const searchOverReview = useCallback(
+	// 	(value: string) => {
+	// 		const filteredReviews = reviews.filter((review) =>
+	// 			review.title.toLowerCase().includes(value.toLowerCase()),
+	// 		);
+	// 		const slicedReviews = filteredReviews.slice(startIndex, startIndex + itemsPerPage);
+	// 		setPaginatedDiscounts(slicedReviews);
+	// 	},
+	// 	[reviews, startIndex],
+	// );
+
+	useEffect(() => {
+		getAllCategoriesMethod();
+	}, []);
+
+	const getAllCategoriesMethod = async () => {
 		try {
-			let toastId = toast.loading('...Deleting', { id: 1 });
-			const res = await deleteUserReviewApi(review.id);
-			if (res?.success) {
-				toast.success(res.message, { id: toastId });
-			}
+			const res = await getAllCategories();
+			setAllCategories(res.data);
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
+	const totalPages = Math.ceil(reviews.length / itemsPerPage);
+
+	const searchOverReview = useCallback(
+		(value: string, page: number) => {
+			const searchValue = value.toLowerCase();
+			const startIndex = (page - 1) * itemsPerPage;
+			const filteredReviews = reviews.filter(
+				(review) =>
+					review.title.toLowerCase().includes(searchValue) ||
+					review.category.name.toLowerCase().includes(searchValue) ||
+					review.description.toLowerCase().includes(searchValue),
+			);
+			const slicedReviews = filteredReviews.slice(startIndex, startIndex + itemsPerPage);
+			setPaginatedDiscounts(slicedReviews);
+		},
+		[reviews],
+	);
+
+	useEffect(() => {
+		searchOverReview(value, currentPage);
+	}, [value, currentPage, searchOverReview]);
+
+	useEffect(() => {
+		searchOverReview(value, 1);
+	}, [value, searchOverReview]);
+
+	useEffect(() => {
+		let filteredReviews: reviewDtlType[] = [];
+
+		if (allSelected) {
+			if (selectedCategories.length > 0) {
+				setSelectedCategories([]);
+			}
+			filteredReviews = reviews;
+		} else if (selectedCategories.length > 0) {
+			if (allSelected) {
+				setAllSelected('');
+			}
+			filteredReviews = reviews.filter((review) => selectedCategories.includes(String(review.categoryId)));
+		} else {
+			filteredReviews = reviews;
+		}
+
+		if (Number(ratingFilter) === 0) {
+			setPaginatedDiscounts(filteredReviews);
+			return;
+		}
+		const finalFilter = filteredReviews.filter((review) => String(review.rating) === String(ratingFilter));
+
+		setPaginatedDiscounts(finalFilter);
+	}, [allSelected, selectedCategories, ratingFilter, reviews]);
+
 	const openDrawer = (review: reviewDtlType) => {
-		console.log('id', review.id);
 		setOpen(true);
 		setReviewDtl(review);
 		setMode(mode);
 		formOne.reset({
 			percent: review.Discount?.percent,
 		});
+	};
+	const handleCategoryChange = (id: string) => {
+		if (String(id) === 'all') {
+			setAllSelected(id);
+			setSelectedCategories([]);
+		} else {
+			setAllSelected('');
+			setSelectedCategories((prev) => [...prev, id]);
+		}
 	};
 
 	const formOne = useForm<z.infer<typeof formSchemaPartOne>>({
@@ -85,7 +179,9 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 			percent: reviewDtl?.Discount?.percent || '0',
 		},
 	});
-
+	const handleRatingChange = (value: number) => {
+		setRatingFilter(value);
+	};
 	const onSubmitOne = async (data: { percent: string }) => {
 		let toastId: string | number = 'updateProfile';
 		toastId = toast.loading('...Loading', { id: toastId });
@@ -114,7 +210,7 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 	};
 	const deleteDiscountHandler = async () => {
 		let toastId: string | number = 'updateProfile';
-		toastId = toast.loading('...Submitting');
+		toastId = toast.loading('...Loading');
 		try {
 			const res = await deleteDiscountApi(reviewDtl.Discount?.id as string);
 			if (res?.success) {
@@ -234,7 +330,95 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 						</div>
 					</CardHeader>
 					<CardContent>
-						<div className="overflow-x-auto">
+						<div className="overflow-x-auto ">
+							<div className="relative w-md mb-4">
+								<Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+								<Input
+									type="search"
+									placeholder="Search by title,category or description"
+									value={value}
+									onChange={(e) => setValue(e.target.value)}
+									className="pl-8 pr-8 w-md mb-4"
+								/>
+							</div>
+							<div className="flex mb-4">
+								<div className="space-y-3 border border-purple-200 p-4 rounded-lg w-[48%] mr-[4%]">
+									<div className="flex justify-between items-center">
+										<h4 className="text-md font-medium">Rating</h4>
+										<span className="text-sm font-medium">{ratingFilter}</span>
+									</div>
+									<Slider
+										defaultValue={[ratingFilter]}
+										max={5}
+										step={1}
+										value={[ratingFilter]}
+										onValueChange={([value]) => handleRatingChange(value)}
+										className="py-2"
+									/>
+									<div className="flex justify-between mt-1 text-xs text-muted-foreground">
+										{[0, 1, 2, 3, 4, 5].map((num) => (
+											<span key={num}>{num}</span>
+										))}
+									</div>
+								</div>
+								<div className="border border-purple-200 p-4 rounded-lg w-[48%]">
+									<h1>Categories</h1>
+									<div className="flex flex-row">
+										<div className="flex items-start">
+											<Checkbox
+												id="all-categories"
+												checked={String(allSelected) === 'all'}
+												onCheckedChange={() => {
+													if (String(allSelected) === 'all') {
+														setAllSelected('');
+													} else {
+														setAllSelected('all');
+													}
+												}}
+												className="mt-1.5 mr-2"
+											/>
+											<span
+												className={cn(
+													'text-sm px-2 py-1 rounded-md w-full text-left transition-colors',
+												)}
+											>
+												All Categories
+											</span>
+										</div>
+
+										{category.map((cat) => (
+											<div key={cat.id} className="flex items-start">
+												<Checkbox
+													id={`category-${cat.id}`}
+													checked={selectedCategories.includes(String(cat.id))}
+													onCheckedChange={() => {
+														setAllSelected('');
+														if (selectedCategories.includes(String(cat.id))) {
+															const categories = selectedCategories.filter(
+																(category) => String(category) !== String(cat.id),
+															);
+															setSelectedCategories(categories);
+														} else {
+															setSelectedCategories((prev: string[]) => [
+																...prev,
+																String(cat.id),
+															]);
+														}
+													}}
+													className="mt-1.5 mr-2"
+												/>
+												<span
+													className={cn(
+														'text-sm px-2 py-1 rounded-md w-full text-left transition-colors',
+													)}
+												>
+													{cat.name}
+												</span>
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
 							<table className="min-w-full divide-y divide-gray-200">
 								<thead className="bg-gray-50">
 									<tr>
@@ -242,7 +426,7 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 											Title
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Author
+											Discount
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 											Category
@@ -260,7 +444,7 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 									</tr>
 								</thead>
 								<tbody className="bg-white divide-y divide-gray-200">
-									{reviews.map((review, index) => (
+									{paginatedDiscounts.map((review, index) => (
 										<tr
 											key={index}
 											className={`hover:bg-gray-50 ${
@@ -278,7 +462,7 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 												</div>
 											</td>
 											<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-												{review.author.name || 'Unknown'}
+												{review.Discount?.percent || 'Unknown'}
 											</td>
 
 											<td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
@@ -298,31 +482,11 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 													<Button
 														variant="ghost"
 														size="icon"
-														className="h-8 w-8 text-blue-500"
-														title="View"
-														onClick={() => openDrawer(review)}
-													>
-														<Eye className="h-4 w-4" />
-													</Button>
-
-													<Button
-														variant="ghost"
-														size="icon"
 														className="h-8 w-8 text-green-500"
-														title="Edit"
+														title="Add Discount"
 														onClick={() => openDrawer(review)}
 													>
 														<Edit className="h-4 w-4" />
-													</Button>
-
-													<Button
-														variant="ghost"
-														size="icon"
-														className="h-8 w-8 text-red-500"
-														title="Delete"
-														onClick={() => deleteUserReview(review)}
-													>
-														<Trash2 className="h-4 w-4" />
 													</Button>
 												</div>
 											</td>
@@ -330,6 +494,11 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 									))}
 								</tbody>
 							</table>
+							<Pagination
+								currentPage={currentPage}
+								totalPages={totalPages}
+								onPageChange={setCurrentPage}
+							/>
 						</div>
 					</CardContent>
 				</>
