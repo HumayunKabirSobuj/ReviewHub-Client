@@ -1,22 +1,13 @@
-'use client';
-
-import { useState } from 'react';
-import { useMyReviews } from '@/hooks/useMyReviews';
-import UserReviewManagement from '@/components/module/user-review/manage-review';
+import UserDiscountManagement from '@/components/module/user-review/discount-management';
+import { reviewDtlType } from '@/components/types/add-review';
 import { Skeleton } from '@/components/ui/skeleton';
-import Pagination from '@/components/shared/Pagination';
+import { getMyReviewsApi } from '@/services/UserDashboard/ReviewServices';
+import { Suspense } from 'react';
 
-const itemsPerPage = 10;
-
-export default function ManageReviewsForUser() {
-	const { reviews, loading } = useMyReviews();
-	const [currentPage, setCurrentPage] = useState(1);
-
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const paginatedReviews = reviews.slice(startIndex, startIndex + itemsPerPage);
-	const totalPages = Math.ceil(reviews.length / itemsPerPage);
-
-	if (loading) {
+const ManageReviewsForUser = async () => {
+	const reviews = (await getMyReviewsApi()).data.filter((review: reviewDtlType) => review.isPremium === true);
+	// Loading component for Suspense fallback
+	function ReviewsLoading() {
 		return (
 			<div className="container py-8">
 				<div className="flex justify-between items-center mb-6">
@@ -48,15 +39,11 @@ export default function ManageReviewsForUser() {
 
 	return (
 		<div className="p-[15px]">
-			<UserReviewManagement reviews={paginatedReviews} />
-
-			<div className="mt-8">
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={(page) => setCurrentPage(page)}
-				/>
-			</div>
+			<Suspense fallback={<ReviewsLoading />}>
+				<UserDiscountManagement reviews={reviews} />
+			</Suspense>
 		</div>
 	);
-}
+};
+
+export default ManageReviewsForUser;

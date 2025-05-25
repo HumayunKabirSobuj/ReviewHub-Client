@@ -231,6 +231,7 @@ import { useUser } from '@/components/context/UserContext';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
+	BadgeDollarSign,
 	BarChart3,
 	CalendarRange,
 	Euro,
@@ -267,6 +268,11 @@ const sidebarItemsUser = [
 		icon: MessageCircle,
 		label: 'Manage Comment',
 		href: '/user/manage-comment',
+	},
+	{
+		icon: BadgeDollarSign,
+		label: 'Manage Discount',
+		href: '/user/manage-discount',
 	},
 	{ icon: Vote, label: 'Manage Vote', href: '/user/manage-vote' },
 	{ icon: Euro, label: 'My Payment', href: '/user/my-payments' },
