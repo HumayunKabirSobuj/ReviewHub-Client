@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/pagination";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { getAllCategories } from "@/services/Categories";
+import { getAllPublishedReviews } from "@/services/Reviews";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
@@ -70,15 +72,25 @@ interface Category {
 }
 
 interface ReviewsPageCardProps {
-  initialData: Review[];
-  category: Category[];
+  // initialData: Review[];
+  // category: Category[];
+  queryString:  Promise<any>
 }
 
 // Main component
-const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
-  initialData,
-  category,
-}) => {
+const ReviewsPageCard: React.FC<ReviewsPageCardProps> = (
+  {
+    // initialData,
+    // category,
+    queryString
+  }) => {
+
+
+  const initialData = getAllPublishedReviews(queryString)
+  const category = getAllCategories()
+
+
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -445,7 +457,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = ({
             All Categories
           </button>
         </div>
-        {category.map((cat) => (
+        {category?.map((cat) => (
           <div key={cat.id} className="flex items-center">
             <button
               className={cn(
