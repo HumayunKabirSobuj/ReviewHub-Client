@@ -498,6 +498,9 @@ export default function AdminDashboardPage({
 }: AdminDashboardPageProps) {
   // console.log(data);
 
+  // const [data,setData] = useState()
+  // const [tableData,setTableData] = useState()
+
   const tableWithFiveRow = tableData?.data?.slice(0, 5);
   // console.log(tableWithFiveRow);
 
