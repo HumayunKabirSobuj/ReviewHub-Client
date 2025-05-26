@@ -15,6 +15,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+
 const ContactPage = () => {
   const contactMethods = [
     {
