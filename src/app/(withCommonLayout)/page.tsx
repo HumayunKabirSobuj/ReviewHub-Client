@@ -1,3 +1,4 @@
+import ContactForm from "@/components/modules/HomePage/ContactForm";
 import GetStarted from "@/components/modules/HomePage/GetStarted";
 import HeroSection from "@/components/modules/HomePage/HeroSection";
 import HowItWorksSection from "@/components/modules/HomePage/HowItWorksSection";
@@ -21,6 +22,7 @@ export default async function HomePage() {
         <GetStarted />
         <ServicesSection />
         <HowItWorksSection />
+        <ContactForm/>
       </section>
     </div>
   );
