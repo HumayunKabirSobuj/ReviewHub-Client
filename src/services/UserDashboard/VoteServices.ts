@@ -13,6 +13,8 @@ export const getMyAllVotesApi = async () => {
           "Content-Type": "application/json",
           Authorization: `${accessToken}`,
         },
+            cache: "force-cache",
+
       },
     );
     const result = await res.json();

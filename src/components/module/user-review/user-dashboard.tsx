@@ -5,19 +5,42 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getCurrentUser } from "@/services/AuthServices"
+import { getMyAllCommentsApi } from "@/services/UserDashboard/CommentServices"
+import { getMyReviewsApi } from "@/services/UserDashboard/ReviewServices"
+import { getMyAllVotesApi } from "@/services/UserDashboard/VoteServices"
 import { MessageSquare, SquareKanban, Vote } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 
-export default function UserDashboardSection({
-  voteCount,
-  commentCount,
-  ReviewsCount,
-}: {
-  commentCount: number
-  voteCount: number
-  ReviewsCount: number
-}) {
+export default function UserDashboardSection() {
+
+
+  const [reviewsCount, setReviewsCount] = useState(0)
+  const [voteCount, setVoteCount] = useState(0)
+  const [commentCount, setCommentCount] = useState(0)
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        const voteCount = (await getMyAllVotesApi())?.data?.length;
+        const commentCount = (await getMyAllCommentsApi())?.data?.length;
+        const reviewsCount = (await getMyReviewsApi())?.data?.length;
+
+        console.log(voteCount);
+        setReviewsCount(reviewsCount)
+        setCommentCount(commentCount)
+        setVoteCount(voteCount)
+
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+    fetchData();
+  }, [reviewsCount, voteCount, commentCount]);
+
+
   const [profileData, setProfileData] = useState<Record<string, string>>({
     name: "",
     email: "",
@@ -68,7 +91,7 @@ export default function UserDashboardSection({
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl md:text-3xl font-bold">{ReviewsCount}</div>
+                <div className="text-2xl md:text-3xl font-bold">{reviewsCount}</div>
               </CardContent>
             </Card>
 
