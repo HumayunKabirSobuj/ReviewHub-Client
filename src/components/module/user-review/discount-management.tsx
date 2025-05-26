@@ -2,26 +2,27 @@
 
 'use client';
 
+import Pagination from '@/components/shared/Pagination';
 import { reviewDtlType } from '@/components/types/add-review';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { deleteUserReviewApi } from '@/services/UserDashboard/ReviewServices';
-import { CircleX, Edit, Eye, Loader, Search, Trash2 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
-import Pagination from '@/components/shared/Pagination';
-import { createAndUpdateDiscount, deleteDiscountApi } from '@/services/UserDashboard/DiscountServices';
-import { Slider } from '@/components/ui/slider';
-import { getAllCategories } from '@/services/Categories';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
+import { getAllCategories } from '@/services/Categories';
+import { createAndUpdateDiscount, deleteDiscountApi } from '@/services/UserDashboard/DiscountServices';
+import { getMyReviewsApi } from '@/services/UserDashboard/ReviewServices';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CircleX, Edit, Search } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const formSchemaPartOne = z.object({
 	percent: z.string().min(1, {
@@ -33,7 +34,33 @@ interface Category {
 	id: string;
 	name: string;
 }
-export default function UserDiscountManagement({ reviews }: { reviews: reviewDtlType[] }) {
+export default function UserDiscountManagement() {
+
+
+
+
+
+	const [reviews, setReviews] = useState<reviewDtlType[]>([]);
+	const itemsPerPage = 10;
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const reviewsData = (await getMyReviewsApi()).data.filter(
+					(review: reviewDtlType) => review.isPremium === true
+				);
+				if (reviewsData) setReviews(reviewsData);
+			} catch (err) {
+				console.log(err);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchData();
+	}, []);
+
+
 	// const [allReviews, setAllReviews] = useState<reviewDtlType[]>([]);
 	const [open, setOpen] = useState<boolean>(false);
 	const [mode, setMode] = useState<string>('view');
@@ -225,9 +252,40 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 		}
 	};
 
+
 	return (
 		<Card className="w-full ">
-			{!reviews.length && (
+			{
+				isLoading &&
+				<div className="container py-8">
+					<div className="flex justify-between items-center mb-6">
+						<Skeleton className="h-8 w-32" />
+						<div className="flex items-center gap-3">
+							<Skeleton className="h-10 w-64" />
+							<Skeleton className="h-10 w-24" />
+						</div>
+					</div>
+
+					<div className="grid grid-cols-4 gap-6">
+						<aside className="col-span-1 hidden md:block">
+							<Skeleton className="h-[500px] w-full rounded-lg" />
+						</aside>
+
+						<div className="col-span-4 md:col-span-3">
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+								{Array(6)
+									.fill(0)
+									.map((_, index) => (
+										<Skeleton key={index} className="h-64 w-full rounded-lg" />
+									))}
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			}
+			{reviews?.length === 0 && !isLoading && (
 				<div className="w-2/3 mx-auto border-2 p-[25px] border-red-500 bg-red-300 lg:h-[150px] rounded-4xl flex items-center justify-center">
 					<h1 className="lg:text-3xl">No Reviews to display!</h1>
 				</div>
@@ -447,9 +505,8 @@ export default function UserDiscountManagement({ reviews }: { reviews: reviewDtl
 									{paginatedDiscounts.map((review, index) => (
 										<tr
 											key={index}
-											className={`hover:bg-gray-50 ${
-												reviewDtl.id === review.id ? 'bg-gray-200' : ''
-											}`}
+											className={`hover:bg-gray-50 ${reviewDtl.id === review.id ? 'bg-gray-200' : ''
+												}`}
 										>
 											<td className="px-4 py-3 text-sm font-medium">
 												<div className="flex flex-col">

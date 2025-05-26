@@ -367,8 +367,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 												href={item.href}
 												className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
 													isActive
-														? 'bg-blue-50 text-blue-600'
-														: 'text-gray-600 hover:bg-gray-100'
+														? 'bg-blue-50 text-purple-600'
+														: 'textprimary'
 												}`}
 												onClick={() => isMobile && setSidebarOpen(false)}
 											>
