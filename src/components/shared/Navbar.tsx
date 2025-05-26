@@ -293,14 +293,14 @@ type NavItem = {
 const navItems: NavItem[] = [
 	{ title: 'Home', href: '/', icon: Home },
 	{ title: 'Reviews', href: '/reviews', icon: Star },
-	{ title: 'Categories', href: '/categories', icon: Star },
+	// { title: 'Categories', href: '', icon: Star },
 	{ title: 'About', href: '/about', icon: MailQuestion },
 	{ title: 'Contact Us', href: '/contact-us', icon: MailQuestion },
 	{ title: 'News', href: '/news', icon: Newspaper },
 ];
 
 type Category = {
-	_id: string;
+	id: string;
 	name: string;
 	slug: string;
 };
@@ -313,7 +313,6 @@ const CategoryMegaMenu = () => {
 			const res = await getAllCategories();
 			if (res?.success && res?.data) {
 				setCategories(res.data);
-				console.log("sssssssssss", res);
 			}
 		};
 
@@ -321,20 +320,21 @@ const CategoryMegaMenu = () => {
 	}, []);
 
 	return (
-		<PopoverContent className="grid grid-cols-3 gap-4 p-6 w-[600px]">
+		<div className="flex flex-wrap p-2">
 			{categories?.map((category) => (
-				<div key={category._id}>
+				<div key={category.id}>
 					<Link
-						href={`/categories/${category.slug}`}
+						href={`/reviews/?categoryId=${category.id}`}
 						className="text-sm text-gray-700 hover:underline"
 					>
 						{category.name}
 					</Link>
 				</div>
 			))}
-		</PopoverContent>
+		</div>
 	);
 };
+
 
 export function Navbar() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -363,34 +363,34 @@ export function Navbar() {
 							</Link>
 						</div>
 
-						<div className="hidden md:ml-10 md:block">
-							<div className="flex items-center space-x-4">
-								{navItems.map((item) => {
-									const Icon = item.icon;
-									const isActive =
-										pathname === item.href ||
-										(item.href !== '/' && pathname.startsWith(item.href));
 
-									if (item.title === 'Categories') {
+						{/* Desktop Navigation */}
+						<div className="hidden md:ml-10 md:block">
+							<div className="flex items-center space-x-4 relative">
+								{navItems.map((item) => {
+									if (item.title === 'Reviews') {
 										return (
-											<Popover key={item.href}>
-												<PopoverTrigger asChild>
-													<button
-														className={cn(
-															'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
-															isActive
-																? 'text-primary bg-gray-50'
-																: 'text-gray-600 hover:bg-gray-50 hover:text-primary'
-														)}
-													>
-														<Icon className="mr-2 h-4 w-4" />
-														{item.title}
-													</button>
-												</PopoverTrigger>
-												<CategoryMegaMenu />
-											</Popover>
+											<div key="reviews" className="relative group">
+												<div
+													className={cn(
+														'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors cursor-pointer',
+														'text-gray-600 hover:bg-gray-50 hover:text-primary'
+													)}
+												>
+													<item.icon className="mr-2 h-4 w-4" />
+													<Link href={`/reviews`}>
+													Reviews
+													</Link>
+												</div>
+												<div className="absolute left-0 top-full z-50 hidden group-hover:block bg-white shadow-md border rounded-md">
+													<CategoryMegaMenu />
+												</div>
+											</div>
 										);
 									}
+
+									const isActive =
+										pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
 
 									return (
 										<Link
@@ -403,13 +403,15 @@ export function Navbar() {
 													: 'text-gray-600 hover:bg-gray-50 hover:text-primary'
 											)}
 										>
-											<Icon className="mr-2 h-4 w-4" />
+											<item.icon className="mr-2 h-4 w-4" />
 											{item.title}
 										</Link>
 									);
 								})}
 							</div>
 						</div>
+
+
 					</div>
 
 					<div className="flex items-center">
@@ -493,6 +495,30 @@ export function Navbar() {
 						const isActive =
 							pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
 
+						if (item.title === 'Categories') {
+							return (
+								<Popover key="categories">
+									<PopoverTrigger asChild>
+										<button
+											className={cn(
+												'flex w-full items-center rounded-md px-3 py-2 text-base font-medium text-left',
+												'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+											)}
+										>
+											<Star className="mr-3 h-5 w-5" />
+											Categories
+										</button>
+									</PopoverTrigger>
+									<PopoverContent className="w-full">
+										<div className="grid grid-cols-1 gap-2">
+											<CategoryMegaMenu />
+										</div>
+									</PopoverContent>
+								</Popover>
+
+							);
+						}
+
 						return (
 							<Link
 								key={item.href}
@@ -512,6 +538,7 @@ export function Navbar() {
 					})}
 				</div>
 			</div>
+
 
 			<ProfileModal isOpen={profileModalOpen} onClose={() => setProfileModalOpen(false)} />
 		</nav>

@@ -38,7 +38,6 @@ import {
   useState,
   useTransition,
 } from "react";
-import { toast } from "sonner";
 import ReviewCard from "./ReviewCard";
 import ReviewCardSkeleton from "./REviewCardSkeleton";
 
@@ -74,7 +73,7 @@ interface Category {
 interface ReviewsPageCardProps {
   // initialData: Review[];
   // category: Category[];
-  queryString:  Promise<any>
+  queryString: Promise<any>
 }
 
 // Main component
@@ -86,14 +85,38 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = (
   }) => {
 
 
-  const initialData = getAllPublishedReviews(queryString)
-  const category = getAllCategories()
-
-
+  const [initialData, setInitialData] = useState<Review[]>([]);
+  const [category, setCategory] = useState<Category[]>([]);
+  const [loadingInitial, setLoadingInitial] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  // ... other states ...
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const reviewsRes = await getAllPublishedReviews(queryString);
+        const categoryRes = await getAllCategories();
+
+        if (reviewsRes?.success && categoryRes?.success) {
+          setInitialData(reviewsRes.data);
+          setCategory(categoryRes.data);
+        }
+      } catch (err) {
+        console.error("Failed to load data:", err);
+      } finally {
+        setLoadingInitial(false);
+      }
+    };
+
+    fetchData();
+  }, [queryString]);
+
+
+
 
   // Initialize state from URL params to maintain filter state
   const [searchQuery, setSearchQuery] = useState(
@@ -116,7 +139,7 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = (
 
   // UI state
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingInitial, setLoadingInitial] = useState(true);
+
   const [filteredReviews, setFilteredReviews] = useState<Review[]>([]);
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
@@ -276,11 +299,11 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = (
     updateUrl(validPage);
 
     // Show toast notification for filter changes
-    if (shouldApplyFilters) {
-      toast.success("Filters applied", {
-        description: `Found ${filtered.length} reviews matching your criteria`,
-      });
-    }
+    // if (shouldApplyFilters) {
+    //   toast.success("Filters applied", {
+    //     description: `Found ${filtered.length} reviews matching your criteria`,
+    //   });
+    // }
 
     // Simulate network delay for smoother UX
     setTimeout(() => {
@@ -435,9 +458,9 @@ const ReviewsPageCard: React.FC<ReviewsPageCardProps> = (
     setCurrentPage(1);
     setShouldApplyFilters(true);
 
-    toast.info("Filters reset", {
-      description: "All filters have been cleared",
-    });
+    // toast.info("Filters reset", {
+    //   description: "All filters have been cleared",
+    // });
   }, []);
 
   // Memoize the category list to prevent unnecessary re-renders

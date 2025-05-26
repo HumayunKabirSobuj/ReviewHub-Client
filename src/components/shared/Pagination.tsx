@@ -2,7 +2,6 @@
 
 
 
-import React from "react";
 
 interface Props {
   currentPage: number;
@@ -20,10 +19,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: Props) => {
           key={page}
           onClick={() => onPageChange(page)}
           className={`min-w-[40px] px-2 py-1 rounded-lg border transition-all duration-300
-            ${
-              page === currentPage
-                ? "bg-blue-600 text-white shadow-lg border-blue-600"
-                : "bg-white text-gray-700 hover:bg-blue-50 border-gray-300"
+            ${page === currentPage
+              ? "bg-primary text-white shadow-lg border-primary"
+              : "bg-white text-purple-700 hover:bg-purple-50 border-gray-300"
             }`}
         >
           {page}
