@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Suspense } from "react";
 import ReviewsPageCard from "@/components/modules/Review/ReviewsPageCard";
-import { createQueryString } from "@/helpers";
-import { getAllCategories } from "@/services/Categories";
-import { getAllPublishedReviews} from "@/services/Reviews";
 import { Skeleton } from "@/components/ui/skeleton";
+import { createQueryString } from "@/helpers";
+import { Suspense } from "react";
 
 // Define proper types for the page props
 
@@ -61,38 +59,39 @@ export default async function Reviews({
     const queryString = createQueryString(searchParams);
 
     // Fetch data in parallel for better performance
-    const [reviewsResponse, categoriesResponse] = await Promise.all([
-      getAllPublishedReviews(queryString),
-      getAllCategories(),
-    ]);
+    // const [reviewsResponse, categoriesResponse] = await Promise.all([
+    //   getAllPublishedReviews(queryString),
+    //   getAllCategories(),
+    // ]);
 
     // Handle errors from either API call
-    if (reviewsResponse.error) {
-      return (
-        <ErrorDisplay
-          message={`Failed to load reviews: ${reviewsResponse.error}`}
-        />
-      );
-    }
+    // if (reviewsResponse.error) {
+    //   return (
+    //     <ErrorDisplay
+    //       message={`Failed to load reviews: ${reviewsResponse.error}`}
+    //     />
+    //   );
+    // }
 
-    if (categoriesResponse.error) {
-      return (
-        <ErrorDisplay
-          message={`Failed to load categories: ${categoriesResponse.error}`}
-        />
-      );
-    }
+    // if (categoriesResponse.error) {
+    //   return (
+    //     <ErrorDisplay
+    //       message={`Failed to load categories: ${categoriesResponse.error}`}
+    //     />
+    //   );
+    // }
 
-    // Ensure we have data to display
-    if (!reviewsResponse.data || !categoriesResponse.data) {
-      return <ErrorDisplay message="No data available" />;
-    }
+    // // Ensure we have data to display
+    // if (!reviewsResponse.data || !categoriesResponse.data) {
+    //   return <ErrorDisplay message="No data available" />;
+    // }
 
     return (
       <Suspense fallback={<ReviewsLoading />}>
         <ReviewsPageCard
-          initialData={reviewsResponse.data}
-          category={categoriesResponse.data}
+          // initialData={reviewsResponse.data}
+          // category={categoriesResponse.data}
+          queryString={queryString}
         />
       </Suspense>
     );

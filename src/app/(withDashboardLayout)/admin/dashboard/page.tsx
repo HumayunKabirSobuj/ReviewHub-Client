@@ -7,8 +7,8 @@ import { Loader } from "lucide-react";
 import React, { Suspense } from "react";
 
 const AdminDashboard = async () => {
-  const data = await getAdminDashboardInfo();
-  const tableData = await getReveiwDataForAdminDashboard();
+  // const data = await getAdminDashboardInfo(); 
+  // const tableData = await getReveiwDataForAdminDashboard();
   // console.log(tableData.data);
   return (
     <div>
@@ -20,8 +20,8 @@ const AdminDashboard = async () => {
         }
       >
         <AdminDashboardPage
-          data={data}
-          tableData={tableData}
+          // data={data}
+          // tableData={tableData}
         ></AdminDashboardPage>
       </Suspense>
     </div>
