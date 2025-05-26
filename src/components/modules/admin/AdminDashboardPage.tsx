@@ -542,7 +542,7 @@ export default function AdminDashboardPage(
   }, [data, tableData]);
 
 
-  const tableWithFiveRow = tableData.slice(0, 5);
+  const tableWithFiveRow = tableData?.slice(0, 5);
 
   const AdminData = data;
 

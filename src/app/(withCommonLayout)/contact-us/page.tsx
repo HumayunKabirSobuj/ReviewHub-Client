@@ -100,7 +100,7 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen max-w-6xl mx-auto bg-gray-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-br  text-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
@@ -336,11 +336,11 @@ const ContactPage = () => {
         </div>
 
         {/* Social Media & Additional Info */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl text-white p-8">
+        <div className="border border-primary p-4 rounded-md">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-2xl font-bold mb-4">Stay Connected</h2>
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-700 mb-6">
                 Follow us on social media for updates, tips, and community
                 highlights
               </p>
@@ -349,7 +349,7 @@ const ContactPage = () => {
                   <a
                     key={index}
                     href={social.url}
-                    className={`w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center transition-colors duration-200 ${social.color}`}
+                    className={`w-12 h-12 bg-background hover:bg-accent rounded-lg flex items-center justify-center transition-colors duration-200 ${social.color}`}
                   >
                     <social.icon className="w-6 h-6" />
                   </a>
@@ -361,7 +361,7 @@ const ContactPage = () => {
               <p className="text-gray-300 mb-4">
                 Our live chat is available 24/7 for urgent issues
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+              <button className="bg-primary hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
                 Start Live Chat
               </button>
             </div>
