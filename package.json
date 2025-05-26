@@ -43,7 +43,7 @@
 		"react-hook-form": "^7.56.1",
 		"recharts": "^2.15.3",
 		"sonner": "^2.0.3",
-		"swiper": "^11.2.7",
+		"swiper": "^11.2.8",
 		"tailwind-merge": "^3.2.0",
 		"vaul": "^1.1.2",
 		"zod": "^3.24.3"
