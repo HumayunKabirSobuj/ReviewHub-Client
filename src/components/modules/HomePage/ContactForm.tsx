@@ -65,7 +65,7 @@ const ContactForm = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-primary mb-2">Email Us</h3>
-                <p className="text-secondary text-sm">help@reviewportal.com</p>
+                <p className="text-black text-sm">help@reviewportal.com</p>
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-secondary shadow-sm">

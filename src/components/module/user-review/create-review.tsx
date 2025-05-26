@@ -177,7 +177,7 @@ export default function CreateReviewComponent({
 				rating: ratingValue,
 			};
 
-			console.log('json data', jsonData);
+			// console.log('json data', jsonData);
 
 			let res;
 			if (mode === 'edit') {
@@ -207,7 +207,7 @@ export default function CreateReviewComponent({
 				toast.success(res?.message, { id: toastId });
 			} else {
 				toast.error(res?.message, { id: toastId });
-				console.log(res);
+				// console.log(res);
 			}
 		} catch (error) {
 			console.error(error);

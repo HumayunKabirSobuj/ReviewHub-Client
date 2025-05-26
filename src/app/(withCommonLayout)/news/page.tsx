@@ -25,7 +25,7 @@ export default function NewsPage() {
       try {
         setLoading(true)
         const res = await fetch(
-          `https://newsapi.org/v2/everything?q=tesla&from=2025-04-26&sortBy=publishedAt&language=en&apiKey=aff6308a4fc946028de1a4ed46b4df98`,
+          `https://newsapi.org/v2/everything?q=book&from=2025-04-26&sortBy=publishedAt&language=en&apiKey=aff6308a4fc946028de1a4ed46b4df98`,
         )
 
         if (!res.ok) {
@@ -75,7 +75,7 @@ export default function NewsPage() {
       <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Latest Tesla News</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Latest Books News</h1>
           <p className="text-sm sm:text-base text-gray-600">
             Stay updated with the latest Tesla developments and announcements
           </p>

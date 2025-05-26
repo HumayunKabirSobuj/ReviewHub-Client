@@ -19,6 +19,21 @@ export const getAllUsers = async (queryString: Promise<string>) => {
 		return Error(error);
 	}
 };
+export const MyProfileInfo = async () => {
+	// console.log("queryString", { queryString });
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/users/my-profile-info`, {
+			method: 'GET',
+			headers: {
+				Authorization: ` ${(await cookies()).get('accessToken')!.value}`,
+			},
+		});
+
+		return await res.json();
+	} catch (error: any) {
+		return Error(error);
+	}
+};
 
 // Make user an admin
 export const makeAdmin = async (userId: string) => {
