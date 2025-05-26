@@ -61,13 +61,13 @@ export function UploadMultipleImages({ setImageLinks }: ImageListProps) {
           images.push(resp.secure_url);
         }),
       );
-      console.log("images", images);
+      // console.log("images", images);
       setImageLinks(images);
     } catch (err) {
       console.log(err);
     }
 
-    console.log("total", imageList.length, "images");
+    // console.log("total", imageList.length, "images");
   };
 
   return (
