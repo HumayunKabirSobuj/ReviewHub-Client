@@ -1,5 +1,4 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -193,88 +192,7 @@ const HowItWorksSection = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="max-w-6xl mx-auto px-4 py-16">
-            <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
-              {/* Left Column - Text and Illustration */}
-              <div className="w-full md:w-1/2 space-y-6">
-                <div>
-                  <p className="text-primary text-sm mb-2">Contact Us</p>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
-                    Get in Touch With
-                    <br />
-                    Our Team!
-                  </h2>
-                  <p className="text-black text-sm leading-relaxed">
-                    Have questions about our platform or need assistance with
-                    your account?
-                    <br />
-                    Want to discuss potential partnerships or advertising
-                    opportunities?
-                    <br />
-                    Use the form below to reach out to us.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column - Contact Form */}
-              <div className="w-full md:w-1/2">
-                <div className="bg-white rounded-lg shadow-md p-6 border border-purple-200">
-                  {/* Top border */}
-                  <div className="flex h-1 mb-6">
-                    <div className="w-full bg-primary"></div>
-                  </div>
-
-                  <form className="space-y-4">
-                    {/* Name Input */}
-                    <div>
-                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
-                        <span className="text-primary mr-2">👤</span>
-                        <input
-                          type="text"
-                          placeholder="Your Name"
-                          className="w-full outline-none text-sm text-black"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Email Input */}
-                    <div>
-                      <div className="flex items-center border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
-                        <span className="text-primary mr-2">✉️</span>
-                        <input
-                          type="email"
-                          placeholder="Your Email"
-                          className="w-full outline-none text-sm text-black"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Message Input */}
-                    <div>
-                      <div className="flex items-start border border-purple-200 rounded-md px-3 py-2 focus-within:border-primary">
-                        <span className="text-primary mr-2 mt-1">💬</span>
-                        <textarea
-                          placeholder="Your Message"
-                          rows={5}
-                          className="w-full outline-none text-sm resize-none text-black"
-                        ></textarea>
-                      </div>
-                    </div>
-
-                    {/* Submit Button */}
-                    <button
-                      type="submit"
-                      className="w-full bg-primary hover:bg-purple-600 text-white py-3 rounded-md flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <span>Send Message</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+        
         </div>
         </div>
     );
