@@ -5,7 +5,7 @@ const HeroSection = () => {
     <div>
       {/* Hero section */}
       <section className="w-full bg-accent ">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-32">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-[6rem]">
           {/* Tagline */}
           <p className="text-black mb-4 md:mb-6">Discover, Review, Connect</p>
 

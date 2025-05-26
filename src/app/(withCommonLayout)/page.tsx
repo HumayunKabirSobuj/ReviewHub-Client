@@ -1,3 +1,4 @@
+import GetStarted from "@/components/modules/HomePage/GetStarted";
 import HeroSection from "@/components/modules/HomePage/HeroSection";
 import HowItWorksSection from "@/components/modules/HomePage/HowItWorksSection";
 import ReviewsSection from "@/components/modules/HomePage/ReviewsSection";
@@ -17,6 +18,7 @@ export default async function HomePage() {
       <HeroSection />
       <section className="container mx-auto bg-white px-4 md:px-8 lg:px-16 py-8 md:py-12">
         <ReviewsSection reviewsData={reviewsData} />
+        <GetStarted />
         <ServicesSection />
         <HowItWorksSection />
       </section>
